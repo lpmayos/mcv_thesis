@@ -1,0 +1,3 @@
+*.json
+sensembed_vectors/*.json
+env/*
