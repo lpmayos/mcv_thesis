@@ -34,13 +34,14 @@ def save_sensembeds_to_solr():
 
 def generate_json_file_batches():
 
+    infile_name = '/home/lpmayos/Downloads/sensembed_vectors'  # 'sensembeddings.txt'
+
     i = 1
     batch_size = 100000
     num_doc = 1
-    total_lines = sum(1 for line in open('sensembeddings.txt'))
+    total_lines = sum(1 for line in open(infile_name))
 
-    infile = open('/home/lpmayos/Downloads/sensembed_vectors')
-    # infile = open('sensembeddings.txt')
+    infile = open(infile_name)
     outfile = open('sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
     outfile.write('[')
 
