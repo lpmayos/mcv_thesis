@@ -3,8 +3,8 @@ import requests
 
 # # 3849894 /home/lpmayos/Downloads/sensembed_vectors
 def main():
-    generate_json_file_batches()
-    # save_sensembeds_to_solr()
+    # generate_json_file_batches()
+    save_sensembeds_to_solr()
 
 
 def save_sensembeds_to_solr():
