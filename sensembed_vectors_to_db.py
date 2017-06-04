@@ -34,30 +34,17 @@ def save_sensembeds_to_solr():
 
 def generate_json_file_batches():
 
-    i = 0
+    i = 1
     batch_size = 100000
     num_doc = 1
+    total_lines = sum(1 for line in open('sensembeddings.txt'))
 
     infile = open('/home/lpmayos/Downloads/sensembed_vectors')
-    outfile = open('/home/lpmayos/code/mcv_thesis/sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
-    import ipdb; ipdb.set_trace()
+    # infile = open('sensembeddings.txt')
+    outfile = open('sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
     outfile.write('[')
 
     for line in infile:
-
-        if i > 0 and (i + 1) % batch_size != 0:
-            outfile.write(',')
-
-        i += 1
-        if i % batch_size == 0:
-            import ipdb; ipdb.set_trace()
-            i = 0
-            outfile.write(']')
-            outfile.close()
-            print 'closed doc ' + str(num_doc)
-            num_doc += 1
-            outfile = open('/home/lpmayos/code/mcv_thesis/sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
-            outfile.write('[')
 
         sense = line.split()[0]
         vector = line.split()[1:]  # 400 float numbers in string format
@@ -66,34 +53,19 @@ def generate_json_file_batches():
         outfile.write('\n\t\t"sensembed": ' + str([float(a) for a in vector]))
         outfile.write('\n\t}')
 
-    outfile.write(']')
-    outfile.close()
-
-
-def generate_json_file():
-
-    with open('/home/lpmayos/code/mcv_thesis/sensembed.json', 'w') as outfile:
-        outfile.write('[')
-
-        with open('/home/lpmayos/Downloads/sensembed_vectors') as data_file:
-            i = 0
-            for line in data_file:
-                if i > 0:
-                    outfile.write(',')
-
-                sense = line.split()[0]
-                vector = line.split()[1:]  # 400 float numbers in string format
-                outfile.write('\n\t{')
-                outfile.write('\n\t\t"sense": "' + sense + '",')
-                outfile.write('\n\t\t"sensembed": ' + str([float(a) for a in vector]))
-                outfile.write('\n\t}')
-
-                i += 1
-                if i % 100 == 0:
-                    print i
-
-        outfile.write(']')
-        outfile.close()
+        # if we are not about to close the doc, add a separator
+        end_batch = i % batch_size == 0
+        lines_remaining = i < total_lines
+        if not end_batch and lines_remaining:
+            outfile.write(',')
+        else:
+            outfile.write(']')
+            outfile.close()
+            if lines_remaining:
+                num_doc += 1
+                outfile = open('sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
+                outfile.write('[')
+        i += 1
 
 
 if __name__ == '__main__':
