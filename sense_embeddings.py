@@ -1,5 +1,5 @@
 import json
-from tinydb import TinyDB, Query
+import solr  # solrpy
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 
@@ -22,13 +22,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
 
 def main():
 
-    with open('/home/lpmayos/code/mcv_thesis/prova.json') as data_file2:
-        data = json.load(data_file2)
-        import ipdb; ipdb.set_trace()
-
-
-    db = TinyDB('/home/lpmayos/code/mcv_thesis/sensembed_vectors.json')
-    senses = Query()
+    s = solr.SolrConnection('http://localhost:8983/solr/sensembed_vectors')
 
     with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
         data = json.load(data_file)
@@ -63,18 +57,14 @@ def main():
         labels = []
         for sentence in sentences_video:
             for word in sentence.split():
-                word_senses = db.search(senses.sense == word)
-                word_senses += db.search(senses.sense.search('^' + word + '_bn*'))
-                for word_sense in word_senses:
-                    final_embeddings.append([float(a) for a in word_sense['sensembed'].split()])
+                word_senses1 = s.query('sense:' + word)
+                word_senses2 = s.query('sense:' + word + '_bn*')
+                for word_sense in word_senses1.results + word_senses2.results:
+                    final_embeddings.append(word_sense['sensembed'])
                     labels.append(word_sense['sense'])
 
-        plot_with_labels(final_embeddings, labels)
-        import ipdb; ipdb.set_trace()
         tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-        plot_only = 500
-        low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
-        # labels = [reverse_dictionary[i] for i in xrange(plot_only)]
+        low_dim_embs = tsne.fit_transform(final_embeddings)
         plot_with_labels(low_dim_embs, labels)
 
 

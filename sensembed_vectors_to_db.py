@@ -11,7 +11,7 @@ def save_sensembeds_to_solr():
     # curl 'http://localhost:8983/solr/sensembed_vectors/update?commit=true' --data-binary @sensembeds_small.json -H 'Content-type:application/json'
 
     i = 1
-    num_docs = 5
+    num_docs = 39
     while i <= num_docs:
         # url = 'http://localhost:8983/solr/sensembed_vectors/update'
         # headers = {'content-type': 'application/json'}
