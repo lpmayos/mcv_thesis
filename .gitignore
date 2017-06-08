@@ -1,4 +1,4 @@
 *.json
-sensembed_vectors/*.json
-sensembed_vectors/sensembed_vectors
+vectors_sensembed_json/*.json
+vectors_sensembed_json/sensembed_vectors
 env/*

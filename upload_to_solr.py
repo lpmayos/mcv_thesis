@@ -23,7 +23,7 @@ def save_sensembeds_to_solr():
         url = 'http://localhost:8983/solr/sensembed_vectors/update'
         headers = {"content-type": "application/json"}
         params = {"commit": "true"}
-        payload = open('sensembed_vectors/sensembed_' + str(i) + '.json', "rb").read()
+        payload = open('vectors_sensembed_json/sensembed_' + str(i) + '.json', "rb").read()
         # payload = open('sensembeds_small.json', "rb").read()
         r = requests.post(url, data=payload, params=params, headers=headers)
         print("got back: %s" % r.text)
@@ -33,7 +33,7 @@ def save_sensembeds_to_solr():
 
 def generate_json_file_batches():
 
-    infile_name = 'sensembed_vectors/sensembed_vectors'  # 'sensembeddings.txt'
+    infile_name = 'vectors_sensembed_json/sensembed_vectors'  # 'sensembeddings.txt'
 
     i = 1
     batch_size = 100000
@@ -41,7 +41,7 @@ def generate_json_file_batches():
     total_lines = sum(1 for line in open(infile_name))
 
     infile = open(infile_name)
-    outfile = open('sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
+    outfile = open('vectors_sensembed_json/sensembed_' + str(num_doc) + '.json', 'w')
     outfile.write('[')
 
     for line in infile:
@@ -63,7 +63,7 @@ def generate_json_file_batches():
             outfile.close()
             if lines_remaining:
                 num_doc += 1
-                outfile = open('sensembed_vectors/sensembed_' + str(num_doc) + '.json', 'w')
+                outfile = open('vectors_sensembed_json/sensembed_' + str(num_doc) + '.json', 'w')
                 outfile.write('[')
         i += 1
 
