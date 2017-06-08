@@ -1,7 +1,6 @@
 import requests
 
 
-# # 3849894 /home/lpmayos/Downloads/sensembed_vectors
 def main():
     # generate_json_file_batches()
     save_sensembeds_to_solr()
@@ -34,7 +33,7 @@ def save_sensembeds_to_solr():
 
 def generate_json_file_batches():
 
-    infile_name = '/home/lpmayos/Downloads/sensembed_vectors'  # 'sensembeddings.txt'
+    infile_name = 'sensembed_vectors/sensembed_vectors'  # 'sensembeddings.txt'
 
     i = 1
     batch_size = 100000
