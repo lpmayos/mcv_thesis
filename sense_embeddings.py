@@ -1,5 +1,5 @@
 import json
-import solr  # solrpy
+import solr  # corresponds to solrpy
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 import nltk
@@ -65,16 +65,28 @@ def main():
         # a man comparing two different people side by side
         # guy speaking in foreign language
 
+        # --> I want to disciver that "two european men" corresponds to "two different people" and to "some actors"
+        # for each sense of each word of each sentence, compare to all senses of all words of all other senses and save minimum distance
+        #       --> ie. man - man 0; man - explaining 100; man something 90
+        #       --> relate words or groups of words closest for each pair of sentences
+
         sentences_video = [a['caption'] for a in data['sentences'] if a['video_id'] == video_id]
         final_embeddings = []
         labels = []
         max_group_length = 5
 
+        sentences = []
+
         for sentence in sentences_video:
+            sentence_info = {'sentence': sentence}
+
             text = word_tokenize(sentence)
             pos_tagged_text = nltk.pos_tag(text)
 
+            tokens = []
+
             for word_tag in pos_tagged_text:
+                token_senses = []
                 if word_tag[1] in ['NN', 'JJ', 'VB']:
                     word_senses = get_relevant_senses(word_tag[0].lower())
                     word_senses += get_relevant_senses(wnl.lemmatize(word_tag[0]))
@@ -82,6 +94,9 @@ def main():
                         if sense['sensembed'] not in final_embeddings:
                             final_embeddings.append(sense['sensembed'])
                             labels.append(sense['sense'])
+                        # token_senses.append(sense)
+                        token_senses.append({'sense': sense['sense'], 'sensembed': [-0.052792, -0.013711, -0.021385]})
+                tokens.append({'token': word_tag[0], 'senses': token_senses})
 
             groups = []
             for group_length in range(2, max_group_length + 1):
@@ -94,14 +109,31 @@ def main():
 
             for group in list(set(groups)):
                 word_senses = get_relevant_senses(group)
+                token_senses = []
                 for sense in word_senses:
                     if sense['sensembed'] not in final_embeddings:
                         final_embeddings.append(sense['sensembed'])
                         labels.append(sense['sense'])
+                    # token_senses.append(sense)
+                    token_senses.append({'sense': sense['sense'], 'sensembed': [-0.052792, -0.013711, -0.021385]})
+                tokens.append({'token': group, 'senses': token_senses})
 
-        tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-        low_dim_embs = tsne.fit_transform(final_embeddings)
-        plot_with_labels(low_dim_embs, labels)
+            sentence_info['tokens'] = tokens
+
+            sentences.append(sentence_info)
+
+        print sentences
+
+        # once we have stored the info of all possible senses of all tokens of
+        # all sentences, we need to find for each token of each sentence which
+        # of the tokens of every other sentence is closer.
+        #       --> concept alignment if distance below threshold
+
+        # # Visual represnetation of all embeddings
+        # # TSNE, t-distributed Stochastic Neighbor Embedding is a tool to visualize high-dimensional data
+        # tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
+        # low_dim_embs = tsne.fit_transform(final_embeddings)
+        # plot_with_labels(low_dim_embs, labels)
 
 
 if __name__ == '__main__':
