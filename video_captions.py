@@ -3,7 +3,9 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import RegexpTokenizer
 import pprint
 import solr  # corresponds to solrpy
-import numpy as np
+from data_structures.sentence import Sentence
+from data_structures.sense import Sense
+from data_structures.token import Token
 
 
 class VideoCaptions(object):
@@ -31,12 +33,10 @@ class VideoCaptions(object):
         for sentence in sentences_video:
             sentence_i += 1
 
-            sentence_info = {'sentence': sentence, 'sentence_id': sentence_i}
+            sentenceObj = Sentence(sentence, sentence_i, [])
 
             text = tokenizer.tokenize(sentence)
             text = [word for word in text if word not in stopwords.words('english')]
-
-            tokens = []
 
             for word in text:
                 token_i += 1
@@ -45,9 +45,8 @@ class VideoCaptions(object):
                 word_senses += self.get_relevant_senses(wnl.lemmatize(word))
                 for index, sense in enumerate(word_senses):
                     sense_i += 1
-                    sense['sense_id'] = sense_i
-                    token_senses.append(sense)
-                tokens.append({'token': word, 'token_id': token_i, 'senses': token_senses})
+                    token_senses.append(Sense(sense['sense'], sense_i, sense['sensembed']))
+                sentenceObj.addToken(Token(word, token_i, token_senses))
 
             groups = []
             for group_length in range(2, self.max_group_length + 1):
@@ -64,13 +63,10 @@ class VideoCaptions(object):
                 token_senses = []
                 for index, sense in enumerate(word_senses):
                     sense_i += 1
-                    sense['sense_id'] = sense_i
-                    token_senses.append(sense)
-                tokens.append({'token': group, 'token_id': token_i, 'senses': token_senses})
+                    token_senses.append(Sense(sense['sense'], sense_i, sense['sensembed']))
+                sentenceObj.addToken(Token(group, token_i, token_senses))
 
-            sentence_info['tokens'] = tokens
-
-            self.sentences.append(sentence_info)
+            self.sentences.append(sentenceObj)
 
         if print_structure:
             pp = pprint.PrettyPrinter(indent=4)
@@ -86,30 +82,30 @@ class VideoCaptions(object):
         word_senses2 = s.query('sense:' + word)
         return word_senses1.results + word_senses2.results
 
-    def get_sentence_tokens(self, sentence_id):
-        """ returns a list of dictionaries containing 'sense', 'sense_id' and
-        'senseembed' of the tokens of the sentence 'sentence_id'.
-        """
-        return self.sentences[sentence_id]
+    # def get_sentence_tokens(self, sentence_id):
+    #     """ returns a list of dictionaries containing 'sense', 'sense_id' and
+    #     'senseembed' of the tokens of the sentence 'sentence_id'.
+    #     """
+    #     return self.sentences[sentence_id]
 
     def get_sentence_text(self, sentence_id):
         """ returns a string containing the sentence itself
         """
-        return self.sentences[sentence_id]['sentence']
+        return self.sentences[sentence_id].get_sentence()
 
-    def get_sentence_embedding(self, sentence_id, bfs=True):
-        """ if bfs, returns the sum of the embeddings of the first sense of all
-        the tokens of the sentence 'sentence_id';
-        else, returns the sum of the embeddings of all the possible senses of
-        all the tokens of the sentence 'sentence_id'
-        """
-        embedding = []
-        tokens = self.sentences[sentence_id]['tokens']
-        for token in tokens:
-            if len(token['senses']) > 0:
-                if bfs:
-                    embedding = np.sum([embedding, token['senses'][0]['sensembed']], axis=0)
-                else:
-                    for sense in token['senses']:
-                        embedding = np.sum([embedding, sense['sensembed']], axis=0)
-        return embedding
+    # def get_sentence_embedding(self, sentence_id, bfs=True):
+    #     """ if bfs, returns the sum of the embeddings of the first sense of all
+    #     the tokens of the sentence 'sentence_id';
+    #     else, returns the sum of the embeddings of all the possible senses of
+    #     all the tokens of the sentence 'sentence_id'
+    #     """
+    #     embedding = []
+    #     tokens = self.sentences[sentence_id]['tokens']
+    #     for token in tokens:
+    #         if len(token['senses']) > 0:
+    #             if bfs:
+    #                 embedding = np.sum([embedding, token['senses'][0]['sensembed']], axis=0)
+    #             else:
+    #                 for sense in token['senses']:
+    #                     embedding = np.sum([embedding, sense['sensembed']], axis=0)
+    #     return embedding

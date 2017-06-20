@@ -1,9 +1,10 @@
 import json
 import scipy
 import numpy as np
-from video_captions import VideoCaptions
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
+from video_captions import VideoCaptions
+from concept_alignment import ConceptAlignment
 
 
 def plot_embeddings_with_labels(embeddings, labels, filename='tsne.png'):
@@ -35,8 +36,8 @@ def order_sentences_by_distance_to_mean(video_captions, bfs, plot_embeddings=Fal
     embeddings = []
     labels = []
     for sentence in video_captions.sentences:
-        embeddings.append(video_captions.get_sentence_embedding(sentence['sentence_id'] - 1, bfs))
-        labels.append(sentence['sentence'])
+        embeddings.append(sentence.get_sentence_embedding(bfs))
+        labels.append(sentence.get_sentence())
 
     embeddings_mean = np.mean(embeddings, axis=0)
     distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
@@ -47,10 +48,6 @@ def order_sentences_by_distance_to_mean(video_captions, bfs, plot_embeddings=Fal
 
     if plot_embeddings:
         plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
-
-
-def align_concepts(video_captions):
-    return
 
 
 def experiment1(video_id1, video_id2):
@@ -95,7 +92,8 @@ def experiment2(video_id1, video_id2):
         for video_id in range(video_id1, video_id2):
             print '\nvideo ' + str(video_id)
             video_captions = VideoCaptions(data, 'video' + str(video_id))
-            align_concepts(video_captions)
+            concept_alignment = ConceptAlignment(video_captions)
+            print concept_alignment
 
 
 if __name__ == '__main__':

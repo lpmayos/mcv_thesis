@@ -4,17 +4,18 @@ python run_s2vt.py --dataset MSR-VTT --test --checkpoint 99
     tokenization...
     setting up scorers...
     computing Bleu score...
-    {'reflen': 17365, 'guess': [14288, 11298, 8308, 5319], 'testlen': 14288, 'correct': [8435, 20, 0, 0]}
-    ratio: 0.822804491794
+    {'reflen': 22840, 'guess': [21941, 18951, 15961, 12971], 'testlen': 21941, 'correct': [17402, 9620, 4700, 2015]}
+    ratio: 0.960639229422
     computing METEOR score...
     computing Rouge score...
     computing CIDEr score...
-    CIDEr: 0.000
-    Bleu_4: 0.000
-    Bleu_3: 0.000
-    Bleu_2: 0.026
-    Bleu_1: 0.476
-    ROUGE_L: 0.363
-    METEOR: 0.062
-    {'CIDEr': 5.4758084309769452e-05, 'Bleu_4': 5.622457406705116e-11, 'Bleu_3': 4.0397467190948425e-08, 'Bleu_2': 0.026064134693248208, 'Bleu_1': 0.47597694954473235, 'ROUGE_L': 0.36309928492501425, 'METEOR': 0.062320271849573096}
+    CIDEr: 0.387
+    Bleu_4: 0.354
+    Bleu_3: 0.472
+    Bleu_2: 0.609
+    Bleu_1: 0.761
+    ROUGE_L: 0.579
+    METEOR: 0.263
+    {'CIDEr': 0.38670007986379712, 'Bleu_4': 0.3535995357172983, 'Bleu_3': 0.47153424890335044, 'Bleu_2': 0.6090434404025595, 'Bleu_1': 0.7612865785969698, 'ROUGE_L': 0.57863749598397851, 'METEOR': 0.2631448149027057}
     2990
+
