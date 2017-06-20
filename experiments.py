@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 from video_captions import VideoCaptions
-from concept_alignment import ConceptAlignment
+import pickle
 
 
 def plot_embeddings_with_labels(embeddings, labels, filename='tsne.png'):
@@ -84,18 +84,31 @@ def experiment2(video_id1, video_id2):
     Results: TODO
     """
     with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
-        data = json.load(data_file)
-        # data.get('info')             --> {u'contributor': u'Microsoft MSM group', u'version': u'1.0', u'year': u'2016', u'data_created': u'2016-04-14 14:30:20', u'description': u'This is 1.0 version of the 2016 MSR-VTT dataset.'}
-        # len(data.get('videos'))       --> 7010
-        # len(data.get('sentences'))    --> 140200
 
         for video_id in range(video_id1, video_id2):
             print '\nvideo ' + str(video_id)
-            video_captions = VideoCaptions(data, 'video' + str(video_id))
-            concept_alignment = ConceptAlignment(video_captions)
-            print concept_alignment
+            try:
+                video_captions = pickle.load(open("video_captions/video_captions_" + str(video_id) + ".pickle", "rb"))
+            except (OSError, IOError):
+                data = json.load(data_file)  # TODO lpmayos: probably not a good idea to load it for every non-existing video ;)
+                video_captions = VideoCaptions(data, 'video' + str(video_id))
+                pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
+
+            if not video_captions.similarities_computed:
+                video_captions.compute_word_similarity()
+                pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
+
+            # for each token of each sentence we want to know wich token of every other sentence is closer
+            for sentence in video_captions.sentences:
+                print 'sentence ' + str(sentence.get_id()) + ' ' + sentence.get_sentence()
+                for token in sentence.get_tokens():
+                    print '\ttoken ' + token.get_token()
+                    for sentence_id in range(1, 21):
+                        most_similar_token = token.get_most_similar_token(sentence_id)
+                        if most_similar_token:
+                            print '\t\tmost similar token in sentence ' + str(sentence_id) + ' is ' + most_similar_token.get_token() + ' (' + str(most_similar_token.get_similarity(token)) + ')'
 
 
 if __name__ == '__main__':
 
-    experiment1(2900, 2903)
+    experiment2(2900, 2901)

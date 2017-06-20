@@ -2,10 +2,11 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import RegexpTokenizer
 import pprint
-import solr  # corresponds to solrpy
 from data_structures.sentence import Sentence
 from data_structures.sense import Sense
 from data_structures.token import Token
+from commons import word_similarity_closest
+from commons import get_relevant_senses
 
 
 class VideoCaptions(object):
@@ -24,6 +25,7 @@ class VideoCaptions(object):
 
         self.video_id = video_id
         self.sentences = []
+        self.similarities_computed = False
 
         wnl = WordNetLemmatizer()
         tokenizer = RegexpTokenizer(r'\w+')
@@ -45,12 +47,13 @@ class VideoCaptions(object):
             for word in text:
                 token_i += 1
                 token_senses = []
-                word_senses = self.get_relevant_senses(word.lower())
-                word_senses += self.get_relevant_senses(wnl.lemmatize(word))
+                word_senses = get_relevant_senses(word.lower())
+                word_senses += get_relevant_senses(wnl.lemmatize(word))
                 for index, sense in enumerate(word_senses):
                     sense_i += 1
-                    token_senses.append(Sense(sense['sense'], sense_i, sense['sensembed']))
-                sentenceObj.addToken(Token(word, token_i, token_senses))
+                    token_senses.append(Sense(sense['sense'], str(sentence_i) + '_' + str(token_i) + '_' + str(sense_i), sense['sensembed']))
+                if len(token_senses) > 0:
+                    sentenceObj.add_token(Token(word, str(sentence_i) + '_' + str(token_i), token_senses))
 
             groups = []
             for group_length in range(2, self.max_group_length + 1):
@@ -62,13 +65,14 @@ class VideoCaptions(object):
                     i += 1
 
             for group in list(set(groups)):
-                word_senses = self.get_relevant_senses(group)
+                word_senses = get_relevant_senses(group)
                 token_i += 1
                 token_senses = []
                 for index, sense in enumerate(word_senses):
                     sense_i += 1
-                    token_senses.append(Sense(sense['sense'], sense_i, sense['sensembed']))
-                sentenceObj.addToken(Token(group, token_i, token_senses))
+                    token_senses.append(Sense(sense['sense'], str(sentence_i) + '_' + str(token_i) + '_' + str(sense_i), sense['sensembed']))
+                if len(token_senses) > 0:
+                    sentenceObj.add_token(Token(group, str(sentence_i) + '_' + str(token_i), token_senses))
 
             self.sentences.append(sentenceObj)
 
@@ -76,17 +80,27 @@ class VideoCaptions(object):
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(self.sentences)
 
-    @staticmethod
-    def get_relevant_senses(word):
-        # Returns set of relevant senses as described in section 3.1 of SensEmbed:
-        # Leaning Sense Embeddings for Word and Relational Similarity
-
-        s = solr.SolrConnection('http://localhost:8983/solr/sensembed_vectors')
-        word_senses1 = s.query('sense:' + word + '_bn*')
-        word_senses2 = s.query('sense:' + word)
-        return word_senses1.results + word_senses2.results
-
     def get_sentence_text(self, sentence_id):
         """ returns a string containing the sentence itself
         """
         return self.sentences[sentence_id].get_sentence()
+
+    def compute_word_similarity(self):
+        """
+        """
+        for sentence1 in self.sentences:
+            for token1 in sentence1.get_tokens():
+                for sentence2 in self.sentences:
+                    if sentence1 != sentence2:
+                        for token2 in sentence2.get_tokens():
+                            if not token1.get_similarity(token2):
+                                similarity = word_similarity_closest(token1, token2)
+                                token1.set_similarity(token2, similarity)
+                                token2.set_similarity(token1, similarity)
+
+                                # for each token we need to save which token of each other sentence is most similar
+                                token1.updateSimilarity(sentence2.get_id(), token2, similarity)
+                                token2.updateSimilarity(sentence2.get_id(), token1, similarity)
+
+        self.similarities_computed = True
+        return

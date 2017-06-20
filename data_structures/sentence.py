@@ -22,7 +22,7 @@ class Sentence(object):
     def set_tokens(self, tokens):
         self.tokens = tokens
 
-    def addToken(self, token):
+    def add_token(self, token):
         self.tokens.append(token)
 
     def get_sentence_embedding(self, bfs=True):
