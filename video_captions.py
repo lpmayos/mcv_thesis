@@ -13,9 +13,13 @@ class VideoCaptions(object):
     max_group_length = 5
 
     def __init__(self, data, video_id, print_structure=False):
-        """ returns a new VideoAnnotations object: a list of dictionaries containing
-        the information of all the sentences captioning the video with id
-        'video_id'. See samples/video_captions_sample.txt for an example.
+        """ returns a new VideoAnnotations object: a list of Sentences, one for
+        each caption of the video with id 'video_id'.
+        Each Sentence is composed of the text, an id and a list of Tokens, each
+        of them composed by a token, an id and a list of Senses (sense, id and
+        sensembed).
+        See samples/video_captions_sample.txt to get an idea of the structure,
+        even though is not a dictionary anymore (they are all objects).
         """
 
         self.video_id = video_id
@@ -82,30 +86,7 @@ class VideoCaptions(object):
         word_senses2 = s.query('sense:' + word)
         return word_senses1.results + word_senses2.results
 
-    # def get_sentence_tokens(self, sentence_id):
-    #     """ returns a list of dictionaries containing 'sense', 'sense_id' and
-    #     'senseembed' of the tokens of the sentence 'sentence_id'.
-    #     """
-    #     return self.sentences[sentence_id]
-
     def get_sentence_text(self, sentence_id):
         """ returns a string containing the sentence itself
         """
         return self.sentences[sentence_id].get_sentence()
-
-    # def get_sentence_embedding(self, sentence_id, bfs=True):
-    #     """ if bfs, returns the sum of the embeddings of the first sense of all
-    #     the tokens of the sentence 'sentence_id';
-    #     else, returns the sum of the embeddings of all the possible senses of
-    #     all the tokens of the sentence 'sentence_id'
-    #     """
-    #     embedding = []
-    #     tokens = self.sentences[sentence_id]['tokens']
-    #     for token in tokens:
-    #         if len(token['senses']) > 0:
-    #             if bfs:
-    #                 embedding = np.sum([embedding, token['senses'][0]['sensembed']], axis=0)
-    #             else:
-    #                 for sense in token['senses']:
-    #                     embedding = np.sum([embedding, sense['sensembed']], axis=0)
-    #     return embedding
