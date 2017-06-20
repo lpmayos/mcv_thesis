@@ -1,7 +1,7 @@
 import json
 import scipy
 import numpy as np
-from annotation import Annotation
+from video_captions import VideoCaptions
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 
@@ -27,15 +27,15 @@ def plot_embeddings_with_labels(embeddings, labels, filename='tsne.png'):
     plt.savefig(filename)
 
 
-def order_sentences_by_distance_to_mean(annotation, bfs, plot_embeddings=False):
-    """ orders the sentences of the annotation by distance to the mean;
+def order_sentences_by_distance_to_mean(video_captions, bfs, plot_embeddings=False):
+    """ orders the sentences of the video_captions by distance to the mean;
     if bfs, the mean is computed as the sum of the sensembeds of **the first** sense of all the tokens of a sentence.
     else, the mean is computed as the sum of the sensembeds of **all possible** senses of all the tokens of a sentence.
     """
     embeddings = []
     labels = []
-    for sentence in annotation.sentences:
-        embeddings.append(annotation.get_sentence_embedding(sentence['sentence_id'] - 1, bfs))
+    for sentence in video_captions.sentences:
+        embeddings.append(video_captions.get_sentence_embedding(sentence['sentence_id'] - 1, bfs))
         labels.append(sentence['sentence'])
 
     embeddings_mean = np.mean(embeddings, axis=0)
@@ -43,20 +43,24 @@ def order_sentences_by_distance_to_mean(annotation, bfs, plot_embeddings=False):
     sort_index = np.argsort(distances)
     print 'Sentences from closest to fartest to the mean'
     for index in sort_index:
-        print str(distances[index]) + ' \t ' + annotation.get_sentence_text(index)
+        print str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
 
     if plot_embeddings:
-        plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + annotation.video_id + '.png')
+        plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
+
+
+def align_concepts(video_captions):
+    return
 
 
 def experiment1(video_id1, video_id2):
-    """ Goal: detect those annotations that are wrong: they have typos or are
+    """ Goal: detect those captions that are wrong: they have typos or are
     not descriptive.
 
-    Method: for each video we get all the annotations and we compute an
+    Method: for each video we get all the captions and we compute an
     embedding for all the sentences. Then, we project all the embeddings
     in common space, we compute its centroid and the distances to the
-    centroid of each embedding, sorting the annotations by distance.
+    centroid of each embedding, sorting the captions by distance.
     Then, we can discard the highest percentage (i.e. 10%) or the ones that
     are above a certain threshold.
 
@@ -71,8 +75,27 @@ def experiment1(video_id1, video_id2):
 
         for video_id in range(video_id1, video_id2):
             print '\nvideo ' + str(video_id)
-            annotation = Annotation(data, 'video' + str(video_id))
-            order_sentences_by_distance_to_mean(annotation, True)
+            video_captions = VideoCaptions(data, 'video' + str(video_id))
+            order_sentences_by_distance_to_mean(video_captions, True)
+
+
+def experiment2(video_id1, video_id2):
+    """ Goal: align concepts within captions of the same video.
+
+    Method: TODO
+
+    Results: TODO
+    """
+    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+        data = json.load(data_file)
+        # data.get('info')             --> {u'contributor': u'Microsoft MSM group', u'version': u'1.0', u'year': u'2016', u'data_created': u'2016-04-14 14:30:20', u'description': u'This is 1.0 version of the 2016 MSR-VTT dataset.'}
+        # len(data.get('videos'))       --> 7010
+        # len(data.get('sentences'))    --> 140200
+
+        for video_id in range(video_id1, video_id2):
+            print '\nvideo ' + str(video_id)
+            video_captions = VideoCaptions(data, 'video' + str(video_id))
+            align_concepts(video_captions)
 
 
 if __name__ == '__main__':

@@ -6,14 +6,14 @@ import solr  # corresponds to solrpy
 import numpy as np
 
 
-class Annotation(object):
+class VideoCaptions(object):
 
     max_group_length = 5
 
     def __init__(self, data, video_id, print_structure=False):
-        """ returns a new Annotation object: a list of dictionaries containing
-        the information of all the sentences annotating the video with id
-        'video_id'. See samples/annotation_sample.txt for an example.
+        """ returns a new VideoAnnotations object: a list of dictionaries containing
+        the information of all the sentences captioning the video with id
+        'video_id'. See samples/video_captions_sample.txt for an example.
         """
 
         self.video_id = video_id

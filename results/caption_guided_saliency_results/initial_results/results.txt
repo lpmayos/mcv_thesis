@@ -1,0 +1,20 @@
+python run_s2vt.py --dataset MSR-VTT --test --checkpoint 99
+
+    init COCO-EVAL scorer
+    tokenization...
+    setting up scorers...
+    computing Bleu score...
+    {'reflen': 17365, 'guess': [14288, 11298, 8308, 5319], 'testlen': 14288, 'correct': [8435, 20, 0, 0]}
+    ratio: 0.822804491794
+    computing METEOR score...
+    computing Rouge score...
+    computing CIDEr score...
+    CIDEr: 0.000
+    Bleu_4: 0.000
+    Bleu_3: 0.000
+    Bleu_2: 0.026
+    Bleu_1: 0.476
+    ROUGE_L: 0.363
+    METEOR: 0.062
+    {'CIDEr': 5.4758084309769452e-05, 'Bleu_4': 5.622457406705116e-11, 'Bleu_3': 4.0397467190948425e-08, 'Bleu_2': 0.026064134693248208, 'Bleu_1': 0.47597694954473235, 'ROUGE_L': 0.36309928492501425, 'METEOR': 0.062320271849573096}
+    2990
