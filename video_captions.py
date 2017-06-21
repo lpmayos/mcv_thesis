@@ -93,14 +93,11 @@ class VideoCaptions(object):
                 for sentence2 in self.sentences:
                     if sentence1 != sentence2:
                         for token2 in sentence2.get_tokens():
-                            if not token1.get_similarity(token2):
-                                similarity = word_similarity_closest(token1, token2)
-                                token1.set_similarity(token2, similarity)
-                                token2.set_similarity(token1, similarity)
+                            similarity = word_similarity_closest(token1, token2)
+                            token1.set_similarity(token2, similarity)
 
-                                # for each token we need to save which token of each other sentence is most similar
-                                token1.updateSimilarity(sentence2.get_id(), token2, similarity)
-                                token2.updateSimilarity(sentence2.get_id(), token1, similarity)
+                            # for each token we need to save which token of each other sentence is most similar
+                            token1.updateSimilarity(sentence2.get_id(), token2, similarity)
 
         self.similarities_computed = True
         return
