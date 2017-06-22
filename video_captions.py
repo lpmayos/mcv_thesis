@@ -8,6 +8,7 @@ from data_structures.token import Token
 from commons import word_similarity_closest
 from commons import get_relevant_senses
 import itertools
+import config
 
 
 class VideoCaptions(object):
@@ -16,7 +17,7 @@ class VideoCaptions(object):
     wnl = WordNetLemmatizer()
 
     def __init__(self, data, video_id, print_structure=False):
-        """ returns a new VideoAnnotations object: a list of Sentences, one for
+        """ returns a new VideoCaptions object: a list of Sentences, one for
         each caption of the video with id 'video_id'.
         Each Sentence is composed of the text, an id and a list of Tokens, each
         of them composed by a token, an id and a list of Senses (sense, id and
@@ -27,10 +28,8 @@ class VideoCaptions(object):
 
         self.video_id = video_id
         self.sentences = []
-        self.all_tokens = []
-        self.tokens_index = {}  # i.e. stores in which index of all_tokens is stored the token with key 'man'
-        self.similarities_computed = False
         self.num_senses = 0
+        self.all_tokens = []
 
         tokenizer = RegexpTokenizer(r'\w+')
 
@@ -72,38 +71,42 @@ class VideoCaptions(object):
         """
         lemma = self.wnl.lemmatize(token_text)
 
-        if lemma in self.tokens_index:
-            sentence.add_token(self.tokens_index[lemma])
-        else:
-            token_i = len(self.all_tokens)
+        if lemma not in config.tokens_set.tokens_index_by_lemma:
+
             token_senses = []
             word_senses = get_relevant_senses(token_text.lower())
             word_senses += get_relevant_senses(self.wnl.lemmatize(token_text))
             for index, sense in enumerate(word_senses):
                 self.num_senses += 1
-                token_senses.append(Sense(sense['sense'], str(sentence.get_id()) + '_' + str(token_i) + '_' + str(self.num_senses), sense['sensembed']))
+                senseObj = Sense(sense['sense'], sense['sensembed'])
+                token_senses.append(senseObj)
+
+            # if it has senses, add token to config.tokens_set and add token_id to sentence tokens
             if len(token_senses) > 0:
-                self.tokens_index[lemma] = token_i
-                token = Token(token_text, lemma, str(sentence.get_id()) + '_' + str(token_i), sentence.get_id(), token_senses)
-                sentence.add_token(token_i)
-                self.all_tokens.append(token)
+                token_id = config.tokens_set.num_tokens
+                token = Token(token_text, lemma, token_id, token_senses)
+                config.tokens_set.add_token(token)
+
+                sentence.add_token(token_id)
+                self.all_tokens.append(token_id)
+        else:
+            # add token_id to sentence tokens
+            token_id = config.tokens_set.get_token_id_by_lemma(lemma)
+            sentence.add_token(token_id)
+            self.all_tokens.append(token_id)
 
     def get_sentence_text(self, sentence_id):
         """ returns a string containing the sentence itself
         """
         return self.sentences[sentence_id].get_sentence()
 
-    def compute_word_similarity(self):
+    def compute_all_tokens_similarity(self):
         """
         """
         pairs = list(itertools.combinations(self.all_tokens, 2))
         print 'computing similarities for ' + str(len(pairs)) + ' pairs of tokens'
         for pair in pairs:
-            token1 = pair[0]
-            token2 = pair[1]
-            if token1.sentence_id != token2.sentence_id:
-                similarity = word_similarity_closest(token1, token2)
-                token1.set_similarity(token2, similarity)
-                token2.set_similarity(token1, similarity)
-
-        self.similarities_computed = True
+            token1 = config.tokens_set.tokens[pair[0]]
+            token2 = config.tokens_set.tokens[pair[1]]
+            similarity = word_similarity_closest(token1, token2)
+            config.tokens_set.set_tokens_similarity_closest(pair[0], pair[1], similarity)

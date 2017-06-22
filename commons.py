@@ -1,6 +1,7 @@
 import itertools
 import solr  # corresponds to solrpy
 import numpy as np
+import config
 
 
 def get_relevant_senses(word):
@@ -24,10 +25,13 @@ def word_similarity_closest(token1, token2):
     of senseEmbed paper using the 'closest' strategy
     TODO lpmayos: add 'weighted' strategy
     """
-    similarity = -1
-
-    senses_combinations = list(itertools.product(token1.get_senses(), token2.get_senses()))
-    for sense_combination in senses_combinations:
-        tmp = tanimoto_distance(sense_combination[0].get_sensembed(), sense_combination[1].get_sensembed())
-        similarity = max(similarity, tmp)
+    if (token1.id, token2.id) in config.tokens_set.tokens_similarities_closest:
+        similarity = config.tokens_set.tokens_similarities_closest[(token1.id, token2.id)]
+    elif token1.id == token2.id:
+        similarity = 1.0
+    else:
+        senses_combinations = list(itertools.product(token1.senses, token2.senses))
+        similarity = -1
+        for sense_combination in senses_combinations:
+            similarity = max(similarity, tanimoto_distance(sense_combination[0].sensembed, sense_combination[1].sensembed))
     return similarity

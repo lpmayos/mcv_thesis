@@ -6,6 +6,7 @@ from sklearn.manifold import TSNE
 from video_captions import VideoCaptions
 import pickle
 import time
+import config
 
 
 def plot_embeddings_with_labels(embeddings, labels, filename='tsne.png'):
@@ -84,6 +85,7 @@ def experiment2(video_id1, video_id2):
 
     Results: TODO
     """
+
     with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
 
         data = json.load(data_file)  # TODO lpmayos: probably not a good idea to load it for every non-existing video ;)
@@ -92,35 +94,36 @@ def experiment2(video_id1, video_id2):
             start = time.time()
             print '\n\n***** video ' + str(video_id)
             try:
-                video_captions = pickle.load(open("video_captions/video_captions_" + str(video_id) + ".pickle", "rb"))
+                video_captions = pickle.load(open("pickle/video_captions_" + str(video_id) + ".pickle", "rb"))
             except (OSError, IOError):
                 video_captions = VideoCaptions(data, 'video' + str(video_id))
-                pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
+                video_captions.compute_all_tokens_similarity()
+                pickle.dump(video_captions, open("pickle/video_captions_" + str(video_id) + ".pickle", "wb"))
             end = time.time()
-            print str(end - start) + ' seconds'  # 7-15 seconds
-
-            start = time.time()
-            if not video_captions.similarities_computed:
-                video_captions.compute_word_similarity()
-                pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
-            end = time.time()
-            print str(end - start) + ' seconds'  # ~33 seconds
+            print str(end - start) + ' seconds'
 
             start = time.time()
             # for each token of each sentence we want to know wich token of every other sentence is closer
-            for sentence in video_captions.sentences:
-                print 'sentence ' + str(sentence.get_id()) + ' ' + sentence.get_sentence()
-                for token_i in sentence.get_tokens():
-                    token = video_captions.all_tokens[token_i]
-                    print '\ttoken ' + token.get_token()
-                    for sentence_id in range(1, 21):
-                        most_similar_token = token.get_most_similar_token(sentence_id)
-                        if most_similar_token:
-                            print '\t\tmost similar token in sentence ' + str(sentence_id) + ' is ' + most_similar_token.get_token() + ' (' + str(most_similar_token.get_similarity(token)) + ')'
+            for sentence1 in video_captions.sentences:
+                print 'sentence ' + str(sentence1.id) + ' ' + sentence1.sentence
+                for token1_id in sentence1.tokens_id_list:
+                    print '\ttoken ' + config.tokens_set.tokens[token1_id].token
+                    for sentence2 in video_captions.sentences:
+                        most_similar_token_in_sentence = (None, float('-inf'))
+                        for token2_id in sentence2.tokens_id_list:
+                            if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
+                                similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
+                                if similarity > most_similar_token_in_sentence[1]:
+                                    most_similar_token_in_sentence = (token2_id, similarity)
+                        if most_similar_token_in_sentence[0] is not None:
+                            print '\t\tmost similar token in sentence ' + str(sentence2.id) + ' is ' + config.tokens_set.tokens[most_similar_token_in_sentence[0]].token + ' (' + str(most_similar_token_in_sentence[1]) + ')\t\t\t(' + sentence2.sentence + ')'
+
             end = time.time()
-            print(end - start)
+            print str(end - start) + ' seconds'
+
+    pickle.dump(config.tokens_set, open("pickle/tokens_set.pickle", "wb"))
 
 
 if __name__ == '__main__':
 
-    experiment2(2925, 2936)
+    experiment2(2935, 2947)
