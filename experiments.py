@@ -97,21 +97,21 @@ def experiment2(video_id1, video_id2):
                 video_captions = VideoCaptions(data, 'video' + str(video_id))
                 pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
             end = time.time()
-            print str(end - start) + ' seconds'  # ~7.5 seconds
+            print str(end - start) + ' seconds'  # 7-15 seconds
 
             start = time.time()
             if not video_captions.similarities_computed:
                 video_captions.compute_word_similarity()
                 pickle.dump(video_captions, open("video_captions/video_captions_" + str(video_id) + ".pickle", "wb"))
-
             end = time.time()
-            print str(end - start) + ' seconds'  # ~120 seconds
+            print str(end - start) + ' seconds'  # ~33 seconds
 
             start = time.time()
             # for each token of each sentence we want to know wich token of every other sentence is closer
             for sentence in video_captions.sentences:
                 print 'sentence ' + str(sentence.get_id()) + ' ' + sentence.get_sentence()
-                for token in sentence.get_tokens():
+                for token_i in sentence.get_tokens():
+                    token = video_captions.all_tokens[token_i]
                     print '\ttoken ' + token.get_token()
                     for sentence_id in range(1, 21):
                         most_similar_token = token.get_most_similar_token(sentence_id)
@@ -123,4 +123,4 @@ def experiment2(video_id1, video_id2):
 
 if __name__ == '__main__':
 
-    experiment2(2900, 2901)
+    experiment2(2925, 2936)
