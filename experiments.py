@@ -8,6 +8,20 @@ from data_structures.video_captions import VideoCaptions
 import pickle
 
 
+def create_video_captions(video_id_init, video_id_end, compute_similarity=False):
+    """ NOTE: it does NOT check if the pickle object exist, it creates it and overwrittes the old one if it exists
+    """
+    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+
+        data = json.load(data_file)
+        for video_id in range(video_id_init, video_id_end):
+            video_captions = VideoCaptions(data, 'video' + str(video_id))
+            if compute_similarity == 'closest':
+                video_captions.compute_all_tokens_similarity()
+            pickle.dump(video_captions, open("pickle/video_captions_" + str(video_id) + ".pickle", "wb"))
+            pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))  # no me conviene hacerlo cada vez si estoy haciendo el dump de muchos videos
+
+
 def experiment1(video_id_init, video_id_end):
     """ Goal: detect those captions that are wrong: they have typos or are
     not descriptive.
@@ -48,11 +62,13 @@ def experiment1(video_id_init, video_id_end):
 
 
 def experiment2(video_id_init, video_id_end):
-    """ Goal: align concepts within captions of the same video.
+    """ Goal: for each token of each sentence, computes which of the tokens of
+    every other sentence is closer and shows it on shell.
 
-    Method: TODO
+    Method: in config.tokens_set we have computed the similarity of every pair
+    of tokens, so we just loop over all of them and keep the most similar.
 
-    Results: TODO
+    Results:  a sample of the results can be seen at results/experiment2/most_similar_tokens.txt
     """
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
@@ -77,28 +93,58 @@ def experiment2(video_id_init, video_id_end):
         print str(end - start) + ' seconds'
 
 
-def create_video_captions(video_id_init, video_id_end, compute_similarity=False):
-    """ NOTE: it does NOT check if the pickle object exist, it creates it and overwrittes the old one if it exists
-    """
-    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+def experiment3(video_id_init, video_id_end):
+    """ Goal: compute sentences similarity and rank them.
 
-        data = json.load(data_file)
-        for video_id in range(video_id_init, video_id_end):
-            video_captions = VideoCaptions(data, 'video' + str(video_id))
-            if compute_similarity == 'closest':
-                video_captions.compute_all_tokens_similarity()
-            pickle.dump(video_captions, open("pickle/video_captions_" + str(video_id) + ".pickle", "wb"))
-            pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))  # no me conviene hacerlo cada vez si estoy haciendo el dump de muchos videos
+    Method: for each pair of sentences, compute their similarity (non-symmetric)
+    as the sum of the distances of each token in one sentence to the closest one
+    in the other sentence, dividing by the number of tokens added.
+
+    Results:
+    """
+    for video_id in range(video_id_init, video_id_end):
+        video_captions = load_video_captions(video_id)
+
+        result = np.empty([20, 20])
+        i = 0
+        for sentence1 in video_captions.sentences:
+            j = 0
+            for sentence2 in video_captions.sentences:
+                similarities = []
+                for token1_id in sentence1.tokens_id_list:
+                    most_similar_token_in_sentence = (None, float('-inf'))
+                    for token2_id in sentence2.tokens_id_list:
+                        if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
+                            similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
+                            if similarity > most_similar_token_in_sentence[1]:
+                                most_similar_token_in_sentence = (token2_id, similarity)
+                    if most_similar_token_in_sentence[0] is not None:
+                        similarities.append(most_similar_token_in_sentence)
+                if len(similarities) > 0:
+                    sentences_similarity = sum([a[0] for a in similarities]) / len(similarities)
+                else:
+                    sentences_similarity = 0
+                result[i, j] = sentences_similarity
+                j += 1
+            i += 1
+
+        sentences_global_similarities = np.sum(result, axis=1)
+        sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
+        print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
+        for sentence_index in sentences_order:
+            print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
 
 
 if __name__ == '__main__':
 
     # create_video_captions(3000, 3010, 'closest')
 
-    print '====================================== experiment1'
-    experiment1(3000, 3010)
+    # print '====================================== experiment1'
+    # experiment1(3000, 3010)
     # print '====================================== experiment2'
-    # experiment2(3000, 3010)
+    # experiment2(3000, 3001)
+    print '====================================== experiment3'
+    experiment3(3000, 3010)
 
     # create_video_captions(0, 3000)
     # create_video_captions(3000, 4500)  # done
