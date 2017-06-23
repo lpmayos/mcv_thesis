@@ -5,8 +5,7 @@ import pprint
 from data_structures.sentence import Sentence
 from data_structures.sense import Sense
 from data_structures.token import Token
-from commons import word_similarity_closest
-from commons import get_relevant_senses
+from commons import word_similarity_closest, get_relevant_senses
 import itertools
 import config
 
@@ -98,7 +97,7 @@ class VideoCaptions(object):
     def get_sentence_text(self, sentence_id):
         """ returns a string containing the sentence itself
         """
-        return self.sentences[sentence_id].get_sentence()
+        return self.sentences[sentence_id].sentence
 
     def compute_all_tokens_similarity(self):
         """
