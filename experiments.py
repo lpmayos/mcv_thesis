@@ -1,3 +1,5 @@
+import sys
+import getopt
 import json
 import time
 import config
@@ -40,10 +42,8 @@ def experiment1(video_id_init, video_id_end):
     plot_embeddings = False
 
     for video_id in range(video_id_init, video_id_end):
-        print '\nvideo ' + str(video_id)
         video_captions = load_video_captions(video_id)
 
-        # order_sentences_by_distance_to_mean(video_captions, True)
         embeddings = []
         labels = []
         for sentence in video_captions.sentences:
@@ -53,7 +53,7 @@ def experiment1(video_id_init, video_id_end):
         embeddings_mean = np.mean(embeddings, axis=0)
         distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
         sort_index = np.argsort(distances)
-        print 'Sentences from closest to fartest to the mean'
+        print '\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n'
         for index in sort_index:
             print str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
 
@@ -135,17 +135,24 @@ def experiment3(video_id_init, video_id_end):
             print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
 
 
-if __name__ == '__main__':
+def main():
+    first_video = int(config.options.first)
+    last_video = int(config.options.last)
 
-    # create_video_captions(3000, 3010, 'closest')
+    if config.options.experiment == 'experiment1':
+        print '====================================== experiment1'
+        experiment1(first_video, last_video)
+    elif config.options.experiment == 'experiment2':
+        print '====================================== experiment2'
+        experiment2(first_video, last_video)
+    elif config.options.experiment == 'experiment3':
+        print '====================================== experiment3'
+        experiment3(first_video, last_video)
+    elif config.options.experiment == 'create_video_captions':
+        print '====================================== creating video captions'
+        create_video_captions(first_video, last_video)  # TODO lpmayos 3000 - 4500 already done
 
-    # print '====================================== experiment1'
-    # experiment1(3000, 3010)
-    # print '====================================== experiment2'
-    # experiment2(3000, 3001)
-    print '====================================== experiment3'
-    experiment3(3000, 3010)
 
-    # create_video_captions(0, 3000)
-    # create_video_captions(3000, 4500)  # done
-    # create_video_captions(4500, 7010)
+# example call: python experiments.py -t tokens_set.pickle -e experiment1 -s 3000 -l 3010
+if __name__ == "__main__":
+    main()  # options are parsed in config.oy
