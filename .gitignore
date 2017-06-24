@@ -4,3 +4,4 @@ vectors_sensembed_json/sensembed_vectors
 env/*
 *.pyc
 pickle/*.pickle
+pickle_small/*.pickle

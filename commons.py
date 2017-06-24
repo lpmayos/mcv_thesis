@@ -1,5 +1,4 @@
 import itertools
-import solr  # corresponds to solrpy
 import numpy as np
 import config
 import matplotlib.pyplot as plt
@@ -11,9 +10,8 @@ def get_relevant_senses(word):
     # Returns set of relevant senses as described in section 3.1 of SensEmbed:
     # Leaning Sense Embeddings for Word and Relational Similarity
 
-    s = solr.SolrConnection('http://localhost:8983/solr/sensembed_vectors')
-    word_senses1 = s.query('sense:' + word + '_bn*')
-    word_senses2 = s.query('sense:' + word)
+    word_senses1 = config.solr_connection.query('sense:' + word + '_bn*')
+    word_senses2 = config.solr_connection.query('sense:' + word)
     return word_senses1.results + word_senses2.results
 
 
@@ -64,7 +62,7 @@ def plot_embeddings_with_labels(embeddings, labels, filename='tsne.png'):
 def load_video_captions(video_id):
     """
     """
-    video_captions = pickle.load(open("pickle/video_captions_" + str(video_id) + ".pickle", "rb"))
+    video_captions = pickle.load(open(config.pickle_folder + "/video_captions_" + str(video_id) + ".pickle", "rb"))
     return video_captions
 
 

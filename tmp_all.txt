@@ -1,0 +1,25 @@
+====================================== experiment3
+
+
+ ***** video 3000. Sentences from most similar to all others to most different to all others:
+
+	a man stomps on a skeleton head so that it falls into lava (43671.0)
+	a man having his face shoved into lava in a video game (42443.0)
+	a man playing a mortal kombat and commentating over the game (40504.0)
+	a guy playing a video game killing another man (38605.0)
+	the video game has men in lava (36631.0)
+	he put his face in lava (36438.0)
+	a man is playing mortal kombat as freddy krueger (35658.0)
+	someone is playing a video game (35061.0)
+	a person is playing a video game (32961.0)
+	a video game character stomps another character (32822.0)
+	a man talking over a clip from a mortal kombat game (32652.0)
+	a man doing a live play of a mortal kombat video game (32386.0)
+	a man doing a live play of a mortal kombat video game (32386.0)
+	a gamer is talking about a fatality in mortal kombat (30951.0)
+	a guy is talking about street fighter (30141.0)
+	the video game is very gruesome (29193.0)
+	freddy krueger wins in a mortal combat fatality (26541.0)
+	freddy kreugar doing a fatality (26139.0)
+	a video game with a character walking through fire (24198.0)
+	a guy plays a fighting game and narrates it (23115.0)

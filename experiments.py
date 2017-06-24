@@ -1,7 +1,4 @@
-import sys
-import getopt
 import json
-import time
 import config
 import numpy as np
 import scipy
@@ -10,18 +7,22 @@ from data_structures.video_captions import VideoCaptions
 import pickle
 
 
-def create_video_captions(video_id_init, video_id_end, compute_similarity=False):
-    """ NOTE: it does NOT check if the pickle object exist, it creates it and overwrittes the old one if it exists
+def remove_training_sentences(sentences_to_remove, new_file_appendix):
+    """
     """
     with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
-
         data = json.load(data_file)
-        for video_id in range(video_id_init, video_id_end):
-            video_captions = VideoCaptions(data, 'video' + str(video_id))
-            if compute_similarity == 'closest':
-                video_captions.compute_all_tokens_similarity()
-            pickle.dump(video_captions, open("pickle/video_captions_" + str(video_id) + ".pickle", "wb"))
-            pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))  # no me conviene hacerlo cada vez si estoy haciendo el dump de muchos videos
+        data_positions_to_remove = []
+        for sentence_to_remove in sentences_to_remove:
+            data_position = [i for i, a in enumerate(data['sentences']) if a['caption'] == sentence_to_remove[0].sentence and a['video_id'] == 'video' + str(sentence_to_remove[1])]
+            data_positions_to_remove.append(data_position[0])
+    new_data_sentences = [a for i, a in enumerate(data['sentences']) if i not in data_positions_to_remove]
+
+    data['sentences'] = new_data_sentences
+
+    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_' + new_file_appendix + '.json', 'w') as outfile:
+        json.dump(data, outfile)
+    return
 
 
 def experiment1(video_id_init, video_id_end):
@@ -32,16 +33,20 @@ def experiment1(video_id_init, video_id_end):
     embedding for all the sentences. Then, we project all the embeddings
     in common space, we compute its centroid and the distances to the
     centroid of each embedding, sorting the captions by distance.
-    Then, we can discard the highest percentage (i.e. 10%) or the ones that
+    Then, we discard the worst two annotations.
+    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
     are above a certain threshold.
 
     Results: a sample of the results (sentence ordering and image of the
-    embedding space) can be seen at results/experiment1/
+    embedding space) is shown on shell if verbose=True and can be also seen at
+    results/experiment1/, and a new train_val_videodatainfo.json is generated to
+    train a new model on /home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_experiment1.json'
+    TODO lpmayos: make this path a parameter
     """
     bfs = True
     plot_embeddings = False
-
-    for video_id in range(video_id_init, video_id_end):
+    sentences_to_remove = []
+    for video_id in range(video_id_init, video_id_end):  # 0, 7010
         video_captions = load_video_captions(video_id)
 
         embeddings = []
@@ -53,12 +58,19 @@ def experiment1(video_id_init, video_id_end):
         embeddings_mean = np.mean(embeddings, axis=0)
         distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
         sort_index = np.argsort(distances)
-        print '\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n'
-        for index in sort_index:
-            print str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
+
+        for sentence_index in sort_index[18:]:  # we remove the two worst sentences
+            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+
+        if config.verbose:
+            print '\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n'
+            for index in sort_index:
+                print '\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
 
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
+
+    remove_training_sentences(sentences_to_remove, 'experiment1')
 
 
 def experiment2(video_id_init, video_id_end):
@@ -73,7 +85,6 @@ def experiment2(video_id_init, video_id_end):
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
 
-        start = time.time()
         # for each token of each sentence we want to know wich token of every other sentence is closer
         for sentence1 in video_captions.sentences:
             print 'sentence ' + str(sentence1.id) + ' ' + sentence1.sentence
@@ -89,19 +100,24 @@ def experiment2(video_id_init, video_id_end):
                     if most_similar_token_in_sentence[0] is not None:
                         print '\t\tmost similar token in sentence ' + str(sentence2.id) + ' is ' + config.tokens_set.tokens[most_similar_token_in_sentence[0]].token + ' (' + str(most_similar_token_in_sentence[1]) + ')\t\t\t(' + sentence2.sentence + ')'
 
-        end = time.time()
-        print str(end - start) + ' seconds'
-
 
 def experiment3(video_id_init, video_id_end):
     """ Goal: compute sentences similarity and rank them.
 
     Method: for each pair of sentences, compute their similarity (non-symmetric)
     as the sum of the distances of each token in one sentence to the closest one
-    in the other sentence, dividing by the number of tokens added.
+    in the other sentence, dividing by the number of tokens added. Then, discard
+    the worst two annotations.
+    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
+    are above a certain threshold.
 
-    Results:
+    Results: a sample of the results (sentence ordering and image of the
+    embedding space) is shown on shell if verbose=True and can be seen at
+    results/experiment3/, and a new train_val_videodatainfo.json is generated to
+    train a new model on /home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_experiment1.json'
+    TODO lpmayos: make this path a parameter
     """
+    sentences_to_remove = []
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
 
@@ -130,9 +146,55 @@ def experiment3(video_id_init, video_id_end):
 
         sentences_global_similarities = np.sum(result, axis=1)
         sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
-        print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
-        for sentence_index in sentences_order:
-            print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+
+        if config.verbose:
+            print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
+            for sentence_index in sentences_order:
+                print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+
+        for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
+            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+
+    remove_training_sentences(sentences_to_remove, 'experiment3')
+
+
+def create_video_captions(video_id_init, video_id_end, compute_similarities=False):
+    """
+    """
+    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+        i = 0
+        data = json.load(data_file)
+        for video_id in range(video_id_init, video_id_end):
+
+            try:
+                video_captions = load_video_captions(video_id)
+            except (OSError, IOError):
+                print '*** creating pickle of video ' + str(video_id)
+                video_captions = VideoCaptions(data, 'video' + str(video_id))
+                pickle.dump(video_captions, open(config.pickle_folder + "/video_captions_" + str(video_id) + ".pickle", "wb"))
+
+            if compute_similarities:
+                video_captions.compute_all_tokens_similarity()
+
+            i += 1
+            if i == 2:
+                print 'saving small tokens_set_2'
+                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_2.pickle', "wb"))
+            if i == 10:
+                print 'saving small tokens_set_10'
+                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_10.pickle', "wb"))
+            if i % 100 == 0:
+                print 'iteration ' + str(i) + ' -----------> dumping tokens set'
+                pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
+        print 'iteration ' + str(i) + ' -----------> dumping tokens set'
+        pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
+
+
+def compute_similarities(video_id_init, video_id_end):
+    """ TODO lpmayos: we'll have to refactor when we incorporate new siilarity
+    strategies.
+    """
+    create_video_captions(video_id_init, video_id_end, True)
 
 
 def main():
@@ -150,9 +212,14 @@ def main():
         experiment3(first_video, last_video)
     elif config.options.experiment == 'create_video_captions':
         print '====================================== creating video captions'
-        create_video_captions(first_video, last_video)  # TODO lpmayos 3000 - 4500 already done
+        create_video_captions(first_video, last_video)
+    elif config.options.experiment == 'compute_similarities':
+        print '====================================== computing similarities'
+        compute_similarities(first_video, last_video)
+    else:
+        print 'bye!'
 
 
-# example call: python experiments.py -t tokens_set.pickle -e experiment1 -s 3000 -l 3010
+# example call: python experiments.py -p pickle_small -e experiment1 -s 3000 -l 3010
 if __name__ == "__main__":
     main()  # options are parsed in config.oy

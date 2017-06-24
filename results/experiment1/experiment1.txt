@@ -1,0 +1,241 @@
+====================================== experiment1
+
+
+ ***** video 3000. Sentences from closest to fartest to the mean:
+
+	0.106155015496 	 a man doing a live play of a mortal kombat video game
+	0.106155015496 	 a man doing a live play of a mortal kombat video game
+	0.155737648914 	 a man talking over a clip from a mortal kombat game
+	0.188226620086 	 a man playing a mortal kombat and commentating over the game
+	0.223084104903 	 a video game with a character walking through fire
+	0.227866653094 	 a guy playing a video game killing another man
+	0.22913291823 	 a man is playing mortal kombat as freddy krueger
+	0.231337219227 	 a video game character stomps another character
+	0.232474990545 	 a person is playing a video game
+	0.240333750663 	 the video game has men in lava
+	0.243912940727 	 the video game is very gruesome
+	0.255827034776 	 a man having his face shoved into lava in a video game
+	0.257009257879 	 a gamer is talking about a fatality in mortal kombat
+	0.276212314922 	 someone is playing a video game
+	0.316423894595 	 a guy plays a fighting game and narrates it
+	0.584729194722 	 freddy krueger wins in a mortal combat fatality
+	0.659021235268 	 a guy is talking about street fighter
+	0.735936785069 	 a man stomps on a skeleton head so that it falls into lava
+	0.788387827186 	 freddy kreugar doing a fatality
+	0.801164710063 	 he put his face in lava
+
+
+ ***** video 3001. Sentences from closest to fartest to the mean:
+
+	0.0902952367477 	 a man and woman are talking
+	0.102339490102 	 a man  is talking to another man and a woman
+	0.116630707649 	 a man is talking to a girl
+	0.123139565069 	 a man is talking
+	0.157549806323 	 a man and a woman talking and another man enters and says i m bored
+	0.157549806323 	 a man and a woman talking and another man enters and says i m bored
+	0.176856759741 	 a man talking about the human soul
+	0.176856759741 	 a man talking about the human soul
+	0.22996398444 	 two people talking about the philosophy of the human soul and a man interrupting them
+	0.230755785525 	 guy and girl talking about the soul
+	0.331747170535 	 two persons are talking
+	0.359605302568 	 a couple are having a conversation when another man interupts
+	0.361126213017 	 two people are talking and a third person appears between them
+	0.362647862372 	 a man discussing the human soul
+	0.427786342003 	 a man discusses the human soul
+	0.446557075549 	 a man talks to his friends about his deep thoughts
+	0.448265705257 	 a man talks about not living in an empty existence in this funny video
+	0.506972138465 	 people talking around table
+	0.539147503638 	 a man is standing behind a mand
+	0.620424199571 	 a couple speaks to a camera for a video segment
+
+
+ ***** video 3002. Sentences from closest to fartest to the mean:
+
+	0.237965600757 	 a young woman opens a square flat box to take out a paper about beauty tips
+	0.240376918583 	 a woman is opening a beauty tips box
+	0.245024399271 	 french woman opens box of mango beauty tips
+	0.245024399271 	 french woman opens box of mango beauty tips
+	0.288131324504 	 a woman opens a box
+	0.294005276828 	 a young woman finds out what s in a box
+	0.294146141128 	 a women doing a box opening of some cosmetics
+	0.334454868596 	 a woman is showing beauty products
+	0.341159061266 	 a woman displays a box in a room
+	0.382826770373 	 a woman talking about beauty products
+	0.408469511326 	 woman holding a box
+	0.422637259148 	 a girl is showing a gift to the camera and then opening it
+	0.429227158214 	 a woman is showing the opening of a package
+	0.436943603843 	 a woman unboxing products
+	0.470815029633 	 woman is doing a review on margo beauty ties
+	0.486076421889 	 a women showing makeup products
+	0.486076421889 	 a women showing makeup products
+	0.491436840858 	 a girl opens a package
+	0.632044734014 	 a person showing a package she got
+	0.698946491764 	 a person is explaining something
+
+
+ ***** video 3003. Sentences from closest to fartest to the mean:
+
+	0.141705850785 	 a woman slices up some potatoes
+	0.15020080593 	 a woman cutting potatoes
+	0.15020080593 	 a woman is cutting potatoes
+	0.156280356262 	 a person is cooking potatoes
+	0.17595578556 	 in a cooking video a woman slices potatoes into large pieces
+	0.188895831271 	 a person is slicing potatoes in preparation for making soup
+	0.193294877596 	 a woman demonstrates the cutting of potatoes
+	0.205346112443 	 a person is cutting potatoes
+	0.234755745064 	 cooking potatoes in the kitchen
+	0.251898614044 	 potatoes are cut in half by a woman
+	0.259458237099 	 someone is preparing potatos
+	0.261449098383 	 a woman gives a cooking tutorial beginng with three potatoes
+	0.264013443368 	 a woman begins cutting three potatoes into pieces
+	0.266592556384 	 how to cook potatoes
+	0.321813748024 	 woman shows how to prepare potatoes
+	0.378111427315 	 a woman cuts three potatoes into three pieces
+	0.396596053669 	 a person is preparing some food
+	0.518296529226 	 a woman is cutting potaoes
+	0.608067059143 	 a woman describes and demonstrates a recipe
+	0.82845276091 	 lady showing how to cut
+
+
+ ***** video 3004. Sentences from closest to fartest to the mean:
+
+	0.169804961496 	 the spider was crawling on the ceiling
+	0.169804961496 	 a spider is crawling on a ceiling
+	0.177224244256 	 there s a spider on the ceiling
+	0.180220834031 	 a person getting a spider off of the ceiling
+	0.205043648809 	 a large spider is on the ceiling in the kitchen
+	0.226002126458 	 a family discovers a spider on the ceiling
+	0.245784825844 	 a closeup of a spider on a ceiling is given while a man points to it
+	0.257601125713 	 person messing with spider in a kitchen
+	0.268238107829 	 a spider climbs up a wall
+	0.30319785052 	 a man picks up a spider
+	0.31648560795 	 a tiny spider shown on a wall
+	0.331965159037 	 a spider sits on the wall
+	0.332757849953 	 a person is filming a spider
+	0.332757849953 	 a person is filming a spider
+	0.378713221411 	 little girl freaks out over spider
+	0.485022119086 	 a child is filming a bug she found on the wall of her family s kitchen
+	0.568613838766 	 a person is videoing in the kitchen while someone is cooking
+	0.601964661959 	 a first person video in a kitchen
+	0.690499827915 	 a kitchen is being presented
+	0.787611459084 	 this is a video of a mosquito being modified
+
+
+ ***** video 3005. Sentences from closest to fartest to the mean:
+
+	0.257799433481 	 a guy and woman in a movie
+	0.325985025931 	 a woman walking down a hallway followed by a few different clips outlining a movie
+	0.362986686325 	 a woman is walking through a dark tunnel
+	0.362986686325 	 a woman is walking through a dark tunnel
+	0.36641105452 	 a woman is slowly walking towards a man
+	0.36641105452 	 a woman is slowly walking towards a man
+	0.39377297713 	 a woman walks down a suspenseful hallway
+	0.402296227094 	 a trailer for a horror movie
+	0.404700184842 	 a few scenes from a horror movie
+	0.435437703553 	 a woman is struggling down a hallway
+	0.442916568061 	 a woman and a photographer face each other in a preview
+	0.442916568061 	 a woman and a photographer face each other in a preview
+	0.445300232861 	 a trailer for a movie is shown
+	0.448435544824 	 a woman having flash backs
+	0.469095233933 	 thee are random scenes from a movie preview
+	0.473799226034 	 a woman is taking a photo of another person
+	0.519839666305 	 a clipping from the movie
+	0.529780992499 	 woman has hallucinations of seeing herself
+	0.547710170853 	 a short trailer for a movie called another me
+	0.774614038887 	 two men in hoodies are on a pier
+
+
+ ***** video 3006. Sentences from closest to fartest to the mean:
+
+	0.243363848586 	 a person speaking to a woman in a movie scene and various scenes are shown as trailer
+	0.260597947846 	 a movie scene girl in book standing near white bord girl and boy speaking student holding books lady and old man speaking displaying on screen
+	0.295922538421 	 a man is speaking to a woman a woman is speaking to another woman a woman is speaking to a man
+	0.312719109668 	 a woman describes a movie and various actors talk during scenes from the movie
+	0.349442662564 	 a man tries to highfive a woman who ignores him and a boy talks to a girl
+	0.362738796578 	 a woman is talking about a tv show while scenes from the show are displayed
+	0.378691912827 	 a young man talks to a woman and people walk up stairs
+	0.381145417818 	 watch mojo reviews how to get away with murder scenes from characters in the show flash on the screen ending with a shouting courtroom scene
+	0.391058227654 	 a guy in red shirt tries to give a hi5 to a women near to him and a black women argue in a furious way in the court hall
+	0.39511444288 	 a woman is talking about the cast of a movie and how they re mostly newcomers
+	0.418392858495 	 a woman is speaking about a mystery of a future murder
+	0.431853625378 	 a lady talking of something about a movie celebrities
+	0.499639034733 	 a lady speak to fight and a man tell the judgement
+	0.514412155505 	 a female talking about cast members in a new show about law cases
+	0.526644944025 	 a women describing a movie and giving her review
+	0.530232795233 	 an advertisement about the movie trialler is being shown and different movie pictures are seen
+	0.578700303934 	 a description of a dramatic television show and its new cast members
+	0.581713715086 	 trailer of new show how to get away with murder
+	0.702559864239 	 scene from a popular series where different people engage in some activities
+	0.830092553038 	 the college campas all students are enjoy the free time
+
+
+ ***** video 3007. Sentences from closest to fartest to the mean:
+
+	0.0936856647185 	 a person is putting ingredients and raw meat into a plastic bag there is raw meat on a cutting board
+	0.126727841277 	 a man is putting seasonings in a bag and then placing meat in the bag
+	0.15055849392 	  with arms covered in star-shaped tattoos pours powdered ingredients and uncooked pieces of round meat into a plastic bag
+	0.157744974152 	 someone is putting meat piece in plastic bags and adds salt pepper etc  to it
+	0.164375372512 	 a person is putting dry ingredients and raw meat into a platic bag
+	0.17906567976 	 a man with some tattoos is putting red meat in a bag
+	0.194859271209 	 a person adds flour to a plastic bag and then adds few other powders to it along with it meat piece and shakes it well
+	0.19515954305 	 a man with several star tattoos on his arms is seasoning meat in a bag
+	0.203222493264 	 a man and a meat mixing pouring dish plastic bags  inside kitchen to prepare to serve to eat displaying on screen
+	0.209263302356 	 a man prepares a seasoning for fresh meat on a cutting board
+	0.214017755036 	 a man putting different seasoning ingredients into a bag
+	0.214981674805 	 in a kitchen person with tattoos is preparing the meat
+	0.225804942512 	 a man is preparing meat that he has in chunks sitting on a cutting board
+	0.231559026617 	 in a kitchen man is making a meal with meat
+	0.236327171767 	 a chef illustrates how to prepare braised and flour fresh ox tail meat
+	0.269061303848 	 a wooden cutting board holds round piece of red meat with a center bone a glass bowl of white powder
+	0.321442546143 	 a man and a bowl pouring in plastic bag mixing dish inside kitchen to prepare to serve to eat displaying on screen
+	0.360963435235 	 a man seasons his meat while narrating what kind of spices he is using
+	0.425153285629 	 a chef with a star tatoo on his hand seasons several pieces of meat
+	0.457064800483 	 a man seasons and marinates four steaks in a kitchen
+
+
+ ***** video 3008. Sentences from closest to fartest to the mean:
+
+	0.296249713321 	 stick figures change expression when someone snaps their fingers
+	0.319088320923 	 a man talking over his animations
+	0.3307703381 	 cartoon characters are doing different tasks and a human is snapping their fingers over the images
+	0.399004276771 	 a man is talking art
+	0.425889134579 	 man describes simple tools to help children learn
+	0.453232013585 	 a short cartoon clip featuring stick figures
+	0.470350633365 	 someone is making a cartoon
+	0.476273388689 	 a man is talking about helpful tips
+	0.480353946369 	 a man describes how children can make art and learn
+	0.50910890705 	 it is the drawing image for animation
+	0.526450345689 	 finger censored control on images
+	0.529217400813 	 someone showing some drawing s and talk about that
+	0.549495874185 	 story with animated drawn characters
+	0.558835008156 	 a man talks about how to help students learn easily
+	0.56276276966 	 a man gives a presentation
+	0.567196551575 	 fingers are snapped in front of drawings
+	0.575227645561 	 someone describing learning tools
+	0.577776981022 	 a narrator talking about a product
+	0.653654396419 	 a hand is snapping
+	0.653654396419 	 a hand is snapping
+
+
+ ***** video 3009. Sentences from closest to fartest to the mean:
+
+	0.223146339295 	 a man in a blue sleeveless t-shirt and swim trunks talks and dances to music while sitting by a pool he then enters the pool
+	0.228556670158 	 a man in a blue tank top and swim trunks is hanging out by a pool
+	0.239177813791 	 a guy wearing a sleeveless blue t-shirt sits and stands next to a swimming pool
+	0.246024906967 	 a woman swimming in swimming pool and a guy in blue shirt showing signs
+	0.270459592277 	 a man in tank top sits on lounge chair by pool then gets up to talk to friend
+	0.306592346285 	 man from the swimming pool is climbing up and get relaxed in a chair
+	0.317136722157 	 a man in a blue muscle shirt sits in a deck chair
+	0.324141989352 	 at a poolside a man in a blue tank top is sitting on a chair
+	0.329063232956 	 a man in a blue shirt sits in a lawn chair then he lip syncs to a boy band song
+	0.338283115507 	 a young man in a purple tank top is in and around a pool
+	0.351844031991 	 the boy is sitting with a blue suit he stands and starts to sing he removes his shirt
+	0.353980058104 	 a man is sitting down in a seat he then gets up and starts speaking to the camera he is in a bathing suit
+	0.362564840051 	 man in swimming pool and trying to act gangster to backstreet boys music
+	0.400865264163 	 the young man in blue dress watching something interestingly in the mobile
+	0.40160246668 	 sitting by the pool and swimming someone is lip syncing larger than life by the back street boys
+	0.410514600102 	 a man sitting pool side and then dancing while his friend talks
+	0.429935991345 	 a man is inside a pool and trying to get out
+	0.442557005871 	 a person doing activity at swimming pool and could not smile looking at the camera which he is holding
+	0.453126297305 	 a man sitting near to a pond and look at his mobile phone and dances
+	0.455015227971 	 the swimming pool is nearby getting bathed and relaxed along with sun bath
