@@ -2,7 +2,7 @@ import json
 import config
 import numpy as np
 import scipy
-from commons import load_video_captions, plot_embeddings_with_labels, generate_json_file_batches, save_sensembeds_to_solr
+from commons import load_video_captions, plot_embeddings_with_labels
 from data_structures.video_captions import VideoCaptions
 import pickle
 
@@ -72,7 +72,10 @@ def experiment1(video_id_init, video_id_end):
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
 
-    remove_training_sentences(sentences_to_remove, 'experiment1')
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+        remove_training_sentences(sentences_to_remove, 'experiment1')
+    else:
+        print '[WARNING] New json file not created because we are not working with the full data'
 
 
 def experiment2(video_id_init, video_id_end):
@@ -157,7 +160,10 @@ def experiment3(video_id_init, video_id_end):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    remove_training_sentences(sentences_to_remove, 'experiment3')
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+        remove_training_sentences(sentences_to_remove, 'experiment3')
+    else:
+        print '[WARNING] New json file not created because we are not working with the full data'
 
 
 def create_video_captions(video_id_init, video_id_end, compute_similarities=False):
@@ -229,12 +235,6 @@ def main():
     elif config.options.experiment == 'compute_similarities':
         print '====================================== computing similarities'
         compute_similarities(first_video, last_video)
-    elif config.options.experiment == 'generate_json_file_batches':
-        print '====================================== generating json file batches'
-        generate_json_file_batches()
-    elif config.options.experiment == 'save_sensembeds_to_solr':
-        print '====================================== saving sensembeds to solr'
-        save_sensembeds_to_solr()
     else:
         print 'bye!'
 

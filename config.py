@@ -12,8 +12,8 @@ parser.add_option('-e', '--experiment', help='Experiment name (see main function
 parser.add_option('-s', '--first', help='First video number [0-7010]')
 parser.add_option('-l', '--last', help='Last video number [0-7010]')
 parser.add_option('-v', '--verbose', help='Show info on command line')
-parser.add_option('-sp', '--solr_sensembed_path', help='Show info on command line')
-parser.add_option('-jp', '--path_to_train_val_videodatainfo', help='Path to train_val_videodatainfo.json')
+parser.add_option('-x', '--solr_sensembed_path', help='Show info on command line')
+parser.add_option('-y', '--path_to_train_val_videodatainfo', help='Path to train_val_videodatainfo.json')
 (options, args) = parser.parse_args()
 
 if not options.experiment or not options.first or not options.last or not options.pickle_folder or not options.verbose or not options.solr_sensembed_path or not options.path_to_train_val_videodatainfo:
