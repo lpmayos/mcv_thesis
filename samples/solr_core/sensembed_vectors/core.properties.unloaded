@@ -1,0 +1,5 @@
+#Written by CorePropertiesLocator
+#Fri Nov 06 10:36:04 UTC 2015
+name=sensembed_vectors
+config=solrconfig.xml
+schema=schema.xml

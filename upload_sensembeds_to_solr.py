@@ -1,8 +1,9 @@
 import requests
+import config
 
 
 def main():
-    # generate_json_file_batches()
+    generate_json_file_batches()
     save_sensembeds_to_solr()
 
 
@@ -12,15 +13,7 @@ def save_sensembeds_to_solr():
     i = 1
     num_docs = 39
     while i <= num_docs:
-        # url = 'http://localhost:8983/solr/sensembed_vectors/update'
-        # headers = {'content-type': 'application/json'}
-        # params = {"commit": "true", 'data-binary': '@sensembed_vectors/sensembed_' + str(i) + '.json'}
-        # res = requests.post(url, params=params, headers=headers)
-        # print res
-        # print 'uploaded doc ' + str(i) + ' of ' + str(num_docs) + ' to solr'
-        # i += 1
-
-        url = 'http://localhost:8983/solr/sensembed_vectors/update'
+        url = config.solr_path + '/update'
         headers = {"content-type": "application/json"}
         params = {"commit": "true"}
         payload = open('vectors_sensembed_json/sensembed_' + str(i) + '.json', "rb").read()

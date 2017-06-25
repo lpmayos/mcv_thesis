@@ -2,15 +2,16 @@ import json
 import config
 import numpy as np
 import scipy
-from commons import load_video_captions, plot_embeddings_with_labels
+from commons import load_video_captions, plot_embeddings_with_labels, generate_json_file_batches, save_sensembeds_to_solr
 from data_structures.video_captions import VideoCaptions
 import pickle
 
 
 def remove_training_sentences(sentences_to_remove, new_file_appendix):
+    """ Load the video annotations from json file, and makes a copy removing the
+    sentences indicated in sentences_to_remove, adding a sufix to the file name.
     """
-    """
-    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+    with open(config.path_to_train_val_videodatainfo) as data_file:
         data = json.load(data_file)
         data_positions_to_remove = []
         for sentence_to_remove in sentences_to_remove:
@@ -20,7 +21,8 @@ def remove_training_sentences(sentences_to_remove, new_file_appendix):
 
     data['sentences'] = new_data_sentences
 
-    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_' + new_file_appendix + '.json', 'w') as outfile:
+    new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + new_file_appendix + '.json'
+    with open(new_file_path, 'w') as outfile:
         json.dump(data, outfile)
     return
 
@@ -40,8 +42,8 @@ def experiment1(video_id_init, video_id_end):
     Results: a sample of the results (sentence ordering and image of the
     embedding space) is shown on shell if verbose=True and can be also seen at
     results/experiment1/, and a new train_val_videodatainfo.json is generated to
-    train a new model on /home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_experiment1.json'
-    TODO lpmayos: make this path a parameter
+    train a new model on config.path_to_train_val_videodatainfo with sufix
+    # experiment1
     """
     bfs = True
     plot_embeddings = False
@@ -80,7 +82,8 @@ def experiment2(video_id_init, video_id_end):
     Method: in config.tokens_set we have computed the similarity of every pair
     of tokens, so we just loop over all of them and keep the most similar.
 
-    Results:  a sample of the results can be seen at results/experiment2/most_similar_tokens.txt
+    Results:  a sample of the results can be seen at results/experiment2/, and
+    results are shown on shell
     """
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
@@ -111,11 +114,10 @@ def experiment3(video_id_init, video_id_end):
     TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
     are above a certain threshold.
 
-    Results: a sample of the results (sentence ordering and image of the
-    embedding space) is shown on shell if verbose=True and can be seen at
-    results/experiment3/, and a new train_val_videodatainfo.json is generated to
-    train a new model on /home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_experiment1.json'
-    TODO lpmayos: make this path a parameter
+    Results: sentence ranking is shown on shell if verbose=True, a sample can be
+    also seen at results/experiment3/, and a new train_val_videodatainfo.json is
+    generated to train a new model on config.path_to_train_val_videodatainfo
+    with sufix _experiment3
     """
     sentences_to_remove = []
     for video_id in range(video_id_init, video_id_end):
@@ -159,9 +161,20 @@ def experiment3(video_id_init, video_id_end):
 
 
 def create_video_captions(video_id_init, video_id_end, compute_similarities=False):
+    """ Goal: create pickle files containing video and tokens information, to
+    speed up the experiments.
+
+    Method: for each video in train_val_set try to load videoCaption object
+    from pickle. If it dies not exist, create a VideoCaption object and save it
+    as pickle, and add all its tokens to token_set, containing information of
+    all the tokens of all sentences of all videos.
+    If compute_similarities is True, it computes the similarity between all
+    pairs of tokens extracted from the annotations and saves it to tokens_set.
+
+    Results: pickle files for each video and for tokens_set are saved to
+    config.pickle_folder
     """
-    """
-    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json') as data_file:
+    with open(config.path_to_train_val_videodatainfo) as data_file:
         i = 0
         data = json.load(data_file)
         for video_id in range(video_id_init, video_id_end):
@@ -177,9 +190,6 @@ def create_video_captions(video_id_init, video_id_end, compute_similarities=Fals
                 video_captions.compute_all_tokens_similarity()
 
             i += 1
-            if i == 2:
-                print 'saving small tokens_set_2'
-                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_2.pickle', "wb"))
             if i == 10:
                 print 'saving small tokens_set_10'
                 pickle.dump(config.tokens_set, open('pickle_small/tokens_set_10.pickle', "wb"))
@@ -191,7 +201,10 @@ def create_video_captions(video_id_init, video_id_end, compute_similarities=Fals
 
 
 def compute_similarities(video_id_init, video_id_end):
-    """ TODO lpmayos: we'll have to refactor when we incorporate new siilarity
+    """ Compute the similarity between all pairs of tokens extracted from the
+    annotations and save it to tokens_set, creating videoCaption objects for
+    videos and saving them as pickle if they don't exist.
+    TODO lpmayos: we'll have to refactor when we incorporate new siilarity
     strategies.
     """
     create_video_captions(video_id_init, video_id_end, True)
@@ -216,6 +229,12 @@ def main():
     elif config.options.experiment == 'compute_similarities':
         print '====================================== computing similarities'
         compute_similarities(first_video, last_video)
+    elif config.options.experiment == 'generate_json_file_batches':
+        print '====================================== generating json file batches'
+        generate_json_file_batches()
+    elif config.options.experiment == 'save_sensembeds_to_solr':
+        print '====================================== saving sensembeds to solr'
+        save_sensembeds_to_solr()
     else:
         print 'bye!'
 

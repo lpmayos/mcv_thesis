@@ -4,6 +4,7 @@ import config
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 import pickle
+import requests
 
 
 def get_relevant_senses(word):
@@ -63,25 +64,3 @@ def load_video_captions(video_id):
     """
     video_captions = pickle.load(open(config.pickle_folder + "/video_captions_" + str(video_id) + ".pickle", "rb"))
     return video_captions
-
-
-# def order_sentences_by_distance_to_mean(video_captions, bfs, plot_embeddings=False):
-#     """ orders the sentences of the video_captions by distance to the mean;
-#     if bfs, the mean is computed as the sum of the sensembeds of **the first** sense of all the tokens of a sentence.
-#     else, the mean is computed as the sum of the sensembeds of **all possible** senses of all the tokens of a sentence.
-#     """
-#     embeddings = []
-#     labels = []
-#     for sentence in video_captions.sentences:
-#         embeddings.append(sentence.get_sentence_embedding(bfs))
-#         labels.append(sentence.get_sentence())
-
-#     embeddings_mean = np.mean(embeddings, axis=0)
-#     distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
-#     sort_index = np.argsort(distances)
-#     print 'Sentences from closest to fartest to the mean'
-#     for index in sort_index:
-#         print str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
-
-#     if plot_embeddings:
-#         plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
