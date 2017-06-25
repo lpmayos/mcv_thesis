@@ -24,7 +24,6 @@ def tanimoto_distance(w1, w2):
 def word_similarity_closest(token1, token2):
     """ implementation of the word similarity measure described in algorithm 1
     of senseEmbed paper using the 'closest' strategy
-    TODO lpmayos: add 'weighted' strategy
     """
     if (token1.id, token2.id) in config.tokens_set.tokens_similarities_closest:
         similarity = config.tokens_set.tokens_similarities_closest[(token1.id, token2.id)]
