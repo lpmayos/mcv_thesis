@@ -18,7 +18,8 @@ As the excerpts of the caption lists in Figure 1 show, the specificity and quali
 
 ## Pre-processing
 
-All experiments require the existence of a solr core containing the sensembeddings for each token, and the previous execution (once) of compute_similarities, which generates a pickle file for each video and a pickle file containing the tokens_set, variables which are necessary to the execution of the experiments. An execution example can be found at launch_experiments_all.sh, where the necessary variables are defined and all the experiments are executed, including this pre-processing step.
+All experiments require the existence of a solr core containing the sensembeddings for each token, and the previous execution (once) of compute_similarities, which generates a pickle file for each video and a pickle file containing the tokens_set, variables which are necessary to the execution of the experiments.
+
 
 ### SenseEmbeds: Solr
 
