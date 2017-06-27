@@ -5,3 +5,4 @@ env/*
 *.pyc
 pickle/*.pickle
 pickle_small/*.pickle
+results/experiment2/experiment2.txt
