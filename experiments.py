@@ -54,8 +54,10 @@ def experiment1(video_id_init, video_id_end):
         embeddings = []
         labels = []
         for sentence in video_captions.sentences:
-            embeddings.append(sentence.get_sentence_embedding(bfs))
-            labels.append(sentence.sentence)
+            sentence_embedding = sentence.get_sentence_embedding(bfs)
+            if len(sentence_embedding) > 0:  # there are sentences without senses (i.e. 'its a t') --> no embedding!
+                embeddings.append(sentence_embedding)
+                labels.append(sentence.sentence)
 
         embeddings_mean = np.mean(embeddings, axis=0)
         distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
@@ -67,7 +69,10 @@ def experiment1(video_id_init, video_id_end):
         if config.verbose:
             print '\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n'
             for index in sort_index:
-                print '\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
+                try:
+                    print '\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
+                except UnicodeEncodeError:
+                    print '\t [PRINTING ERROR] with printing sentence'
 
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
@@ -89,13 +94,20 @@ def experiment2(video_id_init, video_id_end):
     results are shown on shell
     """
     for video_id in range(video_id_init, video_id_end):
+        print '\n\n ***** video ' + str(video_id)
         video_captions = load_video_captions(video_id)
 
         # for each token of each sentence we want to know wich token of every other sentence is closer
         for sentence1 in video_captions.sentences:
-            print 'sentence ' + str(sentence1.id) + ' ' + sentence1.sentence
+            try:
+                print '\tsentence ' + str(sentence1.id) + ' ' + sentence1.sentence
+            except UnicodeEncodeError:
+                print '[PRINTING ERROR] with printing sentence ' + str(sentence1.id)
             for token1_id in sentence1.tokens_id_list:
-                print '\ttoken ' + config.tokens_set.tokens[token1_id].token
+                try:
+                    print '\t\ttoken ' + config.tokens_set.tokens[token1_id].token
+                except UnicodeEncodeError:
+                    print '[PRINTING ERROR] with printing token'
                 for sentence2 in video_captions.sentences:
                     most_similar_token_in_sentence = (None, float('-inf'))
                     for token2_id in sentence2.tokens_id_list:
@@ -104,7 +116,10 @@ def experiment2(video_id_init, video_id_end):
                             if similarity > most_similar_token_in_sentence[1]:
                                 most_similar_token_in_sentence = (token2_id, similarity)
                     if most_similar_token_in_sentence[0] is not None:
-                        print '\t\tmost similar token in sentence ' + str(sentence2.id) + ' is ' + config.tokens_set.tokens[most_similar_token_in_sentence[0]].token + ' (' + str(most_similar_token_in_sentence[1]) + ')\t\t\t(' + sentence2.sentence + ')'
+                        try:
+                            print '\t\t\tmost similar token in sentence ' + str(sentence2.id) + ' is ' + config.tokens_set.tokens[most_similar_token_in_sentence[0]].token + ' (' + str(most_similar_token_in_sentence[1]) + ')\t\t\t(' + sentence2.sentence + ')'
+                        except UnicodeEncodeError:
+                            print '\t\t\t[PRINTING ERROR] with printing most similar token in sentence ' + str(sentence2.id)
 
 
 def experiment3(video_id_init, video_id_end):
@@ -155,7 +170,10 @@ def experiment3(video_id_init, video_id_end):
         if config.verbose:
             print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
             for sentence_index in sentences_order:
-                print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+                try:
+                    print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+                except UnicodeEncodeError:
+                    print '\t [PRINTING ERROR] with printing sentence'
 
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
