@@ -11,7 +11,8 @@ path_to_train_val_videodatainfo="/home/lpmayos/code/caption-guided-saliency/DATA
 
 # python experiments.py --pickle_folder $pickle_folder --experiment experiment1 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment1/experiment1.txt
 # python experiments.py --pickle_folder $pickle_folder --experiment experiment2 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment2/experiment2.txt
-python experiments.py --pickle_folder $pickle_folder --experiment experiment3 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment3/experiment3.txt
-python experiments.py --pickle_folder $pickle_folder --experiment experiment4 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment4/experiment4.txt
+# python experiments.py --pickle_folder $pickle_folder --experiment experiment3 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment3/experiment3.txt
+# python experiments.py --pickle_folder $pickle_folder --experiment experiment4 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment4/experiment4.txt
+python experiments.py --pickle_folder $pickle_folder --experiment experiment5 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment5/experiment5.txt
 
 # python experiments.py --pickle_folder $pickle_folder --experiment experiment3 --first 3000 --last 3010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment3/experiment3_all_reduced.txt

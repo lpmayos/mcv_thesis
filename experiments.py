@@ -202,7 +202,7 @@ def experiment4(video_id_init, video_id_end):
     with sufix _experiment4
     """
 
-    threshold = 0.2
+    threshold = config.closest_similarity_threshold
 
     sentences_to_remove = []
     for video_id in range(video_id_init, video_id_end):
@@ -250,6 +250,76 @@ def experiment4(video_id_init, video_id_end):
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
         remove_training_sentences(sentences_to_remove, 'experiment4')
+    else:
+        print '[WARNING] New json file not created because we are not working with the full data'
+
+
+def experiment5(video_id_init, video_id_end):
+    """ Goal: compute sentences similarity and rank them.
+
+    Method: for each pair of sentences, compute their similarity (non-symmetric)
+    as the sum 1 for each token if similarity to the closest one in the other
+    sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of
+    tokens. Then, discard the worst two annotations.
+    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
+    are above a certain threshold.
+    TODO lpmayos: threshold determined by observation of experiment2 comparisons
+    between tokens. Give it a little thought!
+
+    Results: sentence ranking is shown on shell if verbose=True, a sample can be
+    also seen at results/experiment4/, and a new train_val_videodatainfo.json is
+    generated to train a new model on config.path_to_train_val_videodatainfo
+    with sufix _experiment5
+    """
+
+    threshold = config.closest_similarity_threshold
+
+    sentences_to_remove = []
+    for video_id in range(video_id_init, video_id_end):
+        video_captions = load_video_captions(video_id)
+
+        result = np.empty([20, 20])
+        i = 0
+        for sentence1 in video_captions.sentences:
+            j = 0
+            for sentence2 in video_captions.sentences:
+                similarities = []
+                for token1_id in sentence1.tokens_id_list:
+                    most_similar_token_in_sentence = (None, float('-inf'))
+                    for token2_id in sentence2.tokens_id_list:
+                        if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
+                            similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
+                            if similarity > most_similar_token_in_sentence[1]:
+                                most_similar_token_in_sentence = (token2_id, similarity)
+                    if most_similar_token_in_sentence[0] is not None:
+                        if most_similar_token_in_sentence[1] > threshold:
+                            similarities.append((most_similar_token_in_sentence[0], 1))  # for each token we add 1 instead of similarity
+                        else:
+                            similarities.append((None, 0))
+                if len(similarities) > 0:
+                    sentences_similarity = float(sum([a[1] for a in similarities])) / len(similarities)
+                else:
+                    sentences_similarity = 0
+                result[i, j] = sentences_similarity
+                j += 1
+            i += 1
+
+        sentences_global_similarities = np.sum(result, axis=1)
+        sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
+
+        if config.verbose:
+            print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
+            for sentence_index in sentences_order:
+                try:
+                    print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+                except UnicodeEncodeError:
+                    print '\t [PRINTING ERROR] with printing sentence'
+
+        for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
+            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+        remove_training_sentences(sentences_to_remove, 'experiment5')
     else:
         print '[WARNING] New json file not created because we are not working with the full data'
 
@@ -320,6 +390,9 @@ def main():
     elif config.options.experiment == 'experiment4':
         print '====================================== experiment4'
         experiment4(first_video, last_video)
+    elif config.options.experiment == 'experiment5':
+        print '====================================== experiment5'
+        experiment5(first_video, last_video)
     elif config.options.experiment == 'create_video_captions':
         print '====================================== creating video captions'
         create_video_captions(first_video, last_video)

@@ -47,6 +47,10 @@ else:
     verbose = False
 
 
+# Threshold to consider in experiments using closest similarity measures
+closest_similarity_threshold = 0.2
+
+
 # When launching experiments that would change the previously created pickle
 # files, if they exist, warn the user:
 if options.experiment == 'create_video_captions':
