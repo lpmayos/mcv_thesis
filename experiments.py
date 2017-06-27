@@ -193,6 +193,8 @@ def experiment4(video_id_init, video_id_end):
     the number of tokens added. Then, discard the worst two annotations.
     TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
     are above a certain threshold.
+    TODO lpmayos: threshold determined by observation of experiment2 comparisons
+    between tokens. Give it a little thought!
 
     Results: sentence ranking is shown on shell if verbose=True, a sample can be
     also seen at results/experiment4/, and a new train_val_videodatainfo.json is

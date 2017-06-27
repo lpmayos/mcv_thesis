@@ -73,8 +73,19 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
-**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the distances of each token in one sentence to the closest one in the other sentence, dividing by the number of tokens added. Then, discard the worst two annotations.
+**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarity of each token in one sentence to the closest one in the other sentence, dividing by the number of tokens added. Then, discard the worst two annotations.
 
 **Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment3/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment3
+
+**Execution**: see launch_experiments_all.sh
+
+
+### Experiment 4
+
+**Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
+
+**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarities of each token in one sentence to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the number of tokens added. Then, discard the worst two annotations.
+
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment4/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment4
 
 **Execution**: see launch_experiments_all.sh
