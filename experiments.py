@@ -443,11 +443,13 @@ def main():
     elif config.options.experiment == 'experiment5':
         experiment5(first_video, last_video)
     elif config.options.experiment == 'create_boxplots_different_thresholds':
-        experiment1(first_video, last_video)
-        experiment3(first_video, last_video)
-        for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
-            experiment4(first_video, last_video, threshold)
-        for threshold in [0.2, 0.18, 0.16, 0.14, 0.12, 0.1]:
+        # experiment1(first_video, last_video)
+        # experiment3(first_video, last_video)
+        # for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
+        #     experiment4(first_video, last_video, threshold)
+        # for threshold in [0.2, 0.18, 0.16, 0.14, 0.12, 0.1]:
+        #     experiment5(first_video, last_video, threshold)
+        for threshold in [0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.4]:
             experiment5(first_video, last_video, threshold)
     elif config.options.experiment == 'create_video_captions':
         create_video_captions(first_video, last_video)
