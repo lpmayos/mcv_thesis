@@ -14,9 +14,10 @@ parser.add_option('-l', '--last', help='Last video number [0-7010]')
 parser.add_option('-v', '--verbose', help='Show info on command line')
 parser.add_option('-x', '--solr_sensembed_path', help='Show info on command line')
 parser.add_option('-y', '--path_to_train_val_videodatainfo', help='Path to train_val_videodatainfo.json')
+parser.add_option('-z', '--create_new_training_sentences', help='true if we want to generate new training sentences')
 (options, args) = parser.parse_args()
 
-if not options.experiment or not options.first or not options.last or not options.pickle_folder or not options.verbose or not options.solr_sensembed_path or not options.path_to_train_val_videodatainfo:
+if not options.experiment or not options.first or not options.last or not options.pickle_folder or not options.verbose or not options.solr_sensembed_path or not options.path_to_train_val_videodatainfo or not options.create_new_training_sentences:
     print '[ERROR] Missing parameters. See config.py.'
     sys.exit(2)
 
@@ -45,6 +46,12 @@ if options.verbose == 'true':
     verbose = True
 else:
     verbose = False
+
+
+if options.create_new_training_sentences == 'true':
+    create_new_training_sentences = True
+else:
+    create_new_training_sentences = False
 
 
 # Threshold to consider in experiments using closest similarity measures

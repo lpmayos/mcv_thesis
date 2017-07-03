@@ -5,26 +5,7 @@ import scipy
 from commons import load_video_captions, plot_embeddings_with_labels
 from data_structures.video_captions import VideoCaptions
 import pickle
-
-
-def remove_training_sentences(sentences_to_remove, new_file_appendix):
-    """ Load the video annotations from json file, and makes a copy removing the
-    sentences indicated in sentences_to_remove, adding a sufix to the file name.
-    """
-    with open(config.path_to_train_val_videodatainfo) as data_file:
-        data = json.load(data_file)
-        data_positions_to_remove = []
-        for sentence_to_remove in sentences_to_remove:
-            data_position = [i for i, a in enumerate(data['sentences']) if a['caption'] == sentence_to_remove[0].sentence and a['video_id'] == 'video' + str(sentence_to_remove[1])]
-            data_positions_to_remove.append(data_position[0])
-    new_data_sentences = [a for i, a in enumerate(data['sentences']) if i not in data_positions_to_remove]
-
-    data['sentences'] = new_data_sentences
-
-    new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + new_file_appendix + '.json'
-    with open(new_file_path, 'w') as outfile:
-        json.dump(data, outfile)
-    return
+import matplotlib.pyplot as plt
 
 
 def experiment1(video_id_init, video_id_end):
@@ -48,6 +29,7 @@ def experiment1(video_id_init, video_id_end):
     bfs = True
     plot_embeddings = False
     sentences_to_remove = []
+    all_videos_sentences_distances = []  # stores in a single array the distances computed for each video
     for video_id in range(video_id_init, video_id_end):  # 0, 7010
         video_captions = load_video_captions(video_id)
 
@@ -61,6 +43,7 @@ def experiment1(video_id_init, video_id_end):
 
         embeddings_mean = np.mean(embeddings, axis=0)
         distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
+        all_videos_sentences_distances += distances
         sort_index = np.argsort(distances)
 
         for sentence_index in sort_index[18:]:  # we remove the two worst sentences
@@ -76,6 +59,8 @@ def experiment1(video_id_init, video_id_end):
 
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
+
+    plot_similarities(all_videos_sentences_distances, 'experiment1', 'Experiment 1 sentences distance to mean boxplot')
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
         remove_training_sentences(sentences_to_remove, 'experiment1')
@@ -138,6 +123,7 @@ def experiment3(video_id_init, video_id_end):
     with sufix _experiment3
     """
     sentences_to_remove = []
+    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
 
@@ -161,6 +147,8 @@ def experiment3(video_id_init, video_id_end):
                 else:
                     sentences_similarity = 0
                 result[i, j] = sentences_similarity
+                if i != j:
+                    all_videos_sentences_similarities.append(sentences_similarity)
                 j += 1
             i += 1
 
@@ -178,13 +166,15 @@ def experiment3(video_id_init, video_id_end):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+    plot_similarities(all_videos_sentences_similarities, 'experiment3', 'Experiment 3 sentences similarities boxplot')
+
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment3')
     else:
         print '[WARNING] New json file not created because we are not working with the full data'
 
 
-def experiment4(video_id_init, video_id_end):
+def experiment4(video_id_init, video_id_end, threshold=None):
     """ Goal: compute sentences similarity and rank them.
 
     Method: for each pair of sentences, compute their similarity (non-symmetric)
@@ -202,9 +192,11 @@ def experiment4(video_id_init, video_id_end):
     with sufix _experiment4
     """
 
-    threshold = config.closest_similarity_threshold
+    if threshold is None:
+        threshold = config.closest_similarity_threshold
 
     sentences_to_remove = []
+    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
 
@@ -231,6 +223,8 @@ def experiment4(video_id_init, video_id_end):
                 else:
                     sentences_similarity = 0
                 result[i, j] = sentences_similarity
+                if i != j:
+                    all_videos_sentences_similarities.append(sentences_similarity)
                 j += 1
             i += 1
 
@@ -248,13 +242,15 @@ def experiment4(video_id_init, video_id_end):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+    plot_similarities(all_videos_sentences_similarities, 'experiment4', 'Experiment 4 sentences similarities boxplot', threshold)
+
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment4')
     else:
         print '[WARNING] New json file not created because we are not working with the full data'
 
 
-def experiment5(video_id_init, video_id_end):
+def experiment5(video_id_init, video_id_end, threshold=None):
     """ Goal: compute sentences similarity and rank them.
 
     Method: for each pair of sentences, compute their similarity (non-symmetric)
@@ -272,9 +268,11 @@ def experiment5(video_id_init, video_id_end):
     with sufix _experiment5
     """
 
-    threshold = config.closest_similarity_threshold
+    if threshold is None:
+        threshold = config.closest_similarity_threshold
 
     sentences_to_remove = []
+    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
     for video_id in range(video_id_init, video_id_end):
         video_captions = load_video_captions(video_id)
 
@@ -301,6 +299,8 @@ def experiment5(video_id_init, video_id_end):
                 else:
                     sentences_similarity = 0
                 result[i, j] = sentences_similarity
+                if i != j:
+                    all_videos_sentences_similarities.append(sentences_similarity)
                 j += 1
             i += 1
 
@@ -318,7 +318,9 @@ def experiment5(video_id_init, video_id_end):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
+    plot_similarities(all_videos_sentences_similarities, 'experiment5', 'Experiment 5 sentences similarities boxplot', threshold)
+
+    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment5')
     else:
         print '[WARNING] New json file not created because we are not working with the full data'
@@ -364,6 +366,26 @@ def create_video_captions(video_id_init, video_id_end, compute_similarities=Fals
         pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
 
 
+def remove_training_sentences(sentences_to_remove, new_file_appendix):
+    """ Load the video annotations from json file, and makes a copy removing the
+    sentences indicated in sentences_to_remove, adding a sufix to the file name.
+    """
+    with open(config.path_to_train_val_videodatainfo) as data_file:
+        data = json.load(data_file)
+        data_positions_to_remove = []
+        for sentence_to_remove in sentences_to_remove:
+            data_position = [i for i, a in enumerate(data['sentences']) if a['caption'] == sentence_to_remove[0].sentence and a['video_id'] == 'video' + str(sentence_to_remove[1])]
+            data_positions_to_remove.append(data_position[0])
+    new_data_sentences = [a for i, a in enumerate(data['sentences']) if i not in data_positions_to_remove]
+
+    data['sentences'] = new_data_sentences
+
+    new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + new_file_appendix + '.json'
+    with open(new_file_path, 'w') as outfile:
+        json.dump(data, outfile)
+    return
+
+
 def compute_similarities(video_id_init, video_id_end):
     """ Compute the similarity between all pairs of tokens extracted from the
     annotations and save it to tokens_set, creating videoCaption objects for
@@ -374,30 +396,44 @@ def compute_similarities(video_id_init, video_id_end):
     create_video_captions(video_id_init, video_id_end, True)
 
 
+def plot_similarities(all_videos_sentences_similarities, experiment, plot_title, threshold=None):
+    """
+    """
+    # boxplot with outliers
+    plt.figure()
+    plt.boxplot(all_videos_sentences_similarities, 0, 'gD')
+    plt.title(plot_title)
+    # plt.show()
+    if threshold is None:
+        threshold = config.closest_similarity_threshold
+    plt.savefig('results/' + experiment + '/' + experiment + '_boxplot_threshold_' + str(threshold) + '.png')
+
+
 def main():
     first_video = int(config.options.first)
     last_video = int(config.options.last)
 
+    print '====================================== ' + config.options.experiment
+
     if config.options.experiment == 'experiment1':
-        print '====================================== experiment1'
         experiment1(first_video, last_video)
     elif config.options.experiment == 'experiment2':
-        print '====================================== experiment2'
         experiment2(first_video, last_video)
     elif config.options.experiment == 'experiment3':
-        print '====================================== experiment3'
         experiment3(first_video, last_video)
     elif config.options.experiment == 'experiment4':
-        print '====================================== experiment4'
         experiment4(first_video, last_video)
     elif config.options.experiment == 'experiment5':
-        print '====================================== experiment5'
         experiment5(first_video, last_video)
+    elif config.options.experiment == 'create_boxplots_different_thresholds':
+        # for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
+        #     experiment4(first_video, last_video, threshold)
+        #     experiment5(first_video, last_video, threshold)
+        for threshold in [0.18, 0.16, 0.14, 0.12]:
+            experiment5(first_video, last_video, threshold)
     elif config.options.experiment == 'create_video_captions':
-        print '====================================== creating video captions'
         create_video_captions(first_video, last_video)
     elif config.options.experiment == 'compute_similarities':
-        print '====================================== computing similarities'
         compute_similarities(first_video, last_video)
     else:
         print 'bye!'
