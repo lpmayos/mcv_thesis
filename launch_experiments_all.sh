@@ -1,25 +1,13 @@
 #!/bin/bash
 cd $HOME/code/mcv_thesis
 
-pickle_folder="pickle"
+pickle_folder="pickle"  # pickle, pickle_small
 solr_sensembed_path="http://localhost:8983/solr/sensembed_vectors"
 path_to_train_val_videodatainfo="/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json"
 create_new_training_sentences='false'
-first=0
-last=7010
+first=0  # 0, 3000
+last=7010  # 7010, 3010
 verbose='false'
+experiment='create_boxplots_different_thresholds'  # create_video_captions, compute_similarities, experiment1, experiment2, experiment3, experiment4, experiment4, experiment5, create_boxplots_different_thresholds
 
-# Create video captions and compute similarities
-# python experiments.py --pickle_folder $pickle_folder --experiment create_video_captions --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo
-# python experiments.py --pickle_folder $pickle_folder --experiment compute_similarities --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo
-
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment1 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment1/experiment1.txt
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment2 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment2/experiment2.txt
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment3 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment3/experiment3.txt
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment4 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment4/experiment4.txt
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment5 --first 0 --last 7010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment5/experiment5.txt
-
-# python experiments.py --pickle_folder $pickle_folder --experiment experiment3 --first 3000 --last 3010 -v true --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo > results/experiment3/experiment3_all_reduced.txt
-
-
-python experiments.py --pickle_folder $pickle_folder --experiment create_boxplots_different_thresholds --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences $create_new_training_sentences
+python experiments.py --pickle_folder $pickle_folder --experiment $experiment --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences $create_new_training_sentences

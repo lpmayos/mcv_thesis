@@ -399,10 +399,27 @@ def compute_similarities(video_id_init, video_id_end):
 def plot_similarities(all_videos_sentences_similarities, experiment, plot_title, threshold=None):
     """
     """
+
     # boxplot with outliers
     plt.figure()
-    plt.boxplot(all_videos_sentences_similarities, 0, 'gD')
-    plt.title(plot_title)
+
+    # get dictionary returned from boxplot
+    bp_dict = plt.boxplot(all_videos_sentences_similarities, vert=False)
+
+    for line in bp_dict['medians']:
+        x, y = line.get_xydata()[1]  # position for median line: [1] top of median line, [0] bottom of median line
+        plt.text(x, y + 0.02, '%.3f' % x, horizontalalignment='center')  # overlay median value above, centered
+
+    for line in bp_dict['boxes']:
+        x, y = line.get_xydata()[0]  # bottom of left line
+        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
+        x, y = line.get_xydata()[3]  # bottom of right line
+        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
+
+    for line in bp_dict['whiskers']:
+        x, y = line.get_xydata()[1]
+        plt.text(x, y - 0.08, '%.3f' % x, horizontalalignment='center')
+
     # plt.show()
     if threshold is None:
         threshold = config.closest_similarity_threshold
@@ -426,10 +443,11 @@ def main():
     elif config.options.experiment == 'experiment5':
         experiment5(first_video, last_video)
     elif config.options.experiment == 'create_boxplots_different_thresholds':
-        # for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
-        #     experiment4(first_video, last_video, threshold)
-        #     experiment5(first_video, last_video, threshold)
-        for threshold in [0.18, 0.16, 0.14, 0.12]:
+        experiment1(first_video, last_video)
+        experiment3(first_video, last_video)
+        for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
+            experiment4(first_video, last_video, threshold)
+        for threshold in [0.2, 0.18, 0.16, 0.14, 0.12, 0.1]:
             experiment5(first_video, last_video, threshold)
     elif config.options.experiment == 'create_video_captions':
         create_video_captions(first_video, last_video)

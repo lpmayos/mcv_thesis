@@ -55,7 +55,7 @@ else:
 
 
 # Threshold to consider in experiments using closest similarity measures
-closest_similarity_threshold = 0.2
+closest_similarity_threshold = 0.05
 
 
 # When launching experiments that would change the previously created pickle
