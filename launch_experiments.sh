@@ -1,12 +1,12 @@
 #!/bin/bash
 cd $HOME/code/mcv_thesis
 
-pickle_folder="pickle"  # pickle, pickle_small
+pickle_folder="pickle"
 solr_sensembed_path="http://localhost:8983/solr/sensembed_vectors"
 path_to_train_val_videodatainfo="/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json"
 create_new_training_sentences='false'
-first=0  # 0, 3000
-last=7010  # 7010, 3010
+first=0
+last=7010
 verbose='false'
 experiment='create_boxplots_different_thresholds'  # create_video_captions, compute_similarities, experiment1, experiment2, experiment3, experiment4, experiment4, experiment5, create_boxplots_different_thresholds
 
