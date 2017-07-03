@@ -60,7 +60,7 @@ def experiment1(video_id_init, video_id_end):
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
 
-    plot_similarities(all_videos_sentences_distances, 'experiment1', 'Experiment 1 sentences distance to mean boxplot')
+    generate_boxplot(all_videos_sentences_distances, 'experiment1', 'Experiment 1 sentences distance to mean boxplot')
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
         remove_training_sentences(sentences_to_remove, 'experiment1')
@@ -166,7 +166,7 @@ def experiment3(video_id_init, video_id_end):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    plot_similarities(all_videos_sentences_similarities, 'experiment3', 'Experiment 3 sentences similarities boxplot')
+    generate_boxplot(all_videos_sentences_similarities, 'experiment3', 'Experiment 3 sentences similarities boxplot')
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment3')
@@ -242,7 +242,7 @@ def experiment4(video_id_init, video_id_end, threshold=None):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    plot_similarities(all_videos_sentences_similarities, 'experiment4', 'Experiment 4 sentences similarities boxplot', threshold)
+    generate_boxplot(all_videos_sentences_similarities, 'experiment4', 'Experiment 4 sentences similarities boxplot', threshold)
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment4')
@@ -318,7 +318,7 @@ def experiment5(video_id_init, video_id_end, threshold=None):
         for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
             sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
 
-    plot_similarities(all_videos_sentences_similarities, 'experiment5', 'Experiment 5 sentences similarities boxplot', threshold)
+    generate_boxplot(all_videos_sentences_similarities, 'experiment5', 'Experiment 5 sentences similarities boxplot', threshold)
 
     if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
         remove_training_sentences(sentences_to_remove, 'experiment5')
@@ -396,7 +396,7 @@ def compute_similarities(video_id_init, video_id_end):
     create_video_captions(video_id_init, video_id_end, True)
 
 
-def plot_similarities(all_videos_sentences_similarities, experiment, plot_title, threshold=None):
+def generate_boxplot(all_videos_sentences_similarities, experiment, plot_title, threshold=None):
     """
     """
 
