@@ -22,10 +22,27 @@ if not options.experiment or not options.first or not options.last or not option
     sys.exit(2)
 
 
+first_video = int(options.first)
+last_video = int(options.last)
+
 # Similarity strategy to use when comparing tokens, as described in  algorithm 1
 # of senseEmbed paper. For now the only option is the 'closest' strategy.
 # TODO lpmayos: add 'weighted' strategy
 similarity_strategy = 'closest'
+
+# Threshold to consider in experiments using closest similarity measures
+minimum_token_similarity = 0.05
+
+
+# Policy used to discard sentences from annotation set
+removing_policy = 'over_threshold'  # 20percent or over_threshold
+
+# TODO lpmayos: when we decide the right thresholds, change them here!
+thresholds_experiments_test = {'experiment1': {0.65: [], 0.70: [], 0.75: [], 0.78: [], 0.80: []},
+                               'experiment3': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
+                               'experiment4': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
+                               'experiment5': {17.0: [], 16.5: [], 16.0: [], 15.5: [], 15.0: [], 14.5: [], 14.0: []}}
+thresholds_experiments = {'experiment1': 0.785, 'experiment3': 4.0, 'experiment4': 4.0, 'experiment5': 16.0}  # threshold used to discard sentences from annotation set if removing_policy == 'over_threshold'
 
 
 # Folder to save/load the pickle objects to/from
@@ -42,20 +59,14 @@ path_to_train_val_videodatainfo = options.path_to_train_val_videodatainfo
 
 
 # If verbose, extra information is shown on shell
+verbose = False
 if options.verbose == 'true':
     verbose = True
-else:
-    verbose = False
 
 
+create_new_training_sentences = False
 if options.create_new_training_sentences == 'true':
     create_new_training_sentences = True
-else:
-    create_new_training_sentences = False
-
-
-# Threshold to consider in experiments using closest similarity measures
-closest_similarity_threshold = 0.05
 
 
 # When launching experiments that would change the previously created pickle

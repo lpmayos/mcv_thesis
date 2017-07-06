@@ -33,7 +33,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 
 
-### Compute_similarities
+### create_video_captions
 
 **Goal**: Compute the similarity between all pairs of tokens extracted from the annotations and save it to tokens_set, creating videoCaption objects for videos and saving them as pickle if they don't exist.
 
@@ -41,24 +41,13 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Results**: pickle files for each video and for tokens_set are saved to config.pickle_folder
 
-**Execution**: see launch_experiments_all.sh
+**Execution**: see launch_experiments.sh
 
 
 ## Experiments
 
 
-### Experiment 1
-
-**Goal**: detect those captions that are wrong: they have typos or are not descriptive.
-
-**Method**: for each video we get all the captions and we compute an embedding for all the sentences. Then, we project all the embeddings in common space, we compute its centroid and the distances to the centroid of each embedding, sorting the captions by distance. Then, we discard the worst two annotations.
-
-**Results**: a sample of the results (sentence ordering and image of the embedding space) is shown on shell if verbose=True and can be also seen at results/experiment1/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment1
-
-**Execution**: see launch_experiments_all.sh
-
-
-### Experiment 2
+### display_tokens_similarity
 
 **Goal**: for each token of each sentence, computes which of the tokens of every other sentence is closer and shows it on shell.
 
@@ -66,37 +55,59 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Results**: a sample of the results can be seen at results/experiment2/, and results are shown on shell
 
-**Execution**: see launch_experiments_all.sh
+**Execution**: see launch_experiments.sh
 
 
-### Experiment 3
+### experiment1: rank_captions_and_remove_worst_with_embeddings
+
+**Goal**: detect those captions that are wrong: they have typos or are not descriptive.
+
+**Method**: for each video we get all the captions and we compute an embedding for all the sentences. Then, we project all the embeddings in common space, we compute its centroid and the distances to the centroid of each embedding, sorting the captions by distance. Then, discard the ones above threshold.
+
+**Results**: a sample of the results (sentence ordering and image of the embedding space) is shown on shell if verbose=True and can be also seen at results/experiment1/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment1
+
+**Execution**: see launch_experiments.sh
+
+
+### experiment3: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
-**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarity of each token in one sentence to the closest one in the other sentence, dividing by the number of tokens added. Then, discard the worst two annotations.
+**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarity of each token in one sentence to the closest one in the other sentence, dividing by the number of tokens added. Then, discard the ones below threshold.
 
 **Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment3/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment3
 
-**Execution**: see launch_experiments_all.sh
+**Execution**: see launch_experiments.sh
 
 
-### Experiment 4
+### experiment4: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
-**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarities of each token in one sentence to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the number of tokens added. Then, discard the worst two annotations.
+**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarities of each token in one sentence to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the number of tokens added. Then, discard the ones below threshold.
 
 **Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment4/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment4
 
-**Execution**: see launch_experiments_all.sh
+**Execution**: see launch_experiments.sh
 
 
-### Experiment 5
+### experiment5: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
-**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum 1 for each token if similarity to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of tokens. Then, discard the worst two annotations. TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that are above a certain threshold.
+**Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum 1 for each token if similarity to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of tokens. Then, discard the ones below threshold.
 
 **Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment4/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo with sufix _experiment5
 
-**Execution**: see launch_experiments_all.sh
+**Execution**: see launch_experiments.sh
+
+
+### find_tokens_similarity_threshold
+
+**Goal**: find right tokens similarity threshold for experiments 4 and 5
+
+**Method**: iterate over different tokens similarity thresholds, generating boxplots and barcharts which will help us decide the most useful thresholds.
+
+**Results**: images and logs are generated in results/experiment4 and results/experiment5
+
+**Execution**: see launch_experiments.sh

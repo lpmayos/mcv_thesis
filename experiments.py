@@ -2,73 +2,52 @@ import json
 import config
 import numpy as np
 import scipy
-from commons import load_video_captions, plot_embeddings_with_labels
+from commons import setup_logger, load_video_captions, plot_embeddings_with_labels, generate_barchart, generate_boxplot, remove_training_sentences
 from data_structures.video_captions import VideoCaptions
 import pickle
-import matplotlib.pyplot as plt
+import logging
 
 
-def experiment1(video_id_init, video_id_end):
-    """ Goal: detect those captions that are wrong: they have typos or are
-    not descriptive.
+def create_video_captions():
+    """ Goal: create pickle files containing video and tokens information, to
+    speed up the experiments.
 
-    Method: for each video we get all the captions and we compute an
-    embedding for all the sentences. Then, we project all the embeddings
-    in common space, we compute its centroid and the distances to the
-    centroid of each embedding, sorting the captions by distance.
-    Then, we discard the worst two annotations.
-    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
-    are above a certain threshold.
+    Method: for each video in train_val_set try to load videoCaption object
+    from pickle. If it dies not exist, create a VideoCaption object and save it
+    as pickle, and add all its tokens to token_set, containing information of
+    all the tokens of all sentences of all videos.
+    If compute_similarities is True, it computes the similarity between all
+    pairs of tokens extracted from the annotations and saves it to tokens_set.
 
-    Results: a sample of the results (sentence ordering and image of the
-    embedding space) is shown on shell if verbose=True and can be also seen at
-    results/experiment1/, and a new train_val_videodatainfo.json is generated to
-    train a new model on config.path_to_train_val_videodatainfo with sufix
-    # experiment1
+    Results: pickle files for each video and for tokens_set are saved to
+    config.pickle_folder
     """
-    bfs = True
-    plot_embeddings = False
-    sentences_to_remove = []
-    all_videos_sentences_distances = []  # stores in a single array the distances computed for each video
-    for video_id in range(video_id_init, video_id_end):  # 0, 7010
-        video_captions = load_video_captions(video_id)
+    with open(config.path_to_train_val_videodatainfo) as data_file:
+        i = 0
+        data = json.load(data_file)
+        for video_id in range(config.first_video, config.last_video):
 
-        embeddings = []
-        labels = []
-        for sentence in video_captions.sentences:
-            sentence_embedding = sentence.get_sentence_embedding(bfs)
-            if len(sentence_embedding) > 0:  # there are sentences without senses (i.e. 'its a t') --> no embedding!
-                embeddings.append(sentence_embedding)
-                labels.append(sentence.sentence)
+            try:
+                video_captions = load_video_captions(video_id)
+            except (OSError, IOError):
+                print '*** creating pickle of video ' + str(video_id)
+                video_captions = VideoCaptions(data, 'video' + str(video_id))
+                pickle.dump(video_captions, open(config.pickle_folder + "/video_captions_" + str(video_id) + ".pickle", "wb"))
 
-        embeddings_mean = np.mean(embeddings, axis=0)
-        distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
-        all_videos_sentences_distances += distances
-        sort_index = np.argsort(distances)
+            video_captions.compute_all_tokens_similarity()
 
-        for sentence_index in sort_index[18:]:  # we remove the two worst sentences
-            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
-
-        if config.verbose:
-            print '\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n'
-            for index in sort_index:
-                try:
-                    print '\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index)
-                except UnicodeEncodeError:
-                    print '\t [PRINTING ERROR] with printing sentence'
-
-        if plot_embeddings:
-            plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
-
-    generate_boxplot(all_videos_sentences_distances, 'experiment1', 'Experiment 1 sentences distance to mean boxplot')
-
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010:
-        remove_training_sentences(sentences_to_remove, 'experiment1')
-    else:
-        print '[WARNING] New json file not created because we are not working with the full data'
+            i += 1
+            if i == 10:
+                print 'saving small tokens_set_10'
+                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_10.pickle', "wb"))
+            if i % 100 == 0:
+                print 'iteration ' + str(i) + ' -----------> dumping tokens set'
+                pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
+        print 'iteration ' + str(i) + ' -----------> dumping tokens set'
+        pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
 
 
-def experiment2(video_id_init, video_id_end):
+def display_tokens_similarity():
     """ Goal: for each token of each sentence, computes which of the tokens of
     every other sentence is closer and shows it on shell.
 
@@ -78,7 +57,7 @@ def experiment2(video_id_init, video_id_end):
     Results:  a sample of the results can be seen at results/experiment2/, and
     results are shown on shell
     """
-    for video_id in range(video_id_init, video_id_end):
+    for video_id in range(config.first_video, config.last_video):
         print '\n\n ***** video ' + str(video_id)
         video_captions = load_video_captions(video_id)
 
@@ -107,354 +86,211 @@ def experiment2(video_id_init, video_id_end):
                             print '\t\t\t[PRINTING ERROR] with printing most similar token in sentence ' + str(sentence2.id)
 
 
-def experiment3(video_id_init, video_id_end):
-    """ Goal: compute sentences similarity and rank them.
+def rank_captions_and_remove_worst_with_embeddings():
+    """ Goal: detect those captions that are very different from the others
+    (they have typos or are not descriptive)
 
-    Method: for each pair of sentences, compute their similarity (non-symmetric)
-    as the sum of the similarities of each token in one sentence to the closest one
-    in the other sentence, dividing by the number of tokens added. Then, discard
-    the worst two annotations.
+    Method: for each video we get all the captions and we compute an
+    embedding for all the sentences. Then, we project all the embeddings
+    in common space, we compute its centroid and the distances to the
+    centroid of each embedding, sorting the captions by distance.
+    Then, we discard the worst two annotations.
     TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
     are above a certain threshold.
 
-    Results: sentence ranking is shown on shell if verbose=True, a sample can be
-    also seen at results/experiment3/, and a new train_val_videodatainfo.json is
-    generated to train a new model on config.path_to_train_val_videodatainfo
-    with sufix _experiment3
+    Results: a sample of the results (sentence ordering and image of the
+    embedding space) is shown on shell if verbose=True and can be also seen at
+    results/experiment1/, and a new train_val_videodatainfo.json is generated to
+    train a new model on config.path_to_train_val_videodatainfo with sufix
+    # experiment1
     """
+
+    # appendix to add to generated files (plots, logs, etc)
+    experiment = 'experiment1'
+
+    # configure logging file
+    setup_logger(experiment, 'results/' + experiment + '/' + experiment + '.log')
+    log1 = logging.getLogger(experiment)
+
+    bfs = True
+    plot_embeddings = False
     sentences_to_remove = []
-    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
-    for video_id in range(video_id_init, video_id_end):
+    all_videos_sentences_distances = []  # stores in a single array the distances computed for each video
+    for video_id in range(config.first_video, config.last_video):  # 0, 7010
         video_captions = load_video_captions(video_id)
 
-        result = np.empty([20, 20])
-        i = 0
-        for sentence1 in video_captions.sentences:
-            j = 0
-            for sentence2 in video_captions.sentences:
-                similarities = []
-                for token1_id in sentence1.tokens_id_list:
-                    most_similar_token_in_sentence = (None, float('-inf'))
-                    for token2_id in sentence2.tokens_id_list:
-                        if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
-                            similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
-                            if similarity > most_similar_token_in_sentence[1]:
-                                most_similar_token_in_sentence = (token2_id, similarity)
-                    if most_similar_token_in_sentence[0] is not None:
-                        similarities.append(most_similar_token_in_sentence)
-                if len(similarities) > 0:
-                    sentences_similarity = sum([a[1] for a in similarities]) / len(similarities)
-                else:
-                    sentences_similarity = 0
-                result[i, j] = sentences_similarity
-                if i != j:
-                    all_videos_sentences_similarities.append(sentences_similarity)
-                j += 1
-            i += 1
+        embeddings = []
+        labels = []
+        for sentence in video_captions.sentences:
+            sentence_embedding = sentence.get_sentence_embedding(bfs)
+            if len(sentence_embedding) > 0:  # there are sentences without senses (i.e. 'its a t') --> no embedding!
+                embeddings.append(sentence_embedding)
+                labels.append(sentence.sentence)
 
-        sentences_global_similarities = np.sum(result, axis=1)
-        sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
+        embeddings_mean = np.mean(embeddings, axis=0)
+        distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
+        all_videos_sentences_distances += distances
+        sort_index = np.argsort(distances)
+
+        if config.removing_policy == '20percent':
+            for sentence_index in sort_index[18:]:  # we remove the two worst sentences
+                sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+        elif config.removing_policy == 'over_threshold':
+            # test to find a right threshold
+            for th_test in config.thresholds_experiments_test[experiment].keys():
+                num_sentences_below_threshold = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > th_test])
+                config.thresholds_experiments_test[experiment][th_test].append(num_sentences_below_threshold)
+
+            to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.thresholds_experiments[experiment]]
+            sentences_to_remove += to_remove
 
         if config.verbose:
-            print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
-            for sentence_index in sentences_order:
+            log1.info('\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n')
+            for index in sort_index:
                 try:
-                    print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+                    log1.info('\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index))
                 except UnicodeEncodeError:
-                    print '\t [PRINTING ERROR] with printing sentence'
+                    log1.info('\t [PRINTING ERROR] with printing sentence')
 
-        for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
-            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+        if plot_embeddings:
+            plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
 
-    generate_boxplot(all_videos_sentences_similarities, 'experiment3', 'Experiment 3 sentences similarities boxplot')
+    generate_boxplot(all_videos_sentences_distances, experiment, experiment)
+    if config.removing_policy == 'over_threshold':
+        generate_barchart(experiment)
 
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
-        remove_training_sentences(sentences_to_remove, 'experiment3')
-    else:
-        print '[WARNING] New json file not created because we are not working with the full data'
+    # generate a new training set removing the detected annotations
+    remove_training_sentences(sentences_to_remove, experiment, experiment + '_' + str(config.thresholds_experiments[experiment]))
 
 
-def experiment4(video_id_init, video_id_end, threshold=None):
-    """ Goal: compute sentences similarity and rank them.
-
-    Method: for each pair of sentences, compute their similarity (non-symmetric)
-    as the sum of the similarities of each token in one sentence to the closest
-    one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by
-    the number of tokens added. Then, discard the worst two annotations.
-    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
-    are above a certain threshold.
-    TODO lpmayos: threshold determined by observation of experiment2 comparisons
-    between tokens. Give it a little thought!
-
-    Results: sentence ranking is shown on shell if verbose=True, a sample can be
-    also seen at results/experiment4/, and a new train_val_videodatainfo.json is
-    generated to train a new model on config.path_to_train_val_videodatainfo
-    with sufix _experiment4
+def rank_captions_and_remove_worst(experiment, minimum_token_similarity=config.minimum_token_similarity):
+    """
     """
 
-    if threshold is None:
-        threshold = config.closest_similarity_threshold
+    # appendix to add to generated files (plots, logs, etc)
+    if experiment == 'experiment3':
+        name_appendix = experiment + '_discard_sentence_threshold_' + str(config.thresholds_experiments[experiment])
+    else:
+        name_appendix = experiment + '_min_token_similarity_' + str(minimum_token_similarity) + '_discard_sentence_threshold_' + str(config.thresholds_experiments[experiment])
+
+    # configure logging file
+    setup_logger(experiment, 'results/' + experiment + '/' + name_appendix + '.log')
+    log = logging.getLogger(experiment)
+    log.info(name_appendix)
 
     sentences_to_remove = []
-    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
-    for video_id in range(video_id_init, video_id_end):
+    all_videos_sentences_similarities = []  # stores in a single array the similarities computed for each video
+
+    for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
 
-        result = np.empty([20, 20])
+        result = np.zeros([20, 20])
         i = 0
         for sentence1 in video_captions.sentences:
             j = 0
             for sentence2 in video_captions.sentences:
                 similarities = []
                 for token1_id in sentence1.tokens_id_list:
+
+                    # find most similar token to sentence1.token1 in sentence2.tokens
                     most_similar_token_in_sentence = (None, float('-inf'))
                     for token2_id in sentence2.tokens_id_list:
                         if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
                             similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
                             if similarity > most_similar_token_in_sentence[1]:
                                 most_similar_token_in_sentence = (token2_id, similarity)
+
+                    # store token similarity (depending on the experiments we check if it is over threshold)
                     if most_similar_token_in_sentence[0] is not None:
-                        if most_similar_token_in_sentence[1] > threshold:
+                        if experiment == 'experiment5':
+                            if most_similar_token_in_sentence[1] > minimum_token_similarity:
+                                similarities.append((most_similar_token_in_sentence[0], 1.0))  # for each token we add 1 instead of similarity
+                            else:
+                                similarities.append((None, 0))
+                        elif experiment == 'experiment4':
+                            if most_similar_token_in_sentence[1] > minimum_token_similarity:
+                                similarities.append(most_similar_token_in_sentence)
+                            else:
+                                similarities.append((None, 0))
+                        elif experiment == 'experiment3':
                             similarities.append(most_similar_token_in_sentence)
-                        else:
-                            similarities.append((None, 0))
-                if len(similarities) > 0:
-                    sentences_similarity = sum([a[1] for a in similarities]) / len(similarities)
-                else:
-                    sentences_similarity = 0
-                result[i, j] = sentences_similarity
-                if i != j:
-                    all_videos_sentences_similarities.append(sentences_similarity)
-                j += 1
-            i += 1
-
-        sentences_global_similarities = np.sum(result, axis=1)
-        sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
-
-        if config.verbose:
-            print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
-            for sentence_index in sentences_order:
-                try:
-                    print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
-                except UnicodeEncodeError:
-                    print '\t [PRINTING ERROR] with printing sentence'
-
-        for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
-            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
-
-    generate_boxplot(all_videos_sentences_similarities, 'experiment4', 'Experiment 4 sentences similarities boxplot', threshold)
-
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
-        remove_training_sentences(sentences_to_remove, 'experiment4')
-    else:
-        print '[WARNING] New json file not created because we are not working with the full data'
-
-
-def experiment5(video_id_init, video_id_end, threshold=None):
-    """ Goal: compute sentences similarity and rank them.
-
-    Method: for each pair of sentences, compute their similarity (non-symmetric)
-    as the sum 1 for each token if similarity to the closest one in the other
-    sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of
-    tokens. Then, discard the worst two annotations.
-    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
-    are above a certain threshold.
-    TODO lpmayos: threshold determined by observation of experiment2 comparisons
-    between tokens. Give it a little thought!
-
-    Results: sentence ranking is shown on shell if verbose=True, a sample can be
-    also seen at results/experiment4/, and a new train_val_videodatainfo.json is
-    generated to train a new model on config.path_to_train_val_videodatainfo
-    with sufix _experiment5
-    """
-
-    if threshold is None:
-        threshold = config.closest_similarity_threshold
-
-    sentences_to_remove = []
-    all_videos_sentences_similarities = []  # stores in a isngle array the similarities computed for each video
-    for video_id in range(video_id_init, video_id_end):
-        video_captions = load_video_captions(video_id)
-
-        result = np.empty([20, 20])
-        i = 0
-        for sentence1 in video_captions.sentences:
-            j = 0
-            for sentence2 in video_captions.sentences:
-                similarities = []
-                for token1_id in sentence1.tokens_id_list:
-                    most_similar_token_in_sentence = (None, float('-inf'))
-                    for token2_id in sentence2.tokens_id_list:
-                        if (token1_id, token2_id) in config.tokens_set.tokens_similarities_closest:
-                            similarity = config.tokens_set.tokens_similarities_closest[(token1_id, token2_id)]
-                            if similarity > most_similar_token_in_sentence[1]:
-                                most_similar_token_in_sentence = (token2_id, similarity)
-                    if most_similar_token_in_sentence[0] is not None:
-                        if most_similar_token_in_sentence[1] > threshold:
-                            similarities.append((most_similar_token_in_sentence[0], 1))  # for each token we add 1 instead of similarity
-                        else:
-                            similarities.append((None, 0))
+                # compute and store similarity between sentence1 and sentence2
                 if len(similarities) > 0:
                     sentences_similarity = float(sum([a[1] for a in similarities])) / len(similarities)
+                    # sentences_similarity = sum([a[1] for a in similarities]) / len(similarities)
                 else:
                     sentences_similarity = 0
+
                 result[i, j] = sentences_similarity
+
                 if i != j:
                     all_videos_sentences_similarities.append(sentences_similarity)
                 j += 1
             i += 1
 
-        sentences_global_similarities = np.sum(result, axis=1)
+        # compute sentences similarity to all others (array of size 20)
+        sentences_global_similarities = np.sum(result, axis=1)  # TODO lpmayos: in exp5, as we sum similarity per sentence, which is maximum 1, this value is maximum 20
+
+        # compute sentences order according to similarity
         sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
 
+        # show sentences and similarity from most similar to most different
         if config.verbose:
-            print '\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n'
+            log.info('\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n')
             for sentence_index in sentences_order:
                 try:
-                    print '\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')'
+                    log.info('\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')')
                 except UnicodeEncodeError:
-                    print '\t [PRINTING ERROR] with printing sentence'
+                    log.info('\t [PRINTING ERROR] with printing sentence')
 
-        for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
-            sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+        # compute which sentence we should remove according to similarity measures (or just the worst 2, depending on the policy)
+        if config.removing_policy == '20percent':
+            for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
+                sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
+        elif config.removing_policy == 'over_threshold':
 
-    generate_boxplot(all_videos_sentences_similarities, 'experiment5', 'Experiment 5 sentences similarities boxplot', threshold)
+            # test to find a right threshold
+            for th_test in config.thresholds_experiments_test[experiment].keys():
+                num_sentences_below_threshold = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < th_test])
+                config.thresholds_experiments_test[experiment][th_test].append(num_sentences_below_threshold)
 
-    if config.pickle_folder == 'pickle' and video_id_init == 0 and video_id_end == 7010 and config.create_new_training_sentences:
-        remove_training_sentences(sentences_to_remove, 'experiment5')
-    else:
-        print '[WARNING] New json file not created because we are not working with the full data'
+            to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.thresholds_experiments[experiment]]
+            sentences_to_remove += to_remove
 
+    # generate boxplots with sentences similarities and barchart of how many sentences we have to remove from each video according to threshold
+    generate_boxplot(all_videos_sentences_similarities, experiment, name_appendix)
+    if config.removing_policy == 'over_threshold':
+        generate_barchart(experiment, name_appendix)
 
-def create_video_captions(video_id_init, video_id_end, compute_similarities=False):
-    """ Goal: create pickle files containing video and tokens information, to
-    speed up the experiments.
+    # generate a new training set removing the detected annotations
+    remove_training_sentences(sentences_to_remove, experiment, name_appendix)
 
-    Method: for each video in train_val_set try to load videoCaption object
-    from pickle. If it dies not exist, create a VideoCaption object and save it
-    as pickle, and add all its tokens to token_set, containing information of
-    all the tokens of all sentences of all videos.
-    If compute_similarities is True, it computes the similarity between all
-    pairs of tokens extracted from the annotations and saves it to tokens_set.
-
-    Results: pickle files for each video and for tokens_set are saved to
-    config.pickle_folder
-    """
-    with open(config.path_to_train_val_videodatainfo) as data_file:
-        i = 0
-        data = json.load(data_file)
-        for video_id in range(video_id_init, video_id_end):
-
-            try:
-                video_captions = load_video_captions(video_id)
-            except (OSError, IOError):
-                print '*** creating pickle of video ' + str(video_id)
-                video_captions = VideoCaptions(data, 'video' + str(video_id))
-                pickle.dump(video_captions, open(config.pickle_folder + "/video_captions_" + str(video_id) + ".pickle", "wb"))
-
-            if compute_similarities:
-                video_captions.compute_all_tokens_similarity()
-
-            i += 1
-            if i == 10:
-                print 'saving small tokens_set_10'
-                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_10.pickle', "wb"))
-            if i % 100 == 0:
-                print 'iteration ' + str(i) + ' -----------> dumping tokens set'
-                pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
-        print 'iteration ' + str(i) + ' -----------> dumping tokens set'
-        pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
-
-
-def remove_training_sentences(sentences_to_remove, new_file_appendix):
-    """ Load the video annotations from json file, and makes a copy removing the
-    sentences indicated in sentences_to_remove, adding a sufix to the file name.
-    """
-    with open(config.path_to_train_val_videodatainfo) as data_file:
-        data = json.load(data_file)
-        data_positions_to_remove = []
-        for sentence_to_remove in sentences_to_remove:
-            data_position = [i for i, a in enumerate(data['sentences']) if a['caption'] == sentence_to_remove[0].sentence and a['video_id'] == 'video' + str(sentence_to_remove[1])]
-            data_positions_to_remove.append(data_position[0])
-    new_data_sentences = [a for i, a in enumerate(data['sentences']) if i not in data_positions_to_remove]
-
-    data['sentences'] = new_data_sentences
-
-    new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + new_file_appendix + '.json'
-    with open(new_file_path, 'w') as outfile:
-        json.dump(data, outfile)
-    return
-
-
-def compute_similarities(video_id_init, video_id_end):
-    """ Compute the similarity between all pairs of tokens extracted from the
-    annotations and save it to tokens_set, creating videoCaption objects for
-    videos and saving them as pickle if they don't exist.
-    TODO lpmayos: we'll have to refactor when we incorporate new siilarity
-    strategies.
-    """
-    create_video_captions(video_id_init, video_id_end, True)
-
-
-def generate_boxplot(all_videos_sentences_similarities, experiment, plot_title, threshold=None):
-    """
-    """
-
-    # boxplot with outliers
-    plt.figure()
-
-    # get dictionary returned from boxplot
-    bp_dict = plt.boxplot(all_videos_sentences_similarities, vert=False)
-
-    for line in bp_dict['medians']:
-        x, y = line.get_xydata()[1]  # position for median line: [1] top of median line, [0] bottom of median line
-        plt.text(x, y + 0.02, '%.3f' % x, horizontalalignment='center')  # overlay median value above, centered
-
-    for line in bp_dict['boxes']:
-        x, y = line.get_xydata()[0]  # bottom of left line
-        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
-        x, y = line.get_xydata()[3]  # bottom of right line
-        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
-
-    for line in bp_dict['whiskers']:
-        x, y = line.get_xydata()[1]
-        plt.text(x, y - 0.08, '%.3f' % x, horizontalalignment='center')
-
-    # plt.show()
-    if threshold is None:
-        threshold = config.closest_similarity_threshold
-    plt.savefig('results/' + experiment + '/' + experiment + '_boxplot_threshold_' + str(threshold) + '.png')
+    # remove file handlers
+    handlers = log.handlers[:]
+    for handler in handlers:
+        handler.close()
+        log.removeHandler(handler)
 
 
 def main():
-    first_video = int(config.options.first)
-    last_video = int(config.options.last)
-
     print '====================================== ' + config.options.experiment
 
-    if config.options.experiment == 'experiment1':
-        experiment1(first_video, last_video)
-    elif config.options.experiment == 'experiment2':
-        experiment2(first_video, last_video)
-    elif config.options.experiment == 'experiment3':
-        experiment3(first_video, last_video)
-    elif config.options.experiment == 'experiment4':
-        experiment4(first_video, last_video)
-    elif config.options.experiment == 'experiment5':
-        experiment5(first_video, last_video)
-    elif config.options.experiment == 'create_boxplots_different_thresholds':
-        # experiment1(first_video, last_video)
-        # experiment3(first_video, last_video)
-        # for threshold in [0.4, 0.2, 0.1, 0.05, 0.025]:
-        #     experiment4(first_video, last_video, threshold)
-        # for threshold in [0.2, 0.18, 0.16, 0.14, 0.12, 0.1]:
-        #     experiment5(first_video, last_video, threshold)
-        for threshold in [0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.4]:
-            experiment5(first_video, last_video, threshold)
-    elif config.options.experiment == 'create_video_captions':
-        create_video_captions(first_video, last_video)
-    elif config.options.experiment == 'compute_similarities':
-        compute_similarities(first_video, last_video)
+    if config.options.experiment == 'create_video_captions':
+        create_video_captions()
+    elif config.options.experiment == 'display_tokens_similarity':
+        display_tokens_similarity()
+    elif config.options.experiment == 'experiment1':
+        rank_captions_and_remove_worst_with_embeddings()
+    elif config.options.experiment in ['experiment3', 'experiment4', 'experiment5']:
+        rank_captions_and_remove_worst(config.options.experiment)
+    elif config.options.experiment == 'find_tokens_similarity_threshold':
+        for experiment_to_test in ['experiment4', 'experiment5']:
+            for minimum_token_similarity in [0.12, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04]:
+                config.thresholds_experiments_test = {'experiment1': {0.65: [], 0.70: [], 0.75: [], 0.78: [], 0.80: []},
+                                                      'experiment3': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
+                                                      'experiment4': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
+                                                      'experiment5': {17.0: [], 16.5: [], 16.0: [], 15.5: [], 15.0: [], 14.5: [], 14.0: []}}
+                rank_captions_and_remove_worst(experiment_to_test, minimum_token_similarity)
     else:
         print 'bye!'
 

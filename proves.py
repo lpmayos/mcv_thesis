@@ -1,52 +1,33 @@
-from pylab import *
-import pickle
+import logging
 
 
-# from http://matplotlib.org/examples/pylab_examples/boxplot_demo.html
+def setup_logger(logger_name, log_file, level=logging.INFO):
+    log = logging.getLogger(logger_name)
+    formatter = logging.Formatter('%(asctime)s : %(message)s')
+    fileHandler = logging.FileHandler(log_file, mode='w')
+    fileHandler.setFormatter(formatter)
+    streamHandler = logging.StreamHandler()
+    streamHandler.setFormatter(formatter)
 
-# # fake up some data
-# spread= rand(50) * 100
-# center = ones(25) * 50
-# flier_high = rand(10) * 100 + 100
-# flier_low = rand(10) * -100
-# data =concatenate((spread, center, flier_high, flier_low), 0)
-
-# # fake up some more data
-# spread= rand(50) * 100
-# center = ones(25) * 40
-# flier_high = rand(10) * 100 + 100
-# flier_low = rand(10) * -100
-# d2 = concatenate( (spread, center, flier_high, flier_low), 0 )
-# data.shape = (-1, 1)
-# d2.shape = (-1, 1)
-# #data = concatenate( (data, d2), 1 )
-# # Making a 2-D array only works if all the columns are the
-# # same length.  If they are not, then use a list instead.
-# # This is actually more efficient because boxplot converts
-# # a 2-D array into a list of vectors internally anyway.
-# data = [data, d2, d2[::2,0]]
+    log.setLevel(level)
+    log.addHandler(fileHandler)
+    # log.addHandler(streamHandler)
 
 
-data = pickle.load(open("pickle/all_videos_sentences_similarities_exp1.pickle", "rb"))
+def log_something(num):
+    """
+    """
 
-# multiple box plots on one figure
-figure()
+    # configure logging file
+    setup_logger(str(num), str(num) + '.log')
+    log = logging.getLogger(str(num))
+    log.info(num)
 
-# get dictionary returned from boxplot
-bp_dict = boxplot(data, vert=False)
 
-for line in bp_dict['medians']:
-    x, y = line.get_xydata()[1]  # position for median line: [1] top of median line, [0] bottom of median line
-    text(x, y + 0.02, '%.3f' % x, horizontalalignment='center')  # overlay median value above, centered
+def main():
+    for num in [0.12, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04]:
+        log_something(num)
 
-for line in bp_dict['boxes']:
-    x, y = line.get_xydata()[0]  # bottom of left line
-    text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
-    x, y = line.get_xydata()[3]  # bottom of right line
-    text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
 
-for line in bp_dict['whiskers']:
-    x, y = line.get_xydata()[1]
-    plt.text(x, y - 0.08, '%.3f' % x, horizontalalignment='center')
-
-show()
+if __name__ == "__main__":
+    main()
