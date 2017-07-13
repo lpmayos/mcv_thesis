@@ -69,7 +69,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 **Execution**: see launch_experiments.sh
 
 
-### experiment3: rank_captions_and_remove_worst
+### experiment2: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
@@ -80,7 +80,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 **Execution**: see launch_experiments.sh
 
 
-### experiment4: rank_captions_and_remove_worst
+### experiment3: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
@@ -91,7 +91,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 **Execution**: see launch_experiments.sh
 
 
-### experiment5: rank_captions_and_remove_worst
+### experiment4: rank_captions_and_remove_worst
 
 **Goal**: detect those captions that are wrong: they have typos or are not descriptive, by computing sentences similarity and ranking them.
 
@@ -102,7 +102,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 **Execution**: see launch_experiments.sh
 
 
-### find_tokens_similarity_threshold
+### find_th1
 
 **Goal**: find right tokens similarity threshold for experiments 4 and 5
 
