@@ -54,7 +54,7 @@ def display_tokens_similarity():
     Method: in config.tokens_set we have computed the similarity of every pair
     of tokens, so we just loop over all of them and keep the most similar.
 
-    Results:  a sample of the results can be seen at results/experiment2/, and
+    Results:  a sample of the results can be seen at results/display_tokens_similarity/, and
     results are shown on shell
     """
     for video_id in range(config.first_video, config.last_video):
@@ -105,17 +105,16 @@ def rank_captions_and_remove_worst_with_embeddings():
     # experiment1
     """
 
-    # appendix to add to generated files (plots, logs, etc)
-    experiment = 'experiment1'
-
     # configure logging file
-    setup_logger(experiment, 'results/' + experiment + '/' + experiment + '.log')
-    log1 = logging.getLogger(experiment)
+    setup_logger(config.experiment, config.log_path)
+    log1 = logging.getLogger(config.experiment)
 
     bfs = True
     plot_embeddings = False
     sentences_to_remove = []
     all_videos_sentences_distances = []  # stores in a single array the distances computed for each video
+    num_sentences_above_threshold = []
+
     for video_id in range(config.first_video, config.last_video):  # 0, 7010
         video_captions = load_video_captions(video_id)
 
@@ -132,17 +131,12 @@ def rank_captions_and_remove_worst_with_embeddings():
         all_videos_sentences_distances += distances
         sort_index = np.argsort(distances)
 
-        if config.removing_policy == '20percent':
-            for sentence_index in sort_index[18:]:  # we remove the two worst sentences
-                sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
-        elif config.removing_policy == 'over_threshold':
-            # test to find a right threshold
-            for th_test in config.thresholds_experiments_test[experiment].keys():
-                num_sentences_below_threshold = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > th_test])
-                config.thresholds_experiments_test[experiment][th_test].append(num_sentences_below_threshold)
+        # compute how many sentences are above th2
+        num_sentences_above_threshold_video = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.th2])
+        num_sentences_above_threshold.append(num_sentences_above_threshold_video)
 
-            to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.thresholds_experiments[experiment]]
-            sentences_to_remove += to_remove
+        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.th2]
+        sentences_to_remove += to_remove
 
         if config.verbose:
             log1.info('\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n')
@@ -155,31 +149,24 @@ def rank_captions_and_remove_worst_with_embeddings():
         if plot_embeddings:
             plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
 
-    generate_boxplot(all_videos_sentences_distances, experiment, experiment)
-    if config.removing_policy == 'over_threshold':
-        generate_barchart(experiment)
+    generate_boxplot(all_videos_sentences_distances)
+    generate_barchart(num_sentences_above_threshold)
 
     # generate a new training set removing the detected annotations
-    remove_training_sentences(sentences_to_remove, experiment, experiment + '_' + str(config.thresholds_experiments[experiment]))
+    remove_training_sentences(sentences_to_remove)
 
 
-def rank_captions_and_remove_worst(experiment, minimum_token_similarity=config.minimum_token_similarity):
+def rank_captions_and_remove_worst():
     """
     """
-
-    # appendix to add to generated files (plots, logs, etc)
-    if experiment == 'experiment3':
-        name_appendix = experiment + '_discard_sentence_threshold_' + str(config.thresholds_experiments[experiment])
-    else:
-        name_appendix = experiment + '_min_token_similarity_' + str(minimum_token_similarity) + '_discard_sentence_threshold_' + str(config.thresholds_experiments[experiment])
 
     # configure logging file
-    setup_logger(experiment, 'results/' + experiment + '/' + name_appendix + '.log')
-    log = logging.getLogger(experiment)
-    log.info(name_appendix)
+    setup_logger(config.experiment, config.log_path)
+    log = logging.getLogger(config.experiment)
 
     sentences_to_remove = []
     all_videos_sentences_similarities = []  # stores in a single array the similarities computed for each video
+    num_sentences_below_threshold = []
 
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
@@ -202,17 +189,17 @@ def rank_captions_and_remove_worst(experiment, minimum_token_similarity=config.m
 
                     # store token similarity (depending on the experiments we check if it is over threshold)
                     if most_similar_token_in_sentence[0] is not None:
-                        if experiment == 'experiment5':
-                            if most_similar_token_in_sentence[1] > minimum_token_similarity:
+                        if config.experiment == 'experiment4':
+                            if most_similar_token_in_sentence[1] > config.th1:
                                 similarities.append((most_similar_token_in_sentence[0], 1.0))  # for each token we add 1 instead of similarity
                             else:
                                 similarities.append((None, 0))
-                        elif experiment == 'experiment4':
-                            if most_similar_token_in_sentence[1] > minimum_token_similarity:
+                        elif config.experiment == 'experiment3':
+                            if most_similar_token_in_sentence[1] > config.th1:
                                 similarities.append(most_similar_token_in_sentence)
                             else:
                                 similarities.append((None, 0))
-                        elif experiment == 'experiment3':
+                        elif config.experiment == 'experiment2':
                             similarities.append(most_similar_token_in_sentence)
                 # compute and store similarity between sentence1 and sentence2
                 if len(similarities) > 0:
@@ -229,7 +216,7 @@ def rank_captions_and_remove_worst(experiment, minimum_token_similarity=config.m
             i += 1
 
         # compute sentences similarity to all others (array of size 20)
-        sentences_global_similarities = np.sum(result, axis=1)  # TODO lpmayos: in exp5, as we sum similarity per sentence, which is maximum 1, this value is maximum 20
+        sentences_global_similarities = (np.sum(result, axis=1)) / result.shape[1]  # sentences similarities normalized between 0 and 1
 
         # compute sentences order according to similarity
         sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
@@ -244,26 +231,20 @@ def rank_captions_and_remove_worst(experiment, minimum_token_similarity=config.m
                     log.info('\t [PRINTING ERROR] with printing sentence')
 
         # compute which sentence we should remove according to similarity measures (or just the worst 2, depending on the policy)
-        if config.removing_policy == '20percent':
-            for sentence_index in sentences_order[18:]:  # we remove the two worst sentences
-                sentences_to_remove.append((video_captions.sentences[sentence_index], video_id))
-        elif config.removing_policy == 'over_threshold':
 
-            # test to find a right threshold
-            for th_test in config.thresholds_experiments_test[experiment].keys():
-                num_sentences_below_threshold = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < th_test])
-                config.thresholds_experiments_test[experiment][th_test].append(num_sentences_below_threshold)
+        # compute how many sentences are below th2
+        num_sentences_below_threshold_video = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.th2])
+        num_sentences_below_threshold.append(num_sentences_below_threshold_video)
 
-            to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.thresholds_experiments[experiment]]
-            sentences_to_remove += to_remove
+        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.th2]
+        sentences_to_remove += to_remove
 
     # generate boxplots with sentences similarities and barchart of how many sentences we have to remove from each video according to threshold
-    generate_boxplot(all_videos_sentences_similarities, experiment, name_appendix)
-    if config.removing_policy == 'over_threshold':
-        generate_barchart(experiment, name_appendix)
+    generate_boxplot(all_videos_sentences_similarities)
+    generate_barchart(num_sentences_below_threshold)
 
     # generate a new training set removing the detected annotations
-    remove_training_sentences(sentences_to_remove, experiment, name_appendix)
+    remove_training_sentences(sentences_to_remove)
 
     # remove file handlers
     handlers = log.handlers[:]
@@ -281,16 +262,14 @@ def main():
         display_tokens_similarity()
     elif config.options.experiment == 'experiment1':
         rank_captions_and_remove_worst_with_embeddings()
-    elif config.options.experiment in ['experiment3', 'experiment4', 'experiment5']:
-        rank_captions_and_remove_worst(config.options.experiment)
-    elif config.options.experiment == 'find_tokens_similarity_threshold':
-        for experiment_to_test in ['experiment4', 'experiment5']:
-            for minimum_token_similarity in [0.12, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04]:
-                config.thresholds_experiments_test = {'experiment1': {0.65: [], 0.70: [], 0.75: [], 0.78: [], 0.80: []},
-                                                      'experiment3': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
-                                                      'experiment4': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
-                                                      'experiment5': {17.0: [], 16.5: [], 16.0: [], 15.5: [], 15.0: [], 14.5: [], 14.0: []}}
-                rank_captions_and_remove_worst(experiment_to_test, minimum_token_similarity)
+    elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4']:
+        rank_captions_and_remove_worst()
+    elif config.options.experiment == 'find_th1':
+        for experiment_to_test in ['experiment3', 'experiment4']:
+            config.experiment = experiment_to_test
+            for th1 in [0.10, 0.12, 0.14, 0.16, 0.18, 0.20, 0.22, 0.24, 0.26, 0.28, 0.30]:  # token similarity moves between 0 and 1
+                config.th1, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_th1_and_paths(th1, config.th2, experiment_to_test)
+                rank_captions_and_remove_worst()
     else:
         print 'bye!'
 

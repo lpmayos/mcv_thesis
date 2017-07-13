@@ -80,7 +80,7 @@ def load_video_captions(video_id):
     return video_captions
 
 
-def remove_training_sentences(sentences_to_remove, experiment, name_appendix):
+def remove_training_sentences(sentences_to_remove):
     """ Load the video annotations from json file, and makes a copy removing the
     sentences indicated in sentences_to_remove, adding a sufix to the file name.
     """
@@ -96,7 +96,7 @@ def remove_training_sentences(sentences_to_remove, experiment, name_appendix):
 
         data['sentences'] = new_data_sentences
 
-        new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + name_appendix + '.json'
+        new_file_path = config.path_to_train_val_videodatainfo.split('.json')[0] + '_' + config.sufix_files + '.json'
         with open(new_file_path, 'w') as outfile:
             json.dump(data, outfile)
         print 'done generating new training sentences!'
@@ -105,7 +105,7 @@ def remove_training_sentences(sentences_to_remove, experiment, name_appendix):
     return
 
 
-def generate_boxplot(all_videos_sentences_similarities, experiment, name_appendix):
+def generate_boxplot(all_videos_sentences_similarities, th1=None):
     """
     """
 
@@ -130,21 +130,21 @@ def generate_boxplot(all_videos_sentences_similarities, experiment, name_appendi
         plt.text(x, y - 0.08, '%.3f' % x, horizontalalignment='center')
 
     # plt.show()
-    plt.savefig('results/' + experiment + '/' + 'boxplot_' + name_appendix + '.png')
+    plt.savefig(config.boxplot_path)
     plt.close()
 
 
-def generate_barchart(experiment, name_appendix=''):
+def generate_barchart(num_sentences_discarded):
     """
     """
-    for threshold in config.thresholds_experiments_test[experiment].keys():
-        plt.jet()
-        lines = plt.plot(range(config.first_video, config.last_video), config.thresholds_experiments_test[experiment][threshold])
-        plt.setp(lines, linewidth=2, color='r')
-        plt.xlabel('Training videos')
-        plt.ylabel('Discarded sentences')
-        plt.title(experiment + ' - Discarded sentences with threshold ' + str(threshold))
-        plt.grid(True)
-        # plt.show()
-        plt.savefig('results/' + experiment + '/' + 'barchart_' + name_appendix + '_discard_th_' + str(threshold) + '.png')
-        plt.close()
+    plt.jet()
+    lines = plt.plot(range(config.first_video, config.last_video), num_sentences_discarded)
+    plt.setp(lines, linewidth=2, color='r')
+    plt.xlabel('Training videos')
+    plt.ylabel('Discarded sentences')
+    # plt.title('Discarded sentences per video')
+
+    plt.grid(True)
+    # plt.show()
+    plt.savefig(config.barchart_path)
+    plt.close()

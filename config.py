@@ -1,14 +1,42 @@
 import sys
+import os
 import pickle
 from data_structures.tokens_set import TokensSet
 from optparse import OptionParser
 import solr  # corresponds to solrpy
 
 
+def config_th1_and_paths(th1, th2, experiment):
+    """
+    """
+    if th1:
+        th1 = float(th1)  # corresponds to minimum_token_similarity
+        sufix_files = experiment[0] + experiment[-1] + '_th1_' + str(th1) + '_th2_' + str(th2)
+        folder = 'results/' + experiment + '/th1_' + str(th1)
+        boxplot_path = folder + '/boxplot_' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '.png'
+        barchart_path = folder + '/barchart_' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '_th2_' + str(th2) + '.png'
+        log_path = folder + '/' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '.log'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+    else:
+        th1 = None
+        sufix_files = experiment[0] + experiment[-1] + '_th2_' + str(th2)
+        folder = 'results/' + experiment
+        boxplot_path = folder + '/' + 'boxplot_' + experiment[0] + experiment[-1] + '.png'
+        barchart_path = folder + '/barchart_' + experiment[0] + experiment[-1] + '_th2_' + str(th2) + '.png'
+        log_path = folder + '/' + experiment[0] + experiment[-1] + '.log'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+    return th1, sufix_files, folder, boxplot_path, barchart_path, log_path
+
+
 # Parse command line args and make sure all params are present
 parser = OptionParser()
 parser.add_option('-p', '--pickle_folder', help='Path to folder containing the pickle files to use')
 parser.add_option('-e', '--experiment', help='Experiment name (see main function in experiments.py for options)')
+parser.add_option('-a', '--th1', help='corresponds to minimum_token_similarity')
+parser.add_option('-b', '--th2', help='corresponds to discard_sentence_threshold')
 parser.add_option('-s', '--first', help='First video number [0-7010]')
 parser.add_option('-l', '--last', help='Last video number [0-7010]')
 parser.add_option('-v', '--verbose', help='Show info on command line')
@@ -22,27 +50,22 @@ if not options.experiment or not options.first or not options.last or not option
     sys.exit(2)
 
 
+experiment = options.experiment
 first_video = int(options.first)
 last_video = int(options.last)
+
 
 # Similarity strategy to use when comparing tokens, as described in  algorithm 1
 # of senseEmbed paper. For now the only option is the 'closest' strategy.
 # TODO lpmayos: add 'weighted' strategy
 similarity_strategy = 'closest'
 
-# Threshold to consider in experiments using closest similarity measures
-minimum_token_similarity = 0.05
 
-
-# Policy used to discard sentences from annotation set
-removing_policy = 'over_threshold'  # 20percent or over_threshold
-
-# TODO lpmayos: when we decide the right thresholds, change them here!
-thresholds_experiments_test = {'experiment1': {0.65: [], 0.70: [], 0.75: [], 0.78: [], 0.80: []},
-                               'experiment3': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
-                               'experiment4': {3.0: [], 3.5: [], 4.0: [], 4.5: [], 5.0: []},
-                               'experiment5': {17.0: [], 16.5: [], 16.0: [], 15.5: [], 15.0: [], 14.5: [], 14.0: []}}
-thresholds_experiments = {'experiment1': 0.785, 'experiment3': 4.0, 'experiment4': 4.0, 'experiment5': 16.0}  # threshold used to discard sentences from annotation set if removing_policy == 'over_threshold'
+# Threshold to consider in experiments
+#       th1 corresponds to minimum_token_similarity
+#       th2 corresponds to discard_sentence_threshold
+th2 = float(options.th2)
+th1, sufix_files, folder, boxplot_path, barchart_path, log_path = config_th1_and_paths(options.th1, th2, experiment)
 
 
 # Folder to save/load the pickle objects to/from
@@ -77,6 +100,7 @@ if options.experiment == 'create_video_captions':
     if choice != 'yes':
         print 'aborting mission ;)'
         options.experiment = None
+
 
 # If an experiment is about to be launched, load token_set to use
 # NOTE token_set is heavy, and takes some time to load.
