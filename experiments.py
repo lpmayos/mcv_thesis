@@ -87,7 +87,8 @@ def display_tokens_similarity():
 
 
 def rank_captions_and_remove_worst_with_embeddings():
-    """ Goal: detect those captions that are very different from the others
+    """ experiment 1
+    Goal: detect those captions that are very different from the others
     (they have typos or are not descriptive)
 
     Method: for each video we get all the captions and we compute an
@@ -157,7 +158,7 @@ def rank_captions_and_remove_worst_with_embeddings():
 
 
 def rank_captions_and_remove_worst():
-    """
+    """ experiments 2, 3 and 4
     """
 
     # configure logging file
@@ -189,7 +190,7 @@ def rank_captions_and_remove_worst():
 
                     # store token similarity (depending on the experiments we check if it is over threshold)
                     if most_similar_token_in_sentence[0] is not None:
-                        if config.experiment == 'experiment4':
+                        if config.experiment in ['experiment4', 'experiment4symmetrical']:
                             if most_similar_token_in_sentence[1] > config.th1:
                                 similarities.append((most_similar_token_in_sentence[0], 1.0))  # for each token we add 1 instead of similarity
                             else:
@@ -214,6 +215,18 @@ def rank_captions_and_remove_worst():
                     all_videos_sentences_similarities.append(sentences_similarity)
                 j += 1
             i += 1
+
+        # we make the similarities symmetrical
+        if config.experiment == 'experiment4symmetrical':
+            all_videos_sentences_similarities = []
+            for i in range(0, len(result)):
+                for j in range(0, len(result)):
+                    symmetric_similarity = 0
+                    if result[i, j] + result[j, i] != 0:
+                        symmetric_similarity = (result[i, j] + result[j, i]) / 2
+                    result[i, j] = symmetric_similarity
+                    result[j, i] = symmetric_similarity
+                    all_videos_sentences_similarities += [symmetric_similarity, symmetric_similarity]
 
         # compute sentences similarity to all others (array of size 20)
         sentences_global_similarities = (np.sum(result, axis=1)) / result.shape[1]  # sentences similarities normalized between 0 and 1
@@ -262,10 +275,10 @@ def main():
         display_tokens_similarity()
     elif config.options.experiment == 'experiment1':
         rank_captions_and_remove_worst_with_embeddings()
-    elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4']:
+    elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4', 'experiment4symmetrical']:
         rank_captions_and_remove_worst()
     elif config.options.experiment == 'find_th1':
-        for experiment_to_test in ['experiment3', 'experiment4']:
+        for experiment_to_test in ['experiment4symmetrical']:  # ['experiment3', 'experiment4', 'experiment4symmetrical']:
             config.experiment = experiment_to_test
             for th1 in [0.10, 0.12, 0.14, 0.16, 0.18, 0.20, 0.22, 0.24, 0.26, 0.28, 0.30]:  # token similarity moves between 0 and 1
                 config.th1, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_th1_and_paths(th1, config.th2, experiment_to_test)
