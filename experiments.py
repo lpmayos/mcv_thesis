@@ -6,6 +6,8 @@ from commons import setup_logger, load_video_captions, plot_embeddings_with_labe
 from data_structures.video_captions import VideoCaptions
 import pickle
 import logging
+from nltk.translate.bleu_score import SmoothingFunction
+from nltk import bleu_score
 
 
 def create_video_captions():
@@ -226,7 +228,7 @@ def rank_captions_and_remove_worst():
                         symmetric_similarity = (result[i, j] + result[j, i]) / 2
                     result[i, j] = symmetric_similarity
                     result[j, i] = symmetric_similarity
-                    all_videos_sentences_similarities += [symmetric_similarity, symmetric_similarity]
+                    all_videos_sentences_similarities.append(symmetric_similarity)
 
         # compute sentences similarity to all others (array of size 20)
         sentences_global_similarities = (np.sum(result, axis=1)) / result.shape[1]  # sentences similarities normalized between 0 and 1
@@ -266,6 +268,66 @@ def rank_captions_and_remove_worst():
         log.removeHandler(handler)
 
 
+def rank_captions_and_remove_worst_bleu():
+    """ experiment 5
+    """
+
+    # configure logging file
+    setup_logger(config.experiment, config.log_path)
+    log = logging.getLogger(config.experiment)
+
+    sentences_to_remove = []
+    all_videos_sentences_similarities = []  # stores in a single array the similarities computed for each video
+    num_sentences_below_threshold = []
+
+    chencherry = SmoothingFunction()
+
+    for video_id in range(config.first_video, config.last_video):
+        video_captions = load_video_captions(video_id)
+
+        sentences_scores = []
+        sentences_scores_ordered = []
+        for i, sentence1 in enumerate(video_captions.sentences):
+            scores = [bleu_score.sentence_bleu([sentence2.sentence.split(' ')], sentence1.sentence.split(' '), smoothing_function=chencherry.method4) for j, sentence2 in enumerate(video_captions.sentences)]  # if i != j]  # if we add 1 to all, result shouldn't change
+            score = sum(scores) / len(scores)
+            sentence_score = (sentence1, score)
+            sentences_scores.append(sentence_score)
+            sentences_scores_ordered.append(sentence_score)
+            all_videos_sentences_similarities.append(score)
+        sentences_scores_ordered.sort(key=lambda tup: tup[1], reverse=True)
+
+        # show sentences and similarity from most similar to most different
+        if config.verbose:
+            log.info('\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n')
+            for sentence in sentences_scores_ordered:
+                try:
+                    log.info('\t' + sentence[0].sentence + ' (' + str(sentence[1]) + ')')
+                except UnicodeEncodeError:
+                    log.info('\t [PRINTING ERROR] with printing sentence')
+
+        # compute which sentence we should remove according to similarity measures (or just the worst 2, depending on the policy)
+
+        # compute how many sentences are below th2
+        num_sentences_below_threshold_video = len([a for a in sentences_scores if a[1] < config.th2])
+        num_sentences_below_threshold.append(num_sentences_below_threshold_video)
+
+        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_scores) if a < config.th2]
+        sentences_to_remove += to_remove
+
+    # generate boxplots with sentences similarities and barchart of how many sentences we have to remove from each video according to threshold
+    generate_boxplot(all_videos_sentences_similarities)
+    generate_barchart(num_sentences_below_threshold)
+
+    # generate a new training set removing the detected annotations
+    remove_training_sentences(sentences_to_remove)
+
+    # remove file handlers
+    handlers = log.handlers[:]
+    for handler in handlers:
+        handler.close()
+        log.removeHandler(handler)
+
+
 def main():
     print '====================================== ' + config.options.experiment
 
@@ -277,6 +339,8 @@ def main():
         rank_captions_and_remove_worst_with_embeddings()
     elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4', 'experiment4symmetrical']:
         rank_captions_and_remove_worst()
+    elif config.options.experiment == 'experiment5':
+        rank_captions_and_remove_worst_bleu()
     elif config.options.experiment == 'find_th1':
         for experiment_to_test in ['experiment3', 'experiment4', 'experiment4symmetrical']:
             config.experiment = experiment_to_test

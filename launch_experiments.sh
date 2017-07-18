@@ -21,4 +21,6 @@ verbose='true'
 # python experiments.py --experiment 'experiment2' --th2 0.20 --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences 'false'
 
 # experiments 3 and 4: we need to find the right th1
-python experiments.py --experiment 'find_th1' --th2 0.14 --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences 'false'
+# python experiments.py --experiment 'find_th1' --th2 0.14 --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences 'false'
+
+python experiments.py --experiment 'experiment5' --th2 0.14 --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences 'false'
