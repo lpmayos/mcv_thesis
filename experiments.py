@@ -278,9 +278,9 @@ def main():
     elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4', 'experiment4symmetrical']:
         rank_captions_and_remove_worst()
     elif config.options.experiment == 'find_th1':
-        for experiment_to_test in ['experiment4symmetrical']:  # ['experiment3', 'experiment4', 'experiment4symmetrical']:
+        for experiment_to_test in ['experiment3', 'experiment4', 'experiment4symmetrical']:
             config.experiment = experiment_to_test
-            for th1 in [0.10, 0.12, 0.14, 0.16, 0.18, 0.20, 0.22, 0.24, 0.26, 0.28, 0.30]:  # token similarity moves between 0 and 1
+            for th1 in [0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.11, 0.115]:  # token similarity moves between 0 and 1
                 config.th1, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_th1_and_paths(th1, config.th2, experiment_to_test)
                 rank_captions_and_remove_worst()
     else:
