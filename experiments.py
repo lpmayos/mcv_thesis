@@ -2,10 +2,9 @@ import json
 import config
 import numpy as np
 import scipy
-from commons import setup_logger, load_video_captions, plot_embeddings_with_labels, generate_barchart, generate_boxplot, remove_training_sentences
+from commons import load_video_captions, generate_barchart, generate_boxplot, remove_training_sentences, log_sentences_ranking
 from data_structures.video_captions import VideoCaptions
 import pickle
-import logging
 from nltk.translate.bleu_score import SmoothingFunction
 from nltk import bleu_score
 
@@ -88,39 +87,13 @@ def display_tokens_similarity():
                             print '\t\t\t[PRINTING ERROR] with printing most similar token in sentence ' + str(sentence2.id)
 
 
-def rank_captions_and_remove_worst_with_embeddings():
-    """ experiment 1
-    Goal: detect those captions that are very different from the others
-    (they have typos or are not descriptive)
-
-    Method: for each video we get all the captions and we compute an
-    embedding for all the sentences. Then, we project all the embeddings
-    in common space, we compute its centroid and the distances to the
-    centroid of each embedding, sorting the captions by distance.
-    Then, we discard the worst two annotations.
-    TODO lpmayos: we can try discarding a percentage (i.e. 10%) or the ones that
-    are above a certain threshold.
-
-    Results: a sample of the results (sentence ordering and image of the
-    embedding space) is shown on shell if verbose=True and can be also seen at
-    results/experiment1/, and a new train_val_videodatainfo.json is generated to
-    train a new model on config.path_to_train_val_videodatainfo with sufix
-    # experiment1
+def compute_sentences_ranking(video_captions):
+    """ returns [(sentence0, similarity), ..., (sentence19, similarity)]
     """
+    sentences_global_ranking = []
 
-    # configure logging file
-    setup_logger(config.experiment, config.log_path)
-    log1 = logging.getLogger(config.experiment)
-
-    bfs = True
-    plot_embeddings = False
-    sentences_to_remove = []
-    all_videos_sentences_distances = []  # stores in a single array the distances computed for each video
-    num_sentences_above_threshold = []
-
-    for video_id in range(config.first_video, config.last_video):  # 0, 7010
-        video_captions = load_video_captions(video_id)
-
+    if config.experiment == 'experiment1':
+        bfs = True
         embeddings = []
         labels = []
         for sentence in video_captions.sentences:
@@ -131,54 +104,20 @@ def rank_captions_and_remove_worst_with_embeddings():
 
         embeddings_mean = np.mean(embeddings, axis=0)
         distances = [scipy.spatial.distance.cosine(embedding, embeddings_mean) for embedding in embeddings]
-        all_videos_sentences_distances += distances
-        sort_index = np.argsort(distances)
+        for i, distance in enumerate(distances):
+            sentences_global_ranking.append((video_captions.sentences[i].sentence, distance))
 
-        # compute how many sentences are above th2
-        num_sentences_above_threshold_video = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.th2])
-        num_sentences_above_threshold.append(num_sentences_above_threshold_video)
+    elif config.experiment == 'experiment5':
+        chencherry = SmoothingFunction()
+        for i, sentence1 in enumerate(video_captions.sentences):
+            scores = [bleu_score.sentence_bleu([sentence2.sentence.split(' ')], sentence1.sentence.split(' '), smoothing_function=chencherry.method4) for j, sentence2 in enumerate(video_captions.sentences)]  # if i != j]  # if we add 1 to all, result shouldn't change
+            score = sum(scores) / len(scores)
+            sentences_global_ranking.append((sentence1.sentence, score))
 
-        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(distances) if a > config.th2]
-        sentences_to_remove += to_remove
-
-        if config.verbose:
-            log1.info('\n\n ***** video ' + str(video_id) + '. Sentences from closest to fartest to the mean:\n')
-            for index in sort_index:
-                try:
-                    log1.info('\t' + str(distances[index]) + ' \t ' + video_captions.get_sentence_text(index))
-                except UnicodeEncodeError:
-                    log1.info('\t [PRINTING ERROR] with printing sentence')
-
-        if plot_embeddings:
-            plot_embeddings_with_labels(embeddings, labels, 'sentence_embeddings_' + video_captions.video_id + '.png')
-
-    generate_boxplot(all_videos_sentences_distances)
-    generate_barchart(num_sentences_above_threshold)
-
-    # generate a new training set removing the detected annotations
-    remove_training_sentences(sentences_to_remove)
-
-
-def rank_captions_and_remove_worst():
-    """ experiments 2, 3 and 4
-    """
-
-    # configure logging file
-    setup_logger(config.experiment, config.log_path)
-    log = logging.getLogger(config.experiment)
-
-    sentences_to_remove = []
-    all_videos_sentences_similarities = []  # stores in a single array the similarities computed for each video
-    num_sentences_below_threshold = []
-
-    for video_id in range(config.first_video, config.last_video):
-        video_captions = load_video_captions(video_id)
-
+    else:
         result = np.zeros([20, 20])
-        i = 0
-        for sentence1 in video_captions.sentences:
-            j = 0
-            for sentence2 in video_captions.sentences:
+        for i, sentence1 in enumerate(video_captions.sentences):
+            for j, sentence2 in enumerate(video_captions.sentences):
                 similarities = []
                 for token1_id in sentence1.tokens_id_list:
 
@@ -204,23 +143,17 @@ def rank_captions_and_remove_worst():
                                 similarities.append((None, 0))
                         elif config.experiment == 'experiment2':
                             similarities.append(most_similar_token_in_sentence)
+
                 # compute and store similarity between sentence1 and sentence2
                 if len(similarities) > 0:
                     sentences_similarity = float(sum([a[1] for a in similarities])) / len(similarities)
-                    # sentences_similarity = sum([a[1] for a in similarities]) / len(similarities)
                 else:
                     sentences_similarity = 0
 
                 result[i, j] = sentences_similarity
 
-                if i != j:
-                    all_videos_sentences_similarities.append(sentences_similarity)
-                j += 1
-            i += 1
-
         # we make the similarities symmetrical
         if config.experiment == 'experiment4symmetrical':
-            all_videos_sentences_similarities = []
             for i in range(0, len(result)):
                 for j in range(0, len(result)):
                     symmetric_similarity = 0
@@ -228,104 +161,36 @@ def rank_captions_and_remove_worst():
                         symmetric_similarity = (result[i, j] + result[j, i]) / 2
                     result[i, j] = symmetric_similarity
                     result[j, i] = symmetric_similarity
-                    all_videos_sentences_similarities.append(symmetric_similarity)
 
         # compute sentences similarity to all others (array of size 20)
-        sentences_global_similarities = (np.sum(result, axis=1)) / result.shape[1]  # sentences similarities normalized between 0 and 1
+        sentences_similarities = (np.sum(result, axis=1)) / result.shape[1]  # sentences similarities normalized between 0 and 1
+        for i, similarity in enumerate(sentences_similarities):
+            sentences_global_ranking.append((video_captions.sentences[i].sentence, similarity))
 
-        # compute sentences order according to similarity
-        sentences_order = np.flip(np.argsort(sentences_global_similarities), 0)
-
-        # show sentences and similarity from most similar to most different
-        if config.verbose:
-            log.info('\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n')
-            for sentence_index in sentences_order:
-                try:
-                    log.info('\t' + video_captions.sentences[sentence_index].sentence + ' (' + str(sentences_global_similarities[sentence_index]) + ')')
-                except UnicodeEncodeError:
-                    log.info('\t [PRINTING ERROR] with printing sentence')
-
-        # compute which sentence we should remove according to similarity measures (or just the worst 2, depending on the policy)
-
-        # compute how many sentences are below th2
-        num_sentences_below_threshold_video = len([(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.th2])
-        num_sentences_below_threshold.append(num_sentences_below_threshold_video)
-
-        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_global_similarities) if a < config.th2]
-        sentences_to_remove += to_remove
-
-    # generate boxplots with sentences similarities and barchart of how many sentences we have to remove from each video according to threshold
-    generate_boxplot(all_videos_sentences_similarities)
-    generate_barchart(num_sentences_below_threshold)
-
-    # generate a new training set removing the detected annotations
-    remove_training_sentences(sentences_to_remove)
-
-    # remove file handlers
-    handlers = log.handlers[:]
-    for handler in handlers:
-        handler.close()
-        log.removeHandler(handler)
+    return sentences_global_ranking
 
 
-def rank_captions_and_remove_worst_bleu():
-    """ experiment 5
+def rank_captions_and_remove_worst(similarity_or_distance='similarity'):
+    """ experiments 1, 2, 3, 4, 4symmetrical and 5
     """
 
-    # configure logging file
-    setup_logger(config.experiment, config.log_path)
-    log = logging.getLogger(config.experiment)
-
-    sentences_to_remove = []
-    all_videos_sentences_similarities = []  # stores in a single array the similarities computed for each video
-    num_sentences_below_threshold = []
-
-    chencherry = SmoothingFunction()
+    video_captions_ranking = {}  # dict with the form {video_id: [(sentence0, similarity), ..., (sentence19, similarity)], ...} where similarity indicates how similar the caption is to all other captions of the same video
 
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
+        video_captions_ranking[video_id] = compute_sentences_ranking(video_captions)
 
-        sentences_scores = []
-        sentences_scores_ordered = []
-        for i, sentence1 in enumerate(video_captions.sentences):
-            scores = [bleu_score.sentence_bleu([sentence2.sentence.split(' ')], sentence1.sentence.split(' '), smoothing_function=chencherry.method4) for j, sentence2 in enumerate(video_captions.sentences)]  # if i != j]  # if we add 1 to all, result shouldn't change
-            score = sum(scores) / len(scores)
-            sentence_score = (sentence1, score)
-            sentences_scores.append(sentence_score)
-            sentences_scores_ordered.append(sentence_score)
-            all_videos_sentences_similarities.append(score)
-        sentences_scores_ordered.sort(key=lambda tup: tup[1], reverse=True)
+    # log sentences ranking
+    log_sentences_ranking(video_captions_ranking, similarity_or_distance)
 
-        # show sentences and similarity from most similar to most different
-        if config.verbose:
-            log.info('\n\n ***** video ' + str(video_id) + '. Sentences from most similar to all others to most different to all others:\n')
-            for sentence in sentences_scores_ordered:
-                try:
-                    log.info('\t' + sentence[0].sentence + ' (' + str(sentence[1]) + ')')
-                except UnicodeEncodeError:
-                    log.info('\t [PRINTING ERROR] with printing sentence')
+    # generate boxplot with sentences similarities and compute th2
+    th2 = generate_boxplot(video_captions_ranking, similarity_or_distance)
 
-        # compute which sentence we should remove according to similarity measures (or just the worst 2, depending on the policy)
-
-        # compute how many sentences are below th2
-        num_sentences_below_threshold_video = len([a for a in sentences_scores if a[1] < config.th2])
-        num_sentences_below_threshold.append(num_sentences_below_threshold_video)
-
-        to_remove = [(video_captions.sentences[ind], video_id) for ind, a in enumerate(sentences_scores) if a < config.th2]
-        sentences_to_remove += to_remove
-
-    # generate boxplots with sentences similarities and barchart of how many sentences we have to remove from each video according to threshold
-    generate_boxplot(all_videos_sentences_similarities)
-    generate_barchart(num_sentences_below_threshold)
+    # generate barchart of how many sentences we have to remove from each video according to threshold th2
+    generate_barchart(video_captions_ranking, th2, similarity_or_distance)
 
     # generate a new training set removing the detected annotations
-    remove_training_sentences(sentences_to_remove)
-
-    # remove file handlers
-    handlers = log.handlers[:]
-    for handler in handlers:
-        handler.close()
-        log.removeHandler(handler)
+    remove_training_sentences(video_captions_ranking, th2, similarity_or_distance)
 
 
 def main():
@@ -336,17 +201,25 @@ def main():
     elif config.options.experiment == 'display_tokens_similarity':
         display_tokens_similarity()
     elif config.options.experiment == 'experiment1':
-        rank_captions_and_remove_worst_with_embeddings()
-    elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4', 'experiment4symmetrical']:
+        rank_captions_and_remove_worst(similarity_or_distance='distance')
+    elif config.options.experiment in ['experiment2', 'experiment3', 'experiment4', 'experiment4symmetrical', 'experiment5']:
         rank_captions_and_remove_worst()
-    elif config.options.experiment == 'experiment5':
-        rank_captions_and_remove_worst_bleu()
-    elif config.options.experiment == 'find_th1':
-        for experiment_to_test in ['experiment3', 'experiment4', 'experiment4symmetrical']:
-            config.experiment = experiment_to_test
-            for th1 in [0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.11, 0.115]:  # token similarity moves between 0 and 1
-                config.th1, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_th1_and_paths(th1, config.th2, experiment_to_test)
+    elif config.options.experiment == 'all':
+
+        # experiment 1
+        config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment1')
+        rank_captions_and_remove_worst(similarity_or_distance='distance')
+
+        # experiment 4 and 4 symmetrical
+        for experiment_to_test in ['experiment4', 'experiment4symmetrical']:  # ['experiment3', 'experiment4', 'experiment4symmetrical']:
+            for th1 in [0.08, 0.085, 0.09, 0.095, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135]:  # token similarity moves between 0 and 1
+                config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(th1, config.th2, experiment_to_test)
                 rank_captions_and_remove_worst()
+
+        # experiment 5
+        config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment5')
+        rank_captions_and_remove_worst()
+
     else:
         print 'bye!'
 

@@ -6,7 +6,7 @@ from optparse import OptionParser
 import solr  # corresponds to solrpy
 
 
-def config_th1_and_paths(th1, th2, experiment):
+def config_ths_and_paths(th1, th2, experiment):
     """
     """
     if th1:
@@ -28,7 +28,7 @@ def config_th1_and_paths(th1, th2, experiment):
         if not os.path.exists(folder):
             os.makedirs(folder)
 
-    return th1, sufix_files, folder, boxplot_path, barchart_path, log_path
+    return experiment, th1, th2, sufix_files, folder, boxplot_path, barchart_path, log_path
 
 
 # Parse command line args and make sure all params are present
@@ -36,7 +36,6 @@ parser = OptionParser()
 parser.add_option('-p', '--pickle_folder', help='Path to folder containing the pickle files to use')
 parser.add_option('-e', '--experiment', help='Experiment name (see main function in experiments.py for options)')
 parser.add_option('-a', '--th1', help='corresponds to minimum_token_similarity')
-parser.add_option('-b', '--th2', help='corresponds to discard_sentence_threshold')
 parser.add_option('-s', '--first', help='First video number [0-7010]')
 parser.add_option('-l', '--last', help='Last video number [0-7010]')
 parser.add_option('-v', '--verbose', help='Show info on command line')
@@ -50,7 +49,6 @@ if not options.experiment or not options.first or not options.last or not option
     sys.exit(2)
 
 
-experiment = options.experiment
 first_video = int(options.first)
 last_video = int(options.last)
 
@@ -63,9 +61,7 @@ similarity_strategy = 'closest'
 
 # Threshold to consider in experiments
 #       th1 corresponds to minimum_token_similarity
-#       th2 corresponds to discard_sentence_threshold
-th2 = float(options.th2)
-th1, sufix_files, folder, boxplot_path, barchart_path, log_path = config_th1_and_paths(options.th1, th2, experiment)
+experiment, th1, th2, sufix_files, folder, boxplot_path, barchart_path, log_path = config_ths_and_paths(options.th1, None, options.experiment)
 
 
 # Folder to save/load the pickle objects to/from
