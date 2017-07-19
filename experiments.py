@@ -206,19 +206,19 @@ def main():
         rank_captions_and_remove_worst()
     elif config.options.experiment == 'all':
 
-        # experiment 1
-        config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment1')
-        rank_captions_and_remove_worst(similarity_or_distance='distance')
+        # # experiment 1
+        # config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment1')
+        # rank_captions_and_remove_worst(similarity_or_distance='distance')
 
         # experiment 4 and 4 symmetrical
         for experiment_to_test in ['experiment4', 'experiment4symmetrical']:  # ['experiment3', 'experiment4', 'experiment4symmetrical']:
-            for th1 in [0.08, 0.085, 0.09, 0.095, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135]:  # token similarity moves between 0 and 1
+            for th1 in [0.10]:  # [0.08, 0.085, 0.09, 0.095, 0.10, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135]:  # token similarity moves between 0 and 1
                 config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(th1, config.th2, experiment_to_test)
                 rank_captions_and_remove_worst()
 
-        # experiment 5
-        config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment5')
-        rank_captions_and_remove_worst()
+        # # experiment 5
+        # config.experiment, config.th1, config.th2, config.sufix_files, config.folder, config.boxplot_path, config.barchart_path, config.log_path = config.config_ths_and_paths(config.th1, config.th2, 'experiment5')
+        # rank_captions_and_remove_worst()
 
     else:
         print 'bye!'

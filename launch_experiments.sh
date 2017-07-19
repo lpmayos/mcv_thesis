@@ -9,6 +9,6 @@ first=0
 last=7010
 # last=10
 verbose='true'
-create_new_training_sentences='false'
+create_new_training_sentences='true'
 
 python experiments.py --experiment 'all' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --create_new_training_sentences $create_new_training_sentences
