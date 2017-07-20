@@ -129,16 +129,21 @@ def generate_boxplot(video_captions_ranking, similarity_or_distance='similarity'
 
     for line in bp_dict['medians']:
         x, y = line.get_xydata()[1]  # position for median line: [1] top of median line, [0] bottom of median line
-        plt.text(x, y + 0.02, '%.3f' % x, horizontalalignment='center')  # overlay median value above, centered
+        median = x
+        plt.text(x, y + 0.02, '%.3f' % median, horizontalalignment='center')  # overlay median value above, centered
 
     for line in bp_dict['boxes']:
         x, y = line.get_xydata()[0]  # bottom of left line
-        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
+        q1 = x
+        plt.text(x, y - 0.02, '%.3f' % q1, horizontalalignment='center', verticalalignment='top')
         x, y = line.get_xydata()[3]  # bottom of right line
-        plt.text(x, y - 0.02, '%.3f' % x, horizontalalignment='center', verticalalignment='top')
+        q3 = x
+        plt.text(x, y - 0.02, '%.3f' % q3, horizontalalignment='center', verticalalignment='top')
 
+    min_max = []
     for i, line in enumerate(bp_dict['whiskers']):
         x, y = line.get_xydata()[1]
+        min_max.append(x)
         if i == 0 and similarity_or_distance == 'similarity':
             th2 = x
         elif i == 1 and similarity_or_distance == 'distance':
