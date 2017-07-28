@@ -16,9 +16,9 @@ class typeformCreator():
         """
         """
         self.driver.get('https://admin.typeform.com/login/')
-        username = raw_input('Enter Typeform username: ')
+        username = 'lpmayos@gmail.com'  # raw_input('Enter Typeform username: ')
         self.driver.send_keys('_username', username)
-        password = getpass.getpass()
+        password = 'vasdelpal4Um'  # getpass.getpass()
         self.driver.send_keys('_password', password)
         self.driver.click_element_by_id('btnlogin')
 
@@ -31,36 +31,69 @@ class typeformCreator():
         self.driver.send_keys('quickyform_name', 'form_prova')
         self.driver.click_element_by_id('submit-scratch-form')
 
-    def add_text_with_video(self, video_url, start_time, end_time):
-        # add group of questions for a video
+    def add_text_field(self, text):
+        """
+        """
+        # add text field
         self.driver.click_element_by_css_selector('#sidebar .field-icon.statement')
 
         # switch context to iframe
         self.driver.switch_to_frame('statement_content_ifr')
-        text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
         self.driver.send_keys('tinymce', text)
 
         # switch back to parent form
-        # self.driver.switch_to_frame('sidebar-editor')
         self.driver.driver.switch_to_default_content()
 
+    def add_video_field(self, url):
+        """
+        """
         video_on_off_element = self.driver.find_element_by_css_selector('#attachment .wrapper.coolCheckbox')
         if video_on_off_element.get_attribute("data-qa") == 'false':
             self.driver.click_element_by_css_selector('#attachment .front')  # Image / Video ON
         time.sleep(3)
         self.driver.click_element_by_css_selector('.attachment .video')  # select video tab
 
+        self.driver.send_keys('statement_video_url', url)
+
+    def add_text_with_video(self, video_url, start_time, end_time):
+        """
+        """
+        text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
+        self.add_text_field(text)
+
         # youtube_video_id = video_url.split('=')[1]
         # nice_url = 'https://www.youtube.com/v/' + youtube_video_id + '?start=' + str(int(start_time * 60)) + '&end=' + str(int(end_time * 60)) + '&version=3'
         nice_url = video_url + '&start=' + str(int(start_time * 60))
-        self.driver.send_keys('statement_video_url', nice_url)
+        self.add_video_field(nice_url)
+
         self.driver.click_element_by_css_selector('.submit span')
+
+    def add_group(self, text):
+        """
+        """
+        # add group of questions for a video
+        self.driver.click_element_by_css_selector('#sidebar .field-icon.group')
+
+        # switch context to iframe
+        self.driver.switch_to_frame('group_content_ifr')
+        self.driver.send_keys('tinymce', text)
+
+        # switch back to parent form
+        self.driver.driver.switch_to_default_content()
+        self.driver.click_element_by_css_selector('.submit span')
+
+    def add_caption(self, video_url, start_time, end_time, caption):
+        """
+        """
+        text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
+        self.add_group(text)
 
     def add_video(self, video_url, start_time, end_time, captions):
         """
         """
         self.add_text_with_video(video_url, start_time, end_time)
-        # self.add_
+        for caption in captions:
+            self.add_caption(video_url, start_time, end_time, captions[caption])
 
 
 def extract_data(experiments):
