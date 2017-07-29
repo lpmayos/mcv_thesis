@@ -1,97 +1,107 @@
 from __future__ import print_function  # Only needed for Python 2
 import json
-from selenium_driver import seleniumChromeDriver
+from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import getpass
 import time
 
 
 class typeformCreator():
 
-    def __init__(self, driver):
+    def __init__(self, driver, wait):
         """
         """
         self.driver = driver
+        self.wait = wait
 
     def login(self):
         """
         """
         self.driver.get('https://admin.typeform.com/login/')
         username = 'lpmayos@gmail.com'  # raw_input('Enter Typeform username: ')
-        self.driver.send_keys('_username', username)
-        password = 'vasdelpal4Um'  # getpass.getpass()
-        self.driver.send_keys('_password', password)
-        self.driver.click_element_by_id('btnlogin')
+        password = getpass.getpass()
+        element = self.driver.find_element_by_css_selector('#_username')
+        element.send_keys(username)
+        element = self.driver.find_element_by_css_selector('#_password')
+        element.send_keys(password)
+        self.driver.find_element_by_css_selector('#btnlogin').click()
 
     def add_new_form(self):
         """
         """
-        self.driver.click_element_by_css_selector('#forms .item.add div.label')  # 'Get started'
-        time.sleep(5)
-        self.driver.click_element_by_css_selector('.item.add .content .upper span')
-        self.driver.send_keys('quickyform_name', 'form_prova')
-        self.driver.click_element_by_id('submit-scratch-form')
+        self.driver.find_element_by_css_selector('#forms .item.add div.label').click()
+
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.item.add .content .upper')))
+        element.click()
+
+        self.driver.find_element_by_css_selector('#quickyform_name').send_keys('form_prova')
+        self.driver.find_element_by_css_selector('#submit-scratch-form').click()
 
     def add_text_to_tinymce(self, tinymce_id, text):
         """
         """
         # switch context to iframe
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#' + tinymce_id)))
         self.driver.switch_to_frame(tinymce_id)
-        self.driver.send_keys('tinymce', text)
+        element = self.driver.find_element_by_css_selector('#tinymce')
+        element.send_keys(text)
 
         # switch back to parent form
-        self.driver.driver.switch_to_default_content()
-
-
-    def add_text_field(self, text):
-        """
-        """
-        # add text field
-        self.driver.click_element_by_css_selector('#sidebar .field-icon.statement')
-
-        self.add_text_to_tinymce('statement_content_ifr', text)
+        self.driver.switch_to_default_content()
 
     def add_video_field(self, url):
         """
         """
         video_on_off_element = self.driver.find_element_by_css_selector('#attachment .wrapper.coolCheckbox')
         if video_on_off_element.get_attribute("data-qa") == 'false':
-            self.driver.click_element_by_css_selector('#attachment .front')  # Image / Video ON
+            self.driver.find_element_by_css_selector('#attachment .front').click()  # Image / Video ON
         time.sleep(3)
-        self.driver.click_element_by_css_selector('.attachment .video')  # select video tab
+        self.driver.find_element_by_css_selector('.attachment .video').click()  # select video tab
 
-        self.driver.send_keys('statement_video_url', url)
+        element = self.driver.find_element_by_css_selector('#statement_video_url')
+        element.send_keys(url)
 
     def add_text_with_video(self, video_url, start_time, end_time):
         """
         """
         text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
-        self.add_text_field(text)
+        
+        # add text field
+        time.sleep(3)
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.statement')))
+        element.click()
+
+        self.add_text_to_tinymce('statement_content_ifr', text)
 
         # youtube_video_id = video_url.split('=')[1]
         # nice_url = 'https://www.youtube.com/v/' + youtube_video_id + '?start=' + str(int(start_time * 60)) + '&end=' + str(int(end_time * 60)) + '&version=3'
         nice_url = video_url + '&start=' + str(int(start_time * 60))
         self.add_video_field(nice_url)
 
-        self.driver.click_element_by_css_selector('.submit span')
+        self.driver.find_element_by_css_selector('.submit span').click()
 
     def add_group(self, text):
         """
         """
+        time.sleep(4)
+
         # add group of questions for a video
-        self.driver.click_element_by_css_selector('#sidebar .field-icon.group')
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.group')))
+        element.click()
 
         self.add_text_to_tinymce('group_content_ifr', text)
 
-        self.driver.click_element_by_css_selector('.submit span')
+        self.driver.find_element_by_css_selector('.submit span').click()
 
     def add_opinion_scale_to_last_group(self, text, low_val_text, high_val_text):
         """
         """
         source_element = self.driver.find_element_by_css_selector('#sidebar .field-icon.opinion-scale')
-        # dest_element = self.driver.driver.find_elements_by_css_selector('.field.group .fake-droppable.minidrag')[-1]
-        dest_element = self.driver.driver.find_element_by_css_selector('.last-group .fake-droppable')
-        action = ActionChains(self.driver.driver).drag_and_drop(source_element, dest_element)
+        dest_element = self.driver.find_element_by_css_selector('.last-group .fake-droppable')
+        action = ActionChains(self.driver).drag_and_drop(source_element, dest_element)
         time.sleep(5)
         action.perform()
 
@@ -99,16 +109,18 @@ class typeformCreator():
         self.add_text_to_tinymce('opinion_scale_question_ifr', text)
 
         # add low and high values
-        self.driver.send_keys('opinion_scale_negativeLabel', low_val_text)
-        self.driver.send_keys('opinion_scale_positiveLabel', high_val_text)
+        element = self.driver.find_element_by_css_selector('#opinion_scale_negativeLabel')
+        element.send_keys(low_val_text)
+        element = self.driver.find_element_by_css_selector('#opinion_scale_positiveLabel')
+        element.send_keys(high_val_text)
 
         # make it required
-        required_on_off_element = self.driver.driver.find_elements_by_css_selector('.wrapper.coolCheckbox')[2]
+        required_on_off_element = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox')[2]
         if required_on_off_element.get_attribute("data-qa") == 'false':
-            on_off = self.driver.driver.find_elements_by_css_selector('.wrapper.coolCheckbox .front')[2]  # Required ON
+            on_off = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox .front')[2]  # Required ON
             on_off.click()
 
-        self.driver.click_element_by_css_selector('.submit span')
+        self.driver.find_element_by_css_selector('.submit span').click()
 
     def add_caption(self, video_url, start_time, end_time, caption):
         """
@@ -224,8 +236,11 @@ def main():
     video_ids = ['video1', 'video2', 'video3']
 
     # driver = seleniumChromeDriver('/home/lpmayos/code/chromedriver')
-    driver = seleniumChromeDriver('/Users/lpmayos/code/chromedriver')
-    typeform_creator = typeformCreator(driver)
+    # driver = seleniumChromeDriver('/Users/lpmayos/code/chromedriver')
+    driver = webdriver.Chrome('/Users/lpmayos/code/chromedriver')
+    wait = WebDriverWait(driver, 10)
+
+    typeform_creator = typeformCreator(driver, wait)
     create_form_with_data(typeform_creator, data, video_ids)
 
 
