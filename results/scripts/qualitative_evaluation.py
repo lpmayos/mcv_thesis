@@ -1,6 +1,7 @@
 from __future__ import print_function  # Only needed for Python 2
 import json
 from selenium_driver import seleniumChromeDriver
+from selenium.webdriver.common.action_chains import ActionChains
 import getpass
 import time
 
@@ -31,18 +32,24 @@ class typeformCreator():
         self.driver.send_keys('quickyform_name', 'form_prova')
         self.driver.click_element_by_id('submit-scratch-form')
 
+    def add_text_to_tinymce(self, tinymce_id, text):
+        """
+        """
+        # switch context to iframe
+        self.driver.switch_to_frame(tinymce_id)
+        self.driver.send_keys('tinymce', text)
+
+        # switch back to parent form
+        self.driver.driver.switch_to_default_content()
+
+
     def add_text_field(self, text):
         """
         """
         # add text field
         self.driver.click_element_by_css_selector('#sidebar .field-icon.statement')
 
-        # switch context to iframe
-        self.driver.switch_to_frame('statement_content_ifr')
-        self.driver.send_keys('tinymce', text)
-
-        # switch back to parent form
-        self.driver.driver.switch_to_default_content()
+        self.add_text_to_tinymce('statement_content_ifr', text)
 
     def add_video_field(self, url):
         """
@@ -74,19 +81,43 @@ class typeformCreator():
         # add group of questions for a video
         self.driver.click_element_by_css_selector('#sidebar .field-icon.group')
 
-        # switch context to iframe
-        self.driver.switch_to_frame('group_content_ifr')
-        self.driver.send_keys('tinymce', text)
+        self.add_text_to_tinymce('group_content_ifr', text)
 
-        # switch back to parent form
-        self.driver.driver.switch_to_default_content()
+        self.driver.click_element_by_css_selector('.submit span')
+
+    def add_opinion_scale_to_last_group(self, text, low_val_text, high_val_text):
+        """
+        """
+        source_element = self.driver.find_element_by_css_selector('#sidebar .field-icon.opinion-scale')
+        # dest_element = self.driver.driver.find_elements_by_css_selector('.field.group .fake-droppable.minidrag')[-1]
+        dest_element = self.driver.driver.find_element_by_css_selector('.last-group .fake-droppable')
+        action = ActionChains(self.driver.driver).drag_and_drop(source_element, dest_element)
+        time.sleep(5)
+        action.perform()
+
+        # add title
+        self.add_text_to_tinymce('opinion_scale_question_ifr', text)
+
+        # add low and high values
+        self.driver.send_keys('opinion_scale_negativeLabel', low_val_text)
+        self.driver.send_keys('opinion_scale_positiveLabel', high_val_text)
+
+        # make it required
+        required_on_off_element = self.driver.driver.find_elements_by_css_selector('.wrapper.coolCheckbox')[2]
+        if required_on_off_element.get_attribute("data-qa") == 'false':
+            on_off = self.driver.driver.find_elements_by_css_selector('.wrapper.coolCheckbox .front')[2]  # Required ON
+            on_off.click()
+
         self.driver.click_element_by_css_selector('.submit span')
 
     def add_caption(self, video_url, start_time, end_time, caption):
         """
         """
-        text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
+        text = 'Caption ' + caption
         self.add_group(text)
+        self.add_opinion_scale_to_last_group('Coherence. Judge the logic and readability of the sentence.', 'Low', 'High')
+        self.add_opinion_scale_to_last_group('Relevance. Judge if the sentence contains the more relevant and important objects/actions/events in the video clip', 'Low', 'High')
+        self.add_opinion_scale_to_last_group('Helpful for blind. Judge how helpful would the sentence be for a blind person to understand what is happening in this video clip', 'Poor', 'Great')
 
     def add_video(self, video_url, start_time, end_time, captions):
         """
@@ -156,14 +187,44 @@ def create_form_with_data(typeform_creator, data, video_ids):
 def main():
     """
     """
-    experiments = {'exp3': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment3/model-99.json',
-                   'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
-                   'exp5': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment5/model-99.json'}
-    data = extract_data(experiments)
+    # experiments = {'exp3': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment3/model-99.json',
+    #                'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
+    #                'exp5': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment5/model-99.json'}
+    # data = extract_data(experiments)
+    # video_ids = ['video' + str(i) for i in range(7010, 7015)]
 
-    video_ids = ['video' + str(i) for i in range(7010, 7015)]
+    data = {}
+    video1_data = {'id': 1,
+                   'category': 7,
+                   'url': u'https://www.youtube.com/watch?v=rSYRh2ACa9Y',
+                   'video_id': u'video1',
+                   'start time': 10.81,
+                   'end time': 10.41,
+                   'split': u'test',
+                   'captions': {'exp5': u'caption 1', 'exp4': u'caption 2'}}
+    video2_data = {'id': 2,
+                   'category': 8,
+                   'url': u'https://www.youtube.com/watch?v=rSYRh2ACa9Y',
+                   'video_id': u'video2',
+                   'start time': 20.81,
+                   'end time': 20.41,
+                   'split': u'test',
+                   'captions': {'exp5': u'caption 2', 'exp4': u'caption 4'}}
+    video3_data = {'id': 3,
+                   'category': 9,
+                   'url': u'https://www.youtube.com/watch?v=rSYRh2ACa9Y',
+                   'video_id': u'video3',
+                   'start time': 30.81,
+                   'end time': 30.41,
+                   'split': u'test',
+                   'captions': {'exp5': u'caption 5', 'exp4': u'caption 6'}}
+    data['video1'] = video1_data
+    data['video2'] = video2_data
+    data['video3'] = video3_data
+    video_ids = ['video1', 'video2', 'video3']
 
-    driver = seleniumChromeDriver('/home/lpmayos/code/chromedriver')
+    # driver = seleniumChromeDriver('/home/lpmayos/code/chromedriver')
+    driver = seleniumChromeDriver('/Users/lpmayos/code/chromedriver')
     typeform_creator = typeformCreator(driver)
     create_form_with_data(typeform_creator, data, video_ids)
 
