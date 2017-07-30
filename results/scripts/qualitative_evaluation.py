@@ -29,7 +29,7 @@ class typeformCreator():
         element.send_keys(password)
         self.driver.find_element_by_css_selector('#btnlogin').click()
 
-    def add_new_form(self):
+    def add_new_form(self, num_form):
         """
         """
         self.driver.find_element_by_css_selector('#forms .item.add div.label').click()
@@ -37,7 +37,8 @@ class typeformCreator():
         element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.item.add .content .upper')))
         element.click()
 
-        self.driver.find_element_by_css_selector('#quickyform_name').send_keys('form_prova')
+        self.driver.find_element_by_css_selector('#quickyform_name').send_keys('mcv_eval_' + str(num_form))
+
         self.driver.find_element_by_css_selector('#submit-scratch-form').click()
 
     def add_text_to_tinymce(self, tinymce_id, text):
@@ -143,6 +144,27 @@ class typeformCreator():
         for caption in captions:
             self.add_caption(video_url, start_time, end_time, captions[caption])
 
+    def add_welcome_screen(self):
+        """
+        """
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.intro')))
+        element.click()
+
+        # add text
+        title = 'Improving the quality of video-to-language models by an optimized annotation of the training material - Survey questionnaire'
+        self.add_text_to_tinymce('intro_body_ifr', title)
+
+        desc_on_off_element = self.driver.find_element_by_css_selector('#description .wrapper.coolCheckbox')
+        if desc_on_off_element.get_attribute("data-qa") == 'false':
+            self.driver.find_element_by_css_selector('#description .front').click()  # Description ON
+        time.sleep(3)
+
+        desc = 'Automatic video captioning is one of the ultimate challenges of Natural Language Processing, boosted by the omnipresence of video and the release of large-scale annotated video benchmarks. However, the specificity and quality of the captions vary considerably, having and adverse effect on the quality of the trained captioning models. In my master thesis I address this issue by propossing automatic strategies for optimizing the annotations of video material, removing annotations that are not semantically relevant and generating new and more informative captions.\n\nI need your help to evaluate my approach. Thanks for your collaboration :) It will take you no more than 10 minutes, I promise!'
+        self.add_text_to_tinymce('intro_description_ifr', desc)
+
+        self.driver.find_element_by_css_selector('.submit span').click()
+
+
 
 def extract_data(experiments):
     """ Returns a data structure containing the generated captions for the indicated experiments. Example:
@@ -177,7 +199,7 @@ def extract_data(experiments):
     return data
 
 
-def create_form_with_data(typeform_creator, data, video_ids):
+def create_form_with_data(typeform_creator, data, video_ids, num_form):
     """
     """
 
@@ -186,8 +208,10 @@ def create_form_with_data(typeform_creator, data, video_ids):
     print('login done!')
 
     print('adding new form....')
-    typeform_creator.add_new_form()
+    typeform_creator.add_new_form(num_form)
     print('new form added')
+
+    typeform_creator.add_welcome_screen()
 
     for video_id in data.keys()[0:3]:
         video_data = data[video_id]
@@ -226,7 +250,7 @@ def main():
                    'start time': 20.81,
                    'end time': 20.41,
                    'split': u'test',
-                   'captions': {'exp5': u'caption 2', 'exp4': u'caption 4'}}
+                   'captions': {'exp5': u'caption 3', 'exp4': u'caption 4'}}
     video3_data = {'id': 3,
                    'category': 9,
                    'url': u'https://www.youtube.com/watch?v=rSYRh2ACa9Y',
@@ -246,7 +270,8 @@ def main():
     wait = WebDriverWait(driver, 10)
 
     typeform_creator = typeformCreator(driver, wait)
-    create_form_with_data(typeform_creator, data, video_ids)
+    num_form = 1
+    create_form_with_data(typeform_creator, data, video_ids, num_form)
 
 
 if __name__ == "__main__":
