@@ -114,9 +114,9 @@ class typeformCreator():
         element.send_keys(high_val_text)
 
         # make it required
-        required_on_off_element = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox')[2]
+        required_on_off_element = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox')[-2]
         if required_on_off_element.get_attribute("data-qa") == 'false':
-            on_off = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox .front')[2]  # Required ON
+            on_off = self.driver.find_elements_by_css_selector('.wrapper.coolCheckbox .front')[-2]  # Required ON
             on_off.click()
 
         self.driver.find_element_by_css_selector('.submit span').click()
