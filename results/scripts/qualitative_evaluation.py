@@ -86,7 +86,7 @@ class typeformCreator():
     def add_group(self, text):
         """
         """
-        time.sleep(4)
+        time.sleep(3)
 
         # add group of questions for a video
         element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.group')))
@@ -99,11 +99,9 @@ class typeformCreator():
     def add_opinion_scale_to_last_group(self, text, low_val_text, high_val_text):
         """
         """
-        source_element = self.driver.find_element_by_css_selector('#sidebar .field-icon.opinion-scale')
-        dest_element = self.driver.find_element_by_css_selector('.last-group .fake-droppable')
-        action = ActionChains(self.driver).drag_and_drop(source_element, dest_element)
-        time.sleep(5)
-        action.perform()
+        time.sleep(3)
+        element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.opinion-scale')))
+        element.click()
 
         # add title
         self.add_text_to_tinymce('opinion_scale_question_ifr', text)
@@ -121,6 +119,13 @@ class typeformCreator():
             on_off.click()
 
         self.driver.find_element_by_css_selector('.submit span').click()
+
+        # move to upper group
+        time.sleep(3)
+        aux = self.driver.find_elements_by_css_selector('.field.opinion-scale .action-move')[-1]
+        action = ActionChains(self.driver).drag_and_drop_by_offset(aux, 0, -60)
+        # time.sleep(3)
+        action.perform()
 
     def add_caption(self, video_url, start_time, end_time, caption):
         """
