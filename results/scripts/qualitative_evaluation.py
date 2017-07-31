@@ -5,35 +5,36 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
 import getpass
 import time
 
 
 class typeformCreator():
 
-    def __init__(self, driver, wait):
+    def __init__(self, driver, wait, username, password):
         """
         """
         self.driver = driver
         self.wait = wait
+        self.username = username
+        self.password = password
 
     def login(self):
         """
         """
         self.driver.get('https://admin.typeform.com/login/')
-        username = 'lpmayos@gmail.com'  # raw_input('Enter Typeform username: ')
-        password = getpass.getpass()
         element = self.driver.find_element_by_css_selector('#_username')
-        element.send_keys(username)
+        element.send_keys(self.username)
         element = self.driver.find_element_by_css_selector('#_password')
-        element.send_keys(password)
+        element.send_keys(self.password)
         self.driver.find_element_by_css_selector('#btnlogin').click()
 
     def add_new_form(self, num_form):
         """
         """
         self.driver.find_element_by_css_selector('#forms .item.add div.label').click()
-
+        time.sleep(3)
         element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.item.add .content .upper')))
         element.click()
 
@@ -65,11 +66,18 @@ class typeformCreator():
         element = self.driver.find_element_by_css_selector('#statement_video_url')
         element.send_keys(url)
 
+    def seconds_to_printable_time(self, seconds):
+        """
+        """
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        return "%d:%02d:%02d" % (h, m, s)
+
     def add_text_with_video(self, video_url, start_time, end_time):
         """
         """
-        text = 'Video ' + video_url + '. Please watch segment ' + str(start_time) + ' to ' + str(end_time) + ' and answer the questions below'
-        
+        text = 'Video ' + video_url + '. Please watch segment ' + self.seconds_to_printable_time(start_time) + ' to ' + self.seconds_to_printable_time(end_time) + ' and answer the questions below'
+
         # add text field
         time.sleep(3)
         element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidebar .field-icon.statement')))
@@ -165,7 +173,6 @@ class typeformCreator():
         self.driver.find_element_by_css_selector('.submit span').click()
 
 
-
 def extract_data(experiments):
     """ Returns a data structure containing the generated captions for the indicated experiments. Example:
         data['video7015'] = {'id': 7015,
@@ -202,9 +209,11 @@ def extract_data(experiments):
 def create_form_with_data(typeform_creator, data, video_ids, num_form):
     """
     """
-
     print('login....')
-    typeform_creator.login()
+    try:
+        typeform_creator.login()
+    except NoSuchElementException:
+        print('login was already done')
     print('login done!')
 
     print('adding new form....')
@@ -213,7 +222,7 @@ def create_form_with_data(typeform_creator, data, video_ids, num_form):
 
     typeform_creator.add_welcome_screen()
 
-    for video_id in data.keys()[0:3]:
+    for video_id in video_ids:
         video_data = data[video_id]
         video_url = video_data['url']  # https://www.youtube.com/v/qCVmntRBg8A?start=40&end=45&version=3
         start_time = video_data['start time']
@@ -225,15 +234,9 @@ def create_form_with_data(typeform_creator, data, video_ids, num_form):
     return
 
 
-def main():
+def create_demo_form(typeform_creator):
     """
     """
-    # experiments = {'exp3': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment3/model-99.json',
-    #                'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
-    #                'exp5': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment5/model-99.json'}
-    # data = extract_data(experiments)
-    # video_ids = ['video' + str(i) for i in range(7010, 7015)]
-
     data = {}
     video1_data = {'id': 1,
                    'category': 7,
@@ -264,14 +267,47 @@ def main():
     data['video3'] = video3_data
     video_ids = ['video1', 'video2', 'video3']
 
-    # driver = seleniumChromeDriver('/home/lpmayos/code/chromedriver')
-    # driver = seleniumChromeDriver('/Users/lpmayos/code/chromedriver')
-    driver = webdriver.Chrome('/Users/lpmayos/code/chromedriver')
-    wait = WebDriverWait(driver, 10)
-
-    typeform_creator = typeformCreator(driver, wait)
     num_form = 1
     create_form_with_data(typeform_creator, data, video_ids, num_form)
+
+
+def create_forms(typeform_creator):
+    """
+    """
+    experiments = {'exp3': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment3/model-99.json',
+                   'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
+                   'exp5': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment5/model-99.json'}
+    data = extract_data(experiments)
+
+    forms = [['video7010', 'video7011', 'video7012', 'video7013'],
+             ['video7020', 'video7021', 'video7022', 'video7023']]
+
+    for i, video_ids in enumerate(forms):
+        create_form_with_data(typeform_creator, data, video_ids, i)
+
+
+def main():
+
+    # ask typeform username and password
+    username = raw_input('Enter Typeform username: ')
+    password = getpass.getpass()
+
+    try:
+        driver = webdriver.Chrome('/Users/lpmayos/code/chromedriver')  # osx
+    except:
+        driver = webdriver.Chrome('/home/lpmayos/code/chromedriver')  # ubuntu
+
+    # driver = webdriver.Firefox(executable_path='/home/lpmayos/code/geckodriver')  # ubuntu
+
+    wait = WebDriverWait(driver, 10)
+
+    typeform_creator = typeformCreator(driver, wait, username, password)
+
+    # # demo
+    # create_demo_form(typeform_creator)
+
+    # create forms
+    create_forms(typeform_creator)
 
 
 if __name__ == "__main__":
