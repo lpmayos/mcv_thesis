@@ -92,13 +92,11 @@ class ConllSentence(object):
 
         predicate_root = [a for a in self.root.children if a.deprel != 'SBJ'][0]
         predicate_root.predicate_root = True
-        predicate_dict = self._add_children(predicate_root, {predicate_root.id: predicate_root})
-        predicate_dict[self.root.id] = self.root
 
         subject_keys_sorted = [str(b) for b in sorted(int(a) for a in subject_dict.keys())]
         subject_list = [subject_dict[a] for a in subject_keys_sorted]
-        predicate_keys_sorted = [str(b) for b in sorted(int(a) for a in predicate_dict.keys())]
-        predicate_list = [predicate_dict[a] for a in predicate_keys_sorted]
+
+        predicate_list = [a for a in self.token_list if a not in subject_list]
 
         return subject_list, predicate_list
 
