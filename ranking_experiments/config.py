@@ -12,7 +12,7 @@ def config_ths_and_paths(th1, th2, experiment):
     if th1:
         th1 = float(th1)  # corresponds to minimum_token_similarity
         sufix_files = experiment[0] + experiment[-1] + '_th1_' + str(th1) + '_th2_' + str(th2)
-        folder = 'results/' + experiment + '/th1_' + str(th1)
+        folder = 'results_ranking/' + experiment + '/th1_' + str(th1)
         boxplot_path = folder + '/boxplot_' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '.png'
         barchart_path = folder + '/barchart_' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '_th2_' + str(th2) + '.png'
         log_path = folder + '/' + experiment[0] + experiment[-1] + '_th1_' + str(th1) + '.log'
@@ -21,7 +21,7 @@ def config_ths_and_paths(th1, th2, experiment):
     else:
         th1 = None
         sufix_files = experiment[0] + experiment[-1] + '_th2_' + str(th2)
-        folder = 'results/' + experiment
+        folder = 'results_ranking/' + experiment
         boxplot_path = folder + '/' + 'boxplot_' + experiment[0] + experiment[-1] + '.png'
         barchart_path = folder + '/barchart_' + experiment[0] + experiment[-1] + '_th2_' + str(th2) + '.png'
         log_path = folder + '/' + experiment[0] + experiment[-1] + '.log'

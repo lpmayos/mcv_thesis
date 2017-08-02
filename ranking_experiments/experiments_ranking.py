@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import json
 import config
 import numpy as np
@@ -40,7 +43,7 @@ def create_video_captions():
             i += 1
             if i == 10:
                 print 'saving small tokens_set_10'
-                pickle.dump(config.tokens_set, open('pickle_small/tokens_set_10.pickle', "wb"))
+                pickle.dump(config.tokens_set, open('../pickle_small/tokens_set_10.pickle', "wb"))
             if i % 100 == 0:
                 print 'iteration ' + str(i) + ' -----------> dumping tokens set'
                 pickle.dump(config.tokens_set, open(config.tokens_set_to_load, "wb"))
@@ -55,7 +58,7 @@ def display_tokens_similarity():
     Method: in config.tokens_set we have computed the similarity of every pair
     of tokens, so we just loop over all of them and keep the most similar.
 
-    Results:  a sample of the results can be seen at results/display_tokens_similarity/, and
+    Results:  a sample of the results can be seen at results_ranking/display_tokens_similarity/, and
     results are shown on shell
     """
     for video_id in range(config.first_video, config.last_video):

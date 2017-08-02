@@ -1,7 +1,7 @@
-e1 = {'log_file': '/home/lpmayos/code/mcv_thesis/results/experiment1/e1.log', 'th1': None, 'th2': 0.785}
-e4 = {'log_file': '/home/lpmayos/code/mcv_thesis/results/experiment4/e4_th1_0.09.log', 'th1': 0.09, 'th2': 0.506}
-e4sym = {'log_file': '/home/lpmayos/code/mcv_thesis/results/experiment4symmetrical/e4_th1_0.11.log', 'th1': 0.11, 'th2': 0.435}
-e5 = {'log_file': '/home/lpmayos/code/mcv_thesis/results/experiment5/e5.log', 'th1': None, 'th2': 0.092}
+e1 = {'log_file': '/home/lpmayos/code/mcv_thesis/results_ranking/experiment1/e1.log', 'th1': None, 'th2': 0.785}
+e4 = {'log_file': '/home/lpmayos/code/mcv_thesis/results_ranking/experiment4/e4_th1_0.09.log', 'th1': 0.09, 'th2': 0.506}
+e4sym = {'log_file': '/home/lpmayos/code/mcv_thesis/results_ranking/experiment4symmetrical/e4_th1_0.11.log', 'th1': 0.11, 'th2': 0.435}
+e5 = {'log_file': '/home/lpmayos/code/mcv_thesis/results_ranking/experiment5/e5.log', 'th1': None, 'th2': 0.092}
 
 e1_video24 = {'the site was very informative': 0.826113102623,
               'the site was very informative': 0.826113102623,

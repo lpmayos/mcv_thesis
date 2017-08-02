@@ -5,4 +5,4 @@ env/*
 *.pyc
 pickle/*.pickle
 pickle_small/*.pickle
-results/display_tokens_similarity/display_tokens_similarity.txt
+results_ranking/display_tokens_similarity/display_tokens_similarity.txt

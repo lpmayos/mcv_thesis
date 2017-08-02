@@ -53,7 +53,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: in config.tokens_set we have computed the similarity of every pair of tokens, so we just loop over all of them and keep the most similar.
 
-**Results**: a sample of the results can be seen at results/experiment2/, and results are shown on shell
+**Results**: a sample of the results can be seen at results_ranking/experiment2/, and results are shown on shell
 
 **Execution**: see launch_experiments.sh
 
@@ -64,7 +64,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each video we get all the captions and we compute an embedding for all the sentences. Then, we project all the embeddings in common space, we compute its centroid and the distances to the centroid of each embedding, sorting the captions by distance. Then, discard the ones above threshold.
 
-**Results**: a sample of the results (sentence ordering and image of the embedding space) is shown on shell if verbose=True and can be also seen at results/experiment1/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: a sample of the results (sentence ordering and image of the embedding space) is shown on shell if verbose=True and can be also seen at results_ranking/experiment1/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh
 
@@ -75,7 +75,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarity of each token in one sentence to the closest one in the other sentence, dividing by the number of tokens added. Then, discard the ones below threshold.
 
-**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment2/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results_ranking/experiment2/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh
 
@@ -86,7 +86,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum of the similarities of each token in one sentence to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the number of tokens added. Then, discard the ones below threshold.
 
-**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment3/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results_ranking/experiment3/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh
 
@@ -97,7 +97,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each pair of sentences, compute their similarity (non-symmetric) as the sum 1 for each token if similarity to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of tokens. Then, discard the ones below threshold.
 
-**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment4/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results_ranking/experiment4/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh
 
@@ -108,7 +108,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each pair of sentences, compute their similarity as the sum 1 for each token if similarity to the closest one in the other sentence if similarity is ABOVE A THRESHOLD, dividing by the total number of tokens. For each pair of sentences, final simmilarity is computed as: (d(s1, s2) + d(s2, s1)) / 2. Then, discard the ones below threshold.
 
-**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment4symmetrical/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results_ranking/experiment4symmetrical/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh
 
@@ -119,7 +119,7 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: iterate over different tokens similarity thresholds, generating boxplots and barcharts which will help us decide the most useful thresholds.
 
-**Results**: images and logs are generated in results/experiment4 and results/experiment5
+**Results**: images and logs are generated in results_ranking/experiment4 and results_ranking/experiment5
 
 **Execution**: see launch_experiments.sh
 
@@ -130,6 +130,6 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 **Method**: for each pair of sentences, compute their similarity using the bleu metric. Then, discard the ones below threshold.
 
-**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results/experiment5/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
+**Results**: sentence ranking is shown on shell if verbose=True, a sample can be also seen at results_ranking/experiment5/, and a new train_val_videodatainfo.json is generated to train a new model on config.path_to_train_val_videodatainfo.
 
 **Execution**: see launch_experiments.sh

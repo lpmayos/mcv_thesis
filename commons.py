@@ -114,6 +114,18 @@ def remove_training_sentences(video_captions_ranking, th2, similarity_or_distanc
     return
 
 
+def add_training_sentences(new_training_sentences, file_path):
+    """ TODO
+    """
+    if config.pickle_folder == 'pickle' and config.first_video == 0 and config.last_video == 7010 and config.create_new_training_sentences:
+        print 'generating new training sentences...'
+        with open(config.path_to_train_val_videodatainfo) as data_file:
+            data = json.load(data_file)
+            import ipdb; ipdb.set_trace()
+    print 'TODO add_training_sentences'
+    return
+
+
 def generate_boxplot(video_captions_ranking, similarity_or_distance='similarity'):
     """
     """
