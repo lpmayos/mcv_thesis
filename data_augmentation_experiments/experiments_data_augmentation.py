@@ -95,15 +95,18 @@ def combine_subjects_and_predicates():
     """ generates new training sentences by replacing tokens with synonyms
     """
     parser_en = TransitionClient(EN_PARSER)
+    videos_new_captions = {}
 
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
         parsed_captions = []
-        final_captions = []
+        current_captions = []
+        new_captions = []
+
         for i, sentence in enumerate(video_captions.sentences):
 
             # add original sentence to final sentences
-            final_captions.append(sentence.sentence)
+            current_captions.append(sentence.sentence)
 
             sentence_conll = parser_en.parse_text(sentence.sentence)
             try:
@@ -139,14 +142,16 @@ def combine_subjects_and_predicates():
                 number_matching = subject['singular'] == caption2['predicate']['singular']
                 sense_matching = True  # TODO lpmayos xxx
 
-                if number_matching and sense_matching:
-                    final_captions.append(caption['subject']['text'] + ' ' + caption2['predicate']['text'])
+                candidate_caption = caption['subject']['text'] + ' ' + caption2['predicate']['text']
+                if number_matching and sense_matching and candidate_caption not in current_captions:
+                    new_captions.append(candidate_caption)
 
-        print '\n ------------------------------------------ video ' + str(video_id) + '\n'
-        for caption in list(set(final_captions)):
-            print caption
+        # print '\n ------------------------------------------ video ' + str(video_id) + '\n'
+        # for caption in list(set(new_captions)):
+        #     print caption
+        videos_new_captions[video_id] = list(set(new_captions))
 
-    # add_training_sentences(new_training_sentences, '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_synonyms.json')
+    add_training_sentences(videos_new_captions, '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_sub_pred_combinations.json')
 
 
 def main():

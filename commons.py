@@ -117,12 +117,18 @@ def remove_training_sentences(video_captions_ranking, th2, similarity_or_distanc
 def add_training_sentences(new_training_sentences, file_path):
     """ TODO
     """
-    if config.pickle_folder == 'pickle' and config.first_video == 0 and config.last_video == 7010 and config.create_new_training_sentences:
-        print 'generating new training sentences...'
-        with open(config.path_to_train_val_videodatainfo) as data_file:
-            data = json.load(data_file)
-            import ipdb; ipdb.set_trace()
-    print 'TODO add_training_sentences'
+    print 'adding new training sentences...'
+    i = 0
+    with open(config.path_to_train_val_videodatainfo) as data_file:
+        data = json.load(data_file)
+        for video_id in new_training_sentences:
+            for new_caption in new_training_sentences[video_id]:
+                data['sentences'].append({'caption': new_caption, 'video_id': 'video' + str(video_id), 'sen_id': len(data['sentences'])})
+                i += 1
+
+    with open(file_path, 'w') as outfile:
+        json.dump(data, outfile)
+    print 'done adding new training sentences! Added ' + str(i) + ' captions'
     return
 
 
