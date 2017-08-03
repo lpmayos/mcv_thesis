@@ -26,7 +26,11 @@ class TransitionClient(object):
 
     def parse_text(self, text):
 
-        params = u"text=%s" % (urllib.quote(text))
+        try:
+            params = u"text=%s" % (urllib.quote(text))
+        except:
+            print '[ERROR] urllib had problems with ' + text + '. Skipped'
+            return
         request = urllib2.urlopen(self.parser_url, params)
 
         response = json.loads(request.read())
@@ -93,6 +97,7 @@ def prova():
 
 def combine_subjects_and_predicates():
     """ generates new training sentences by replacing tokens with synonyms
+        "done adding new training sentences! Added 450757 captions"
     """
     parser_en = TransitionClient(EN_PARSER)
     videos_new_captions = {}
@@ -109,25 +114,26 @@ def combine_subjects_and_predicates():
             current_captions.append(sentence.sentence)
 
             sentence_conll = parser_en.parse_text(sentence.sentence)
-            try:
-                subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
-                subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
-                subject_text = ' '.join([a.form for a in subject])
+            if sentence_conll:
+                try:
+                    subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                    subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
+                    subject_text = ' '.join([a.form for a in subject])
 
-                # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
-                if ' and ' in subject_text:
-                    subj_singular = False
+                    # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
+                    if ' and ' in subject_text:
+                        subj_singular = False
 
-                predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+                    predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
 
-                # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
-                if subject_text.lower() != 'there':
-                    predicate_text = ' '.join([a.form for a in predicate])
-                    subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
-                    predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
-                    parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
-            except IndexError:
-                pass
+                    # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
+                    if subject_text.lower() != 'there':
+                        predicate_text = ' '.join([a.form for a in predicate])
+                        subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
+                        predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
+                        parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
+                except IndexError:
+                    pass
 
         # print '\n@@@ Original sentences @@@'
         # for sentence in video_captions.sentences:
