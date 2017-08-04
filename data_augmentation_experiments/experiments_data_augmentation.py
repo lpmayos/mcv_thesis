@@ -105,7 +105,8 @@ def senses_match(caption1, caption2):
 
 def combine_subjects_and_predicates():
     """ generates new training sentences by replacing tokens with synonyms
-        "done adding new training sentences! Added 450757 captions"
+        "done adding new training sentences! Added 450757 captions" (without subject sense matching)
+        "done adding new training sentences! Added 283313 captions" (with subject sense matching)
     """
     parser_en = TransitionClient(EN_PARSER)
     videos_new_captions = {}

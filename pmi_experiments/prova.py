@@ -48,33 +48,16 @@ def do_pmi(combination_words, context_words):
     return response
 
 
-# def extract_parts(output):
-#     """
-#     """
-#     import ipdb; ipdb.set_trace()
-#     sbj = [a for a in sentence if a.deprel == 'SBJ'][0]
-#     # buscar quien le referencia, y quien referencia a ese, etc. hasta llegar a id '0'
-
-#     # while aux != for sentence in output:
-#     #     for token in sentence:
-#     #         import ipdb; ipdb.set_trace()
-#     #         print token
-#     #         # terms.add(token.lemma + " " + token.pos)
-
-
 if __name__ == "__main__":
+    # lemma pos
+    # pmi sino existe 0, si no ocurren juntas -1, corpus british National Corpus
+    candidates = ['car NN', 'vehicle NN', 'audi NN']
+    context = ['drives', 'countryside', 'road', 'driving', 'commercial', 'speedly', 'narrow road', 'features', 'showing', 'narrates', 'experience', 'curves', 'telling', 'talking', 'smooth']
+    context = ['drive VB*']
 
-    text = "My horse's car is red."
-    text = "Two men discuss education and philanthropy on a news program"
-
-    parser_en = TransitionClient(EN_PARSER)
-    output = parser_en.parse_text(text)
-    print '\n%s\n', output
-
-    for sentence in output:
-        subject, predicate = sentence.get_subject_and_predicate()
-        import ipdb; ipdb.set_trace()
-        print 'babau'
+    for candidate in candidates:
+        pmi = do_pmi([candidate], context)
+        print pmi
 
     # for term in terms:
     #     if term.endswith(" NN"):
@@ -82,5 +65,3 @@ if __name__ == "__main__":
     #         print term, do_pmi([term], terms)
     #         print "truck", do_pmi(["truck NN"], terms)
     #         terms.add(term)
-
-    # print '\n\n\n'

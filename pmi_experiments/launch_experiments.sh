@@ -9,4 +9,4 @@ first=0  #  0,      0
 last=7010  #    7010,   10
 verbose='true'
 
-python experiments_data_augmentation.py --experiment 'combine_subjects_and_predicates' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo
+python experiments_data_enhancement.py --experiment 'combine_subjects_and_predicates' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo
