@@ -28,10 +28,10 @@ class TransitionClient(object):
 
         try:
             params = u"text=%s" % (urllib.quote(text))
+            request = urllib2.urlopen(self.parser_url, params)
         except:
             print '[ERROR] urllib had problems with ' + text + '. Skipped'
             return
-        request = urllib2.urlopen(self.parser_url, params)
 
         response = json.loads(request.read())
 
@@ -111,6 +111,10 @@ def combine_subjects_and_predicates():
     parser_en = TransitionClient(EN_PARSER)
     videos_new_captions = {}
 
+    data_file = open(config.path_to_train_val_videodatainfo)
+    data = json.load(data_file)
+    training_sentences = [a['caption'] for a in data['sentences']]
+
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
         parsed_captions = []
@@ -119,30 +123,33 @@ def combine_subjects_and_predicates():
 
         for i, sentence in enumerate(video_captions.sentences):
 
-            # add original sentence to final sentences
-            current_captions.append(sentence.sentence)
+            # check that sentence was not discarded in the training set we are using (video_captions may not be updated)
+            if sentence.sentence in training_sentences:
 
-            sentence_conll = parser_en.parse_text(sentence.sentence)
-            if sentence_conll:
-                try:
-                    subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
-                    subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
-                    subject_text = ' '.join([a.form for a in subject])
+                # add original sentence to final sentences
+                current_captions.append(sentence.sentence)
 
-                    # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
-                    if ' and ' in subject_text:
-                        subj_singular = False
+                sentence_conll = parser_en.parse_text(sentence.sentence)
+                if sentence_conll:
+                    try:
+                        subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                        subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
+                        subject_text = ' '.join([a.form for a in subject])
 
-                    predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+                        # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
+                        if ' and ' in subject_text:
+                            subj_singular = False
 
-                    # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
-                    if subject_text.lower() != 'there':
-                        predicate_text = ' '.join([a.form for a in predicate])
-                        subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
-                        predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
-                        parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
-                except IndexError:
-                    pass
+                        predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+
+                        # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
+                        if subject_text.lower() != 'there':
+                            predicate_text = ' '.join([a.form for a in predicate])
+                            subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
+                            predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
+                            parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
+                    except IndexError:
+                        pass
 
         # print '\n@@@ Original sentences @@@'
         # for sentence in video_captions.sentences:
@@ -164,9 +171,9 @@ def combine_subjects_and_predicates():
         # print '\n ------------------------------------------ video ' + str(video_id) + '\n'
         # for caption in list(set(new_captions)):
         #     print caption
-        videos_new_captions[video_id] = list(set(new_captions))
+        videos_new_captions[video_id] = list(set(new_captions + current_captions))
 
-    add_training_sentences(videos_new_captions, '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo_sub_pred_combinations_with_subject_matching.json')
+    add_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():

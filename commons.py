@@ -114,6 +114,26 @@ def remove_training_sentences(video_captions_ranking, th2, similarity_or_distanc
     return
 
 
+def create_training_sentences(new_training_sentences, file_path):
+    """ TODO
+    """
+    print 'creating new training sentences...'
+    i = 0
+    with open(config.path_to_train_val_videodatainfo) as data_file:
+        data = json.load(data_file)
+        new_data = []
+        for video_id in new_training_sentences:
+            for new_caption in new_training_sentences[video_id]:
+                new_data.append({'caption': new_caption, 'video_id': 'video' + str(video_id), 'sen_id': i})
+                i += 1
+        data['sentences'] = new_data
+
+    with open(file_path, 'w') as outfile:
+        json.dump(data, outfile)
+    print 'done creating new training sentences! Added ' + str(i) + ' captions'
+    return
+
+
 def add_training_sentences(new_training_sentences, file_path):
     """ TODO
     """
