@@ -1,0 +1,81 @@
+\begin{longtable}{
+	>{\raggedright\arraybackslash}p{0.50\textwidth}
+	>{\raggedright\arraybackslash}p{0.50\textwidth}
+	}
+	\caption{Augmenting the training set sentences. Comparative of the results of the two different experiments on one of the videos of the MSR-VTT training set, showing for each experiment the newly generated captions.}
+	\label{table:augmenting_sample}\\
+	\hline
+	\textbf{Exp. 1} & \textbf{Exp. 2}\\
+	\hline
+	\endfirsthead
+	\multicolumn{2}{c}%
+	{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+	\hline
+	\textbf{Exp. 1} & \textbf{Exp. 2}\\
+	\hline\\
+	\endhead
+	\hline \multicolumn{2}{r}{\textit{Continued on next page}} \\
+	\endfoot
+	\hline
+	\endlastfoot\\
+\textbf{the man going very fast in the van in the highway and two persons folllow him by the motor bikes} & \textbf{two bikes are travailing in high speed on a road}\\
+\textbf{a suit man is traveling in a vehicle} & \textbf{there is a cop driving a van with friends}\\
+\textbf{a man is driving a car and looking into the rearview mirror} & \textbf{two person on the bike chasing the  police vehicle in which eddie murphy is travelling}\\
+\textbf{people on motorcycles are chasing a bus that eddie murphy is riding in} & \textbf{two motorcycles are chasing a fleeing bus one man seems not to be paying attention}\\
+\textbf{two man are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus} & \textbf{a bus driver see s two motorcycles driving up from behind the bus}\\
+\textbf{two men riding motorcycles approach a prison bus from behind} & \textbf{guy with headphones looking road from rear window glass}\\
+\textbf{motorcycles approach quickly behind a passenger bus on a rural road as man inside listens to headphones} & \textbf{a couple of bikers chasing a prison bus down a highway in the desert}\\
+\textbf{a man driving a truck as two bikers follow close behind him} & \textbf{a police officer guards some prisoners on a bus}\\
+\textbf{eddie murphy rides down the road on a bus while motor cycles follow the bus} & \textbf{person is watching on the mirror while driving }\\
+\textbf{a person  in black   color dress wearing cloth sitting inside bus and moving in vehical listening to music displaying on screen} & \textbf{two motor cycles chasing a man enjoying music in a bus}\\
+\ul{a suit man follow close behind him} & \ul{a police officer approach a prison bus from behind}\\
+motorcycles are chasing a bus that eddie murphy is riding in & two bikes are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus\\
+the man going very fast in the van in the highway and two persons are chasing a fleeing bus one man seems not to be paying attention & two motorcycles are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus\\
+\ul{eddie murphy approach a prison bus from behind} & two man is traveling in a vehicle\\
+motorcycles are travailing in high speed on a road & \ul{two man approach quickly behind a passenger bus on a rural road as man inside listens to headphones}\\
+the man going very fast in the van in the highway and two persons are chasing a bus that eddie murphy is riding in & a man driving a truck as two bikers see s two motorcycles driving up from behind the bus\\
+two man approach a prison bus from behind & people on motorcycles see s two motorcycles driving up from behind the bus\\
+\ul{a suit man approach quickly behind a passenger bus on a rural road as man inside listens to headphones} & \ul{two men riding motorcycles rides down the road on a bus while motor cycles follow the bus}\\
+\ul{a police officer folllow him by the motor bikes} & people on motorcycles is driving a car and looking into the rearview mirror\\
+\ul{motorcycles guards some prisoners on a bus} & \ul{a police officer follow close behind him}\\
+the man going very fast in the van in the highway and two persons are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus & \ul{a bus driver is traveling in a vehicle}\\
+two man follow close behind him & a man see s two motorcycles driving up from behind the bus\\
+a police officer is traveling in a vehicle & \ul{eddie murphy follow close behind him}\\
+two motorcycles are chasing a bus that eddie murphy is riding in & people on motorcycles folllow him by the motor bikes\\
+a bus driver is driving a car and looking into the rearview mirror & \ul{two men riding motorcycles guards some prisoners on a bus}\\
+person is driving a car and looking into the rearview mirror & \ul{motorcycles rides down the road on a bus while motor cycles follow the bus}\\
+a bus driver folllow him by the motor bikes & \ul{a suit man see s two motorcycles driving up from behind the bus}\\
+two men riding motorcycles are chasing a bus that eddie murphy is riding in & people on motorcycles follow close behind him\\
+two man folllow him by the motor bikes & a man is watching on the mirror while driving\\
+\ul{two bikes rides down the road on a bus while motor cycles follow the bus} & a man driving a truck as two bikers folllow him by the motor bikes\\
+person is watching on the mirror while driving & \ul{eddie murphy is watching on the mirror while driving}\\
+motorcycles are chasing a fleeing bus one man seems not to be paying attention & two bikes are chasing a bus that eddie murphy is riding in\\
+\ul{two man see s two motorcycles driving up from behind the bus} & \ul{person see s two motorcycles driving up from behind the bus}\\
+\ul{a man approach quickly behind a passenger bus on a rural road as man inside listens to headphones} & a bus driver approach a prison bus from behind\\
+a man folllow him by the motor bikes & \ul{person approach quickly behind a passenger bus on a rural road as man inside listens to headphones}\\
+\ul{a man driving a truck as two bikers is traveling in a vehicle} & a man is traveling in a vehicle\\
+\ul{eddie murphy approach quickly behind a passenger bus on a rural road as man inside listens to headphones} & \ul{a police officer see s two motorcycles driving up from behind the bus}\\
+\ul{motorcycles are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus} & \ul{a suit man approach a prison bus from behind}\\
+\ul{two motorcycles rides down the road on a bus while motor cycles follow the bus} & a man follow close behind him\\
+a bus driver follow close behind him & the man going very fast in the van in the highway and two persons are travailing in high speed on a road\\
+people on motorcycles is watching on the mirror while driving & two bikes are chasing a fleeing bus one man seems not to be paying attention\\
+people on motorcycles approach a prison bus from behind & \ul{two motorcycles guards some prisoners on a bus}\\
+people on motorcycles approach quickly behind a passenger bus on a rural road as man inside listens to headphones & person folllow him by the motor bikes\\
+\ul{person approach a prison bus from behind} & two men riding motorcycles are travailing in high speed on a road\\
+a police officer is watching on the mirror while driving & a police officer is driving a car and looking into the rearview mirror\\
+people on motorcycles is traveling in a vehicle & a bus driver approach quickly behind a passenger bus on a rural road as man inside listens to headphones\\
+two men riding motorcycles are seen on a motorcylce through a bus side mirror while eddy murphy is singing on the bus & \ul{eddie murphy folllow him by the motor bikes}\\
+\ul{two bikes guards some prisoners on a bus} & \ul{a police officer approach quickly behind a passenger bus on a rural road as man inside listens to headphones}\\
+two motorcycles are travailing in high speed on a road & a man driving a truck as two bikers approach quickly behind a passenger bus on a rural road as man inside listens to headphones\\
+\ul{the man going very fast in the van in the highway and two persons guards some prisoners on a bus} & person follow close behind him\\
+\ul{the man going very fast in the van in the highway and two persons rides down the road on a bus while motor cycles follow the bus} & two man is driving a car and looking into the rearview mirror\\
+a man driving a truck as two bikers is driving a car and looking into the rearview mirror & \ul{eddie murphy see s two motorcycles driving up from behind the bus}\\
+a suit man is driving a car and looking into the rearview mirror & \ul{a bus driver is watching on the mirror while driving}\\
+a man approach a prison bus from behind & \ul{a suit man folllow him by the motor bikes}\\
+a man driving a truck as two bikers approach a prison bus from behind & two man is watching on the mirror while driving\\
+person is traveling in a vehicle & \ul{eddie murphy is traveling in a vehicle}\\
+a man driving a truck as two bikers is watching on the mirror while driving & two men riding motorcycles are chasing a fleeing bus one man seems not to be paying attention\\
+a suit man is watching on the mirror while driving & \ul{eddie murphy is driving a car and looking into the rearview mirror}\\
+\end{longtable}
+
+

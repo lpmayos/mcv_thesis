@@ -13,7 +13,7 @@ import sys
 sys.path.append("../")
 
 import config
-from commons import load_video_captions, add_training_sentences
+from commons import load_video_captions, add_training_sentences, create_training_sentences
 
 
 EN_PARSER = "http://services-taln.s.upf.edu:8080/prod/transition-service/en/parse"
@@ -107,6 +107,7 @@ def combine_subjects_and_predicates():
     """ generates new training sentences by replacing tokens with synonyms
         "done adding new training sentences! Added 450757 captions" (without subject sense matching)
         "done adding new training sentences! Added 283313 captions" (with subject sense matching)
+        "done adding new training sentences! Added 408177 captions" (with subject sense matching over the previously cleaned training sentences)
     """
     parser_en = TransitionClient(EN_PARSER)
     videos_new_captions = {}
@@ -173,7 +174,7 @@ def combine_subjects_and_predicates():
         #     print caption
         videos_new_captions[video_id] = list(set(new_captions + current_captions))
 
-    add_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
+    create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():
