@@ -139,7 +139,7 @@ class typeformCreator():
     def add_caption(self, video_url, start_time, end_time, caption):
         """
         """
-        text = 'Caption ' + caption
+        text = 'Caption: "' + caption + '"'
         self.add_group(text)
         self.add_opinion_scale_to_last_group('Coherence. Judge the logic and readability of the sentence.', 'Low', 'High')
         self.add_opinion_scale_to_last_group('Relevance. Judge if the sentence contains the more relevant and important objects/actions/events in the video clip', 'Low', 'High')
@@ -167,7 +167,7 @@ class typeformCreator():
             self.driver.find_element_by_css_selector('#description .front').click()  # Description ON
         time.sleep(3)
 
-        desc = 'Automatic video captioning is one of the ultimate challenges of Natural Language Processing, boosted by the omnipresence of video and the release of large-scale annotated video benchmarks. However, the specificity and quality of the captions vary considerably, having and adverse effect on the quality of the trained captioning models. In my master thesis I address this issue by propossing automatic strategies for optimizing the annotations of video material, removing annotations that are not semantically relevant and generating new and more informative captions.\n\nI need your help to evaluate my approach. Thanks for your collaboration :) It will take you no more than 10 minutes, I promise!'
+        desc = 'Automatic video captioning is one of the ultimate challenges of Natural Language Processing, boosted by the omnipresence of video and the release of large-scale annotated video benchmarks. However, the specificity and quality of the captions vary considerably, having and adverse effect on the quality of the trained captioning models. In my master thesis I address this issue by propossing automatic strategies for optimizing the annotations of video material, removing annotations that are not semantically relevant and generating new and more informative captions.\n\nI need your help to evaluate my approach. Thanks for your collaboration :)'
         self.add_text_to_tinymce('intro_description_ifr', desc)
 
         self.driver.find_element_by_css_selector('.submit span').click()
