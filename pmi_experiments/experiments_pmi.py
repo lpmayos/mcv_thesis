@@ -106,6 +106,32 @@ def senses_match(caption1, caption2):
     return False, similarity
 
 
+def create_groups(parsed_captions):
+    """
+    """
+    groups = []  # [[1, 3, 4], [2, 5], ...]
+    for i, caption1 in enumerate(parsed_captions):
+        closest_group_id = None
+        closest_group_similarity = float('-inf')
+
+        for j, group in enumerate(groups):
+            for caption_id in group:
+                if i != caption_id:
+                    caption2 = parsed_captions[caption_id]
+
+                    number_matching = caption1['subject']['singular'] == caption2['subject']['singular']
+                    sense_matching, similarity = senses_match(caption1, caption2)
+                    if number_matching and sense_matching and similarity > closest_group_similarity:
+                        closest_group_id = j
+                        closest_group_similarity = similarity
+
+        if closest_group_id is None:  # create new group
+            groups.append([i])
+        else:
+            groups[closest_group_id].append(i)
+    return groups
+
+
 def replace_best_pmi_subject():
     """ generates new training sentences by replacing those subjects with lower PMI with the ones with higher PMI
     """
@@ -122,31 +148,9 @@ def replace_best_pmi_subject():
         parsed_captions, current_captions = parse_captions(video_captions, training_sentences)
 
         # create groups of captions whose subjects can be replaced by one of the subjects in the group (same number and meaning)
-        groups = []  # [[1, 3, 4], [2, 5], ...]
-        for i, caption1 in enumerate(parsed_captions):
-            closest_group_id = None
-            closest_group_similarity = float('-inf')
+        groups = create_groups(parsed_captions)
 
-            for j, group in enumerate(groups):
-                for caption_id in group:
-                    if i != caption_id:
-                        caption2 = parsed_captions[caption_id]
-
-                        number_matching = caption1['subject']['singular'] == caption2['subject']['singular']
-                        sense_matching, similarity = senses_match(caption1, caption2)
-                        if number_matching and sense_matching and similarity > closest_group_similarity:
-                            closest_group_id = j
-                            closest_group_similarity = similarity
-
-            if closest_group_id is None:  # create new group
-                groups.append([i])
-            else:
-                groups[closest_group_id].append(i)
-
-        # # Check if groups were well created
-        # for group in groups:
-        #     print [parsed_captions[a]['subject']['text'] for a in group]
-
+        # for each group, find candidates and context, find candidate with higher pmi and replace candidates with higher-pmi candidate
         new_captions = []
         for i, group in enumerate(groups):
 
@@ -164,8 +168,6 @@ def replace_best_pmi_subject():
                         context.append(element.lemma + ' NN*')
                     if element.pos.startswith('VB'):
                         context.append(element.lemma + ' VB*')
-
-            # candidates = list(set(candidates))
             context = list(set(context))
 
             # find candidate with higher pmi
