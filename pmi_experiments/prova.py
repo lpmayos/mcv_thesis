@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # pmi sino existe 0, si no ocurren juntas -1, corpus british National Corpus
     candidates = ['car NN', 'vehicle NN', 'audi NN']
     context = ['drives', 'countryside', 'road', 'driving', 'commercial', 'speedly', 'narrow road', 'features', 'showing', 'narrates', 'experience', 'curves', 'telling', 'talking', 'smooth']
-    context = ['drive VB*']
+    context = ['drive VB*', 'show VB*']
 
     for candidate in candidates:
         pmi = do_pmi([candidate], context)

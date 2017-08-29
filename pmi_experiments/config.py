@@ -14,6 +14,7 @@ parser.add_option('-l', '--last', help='Last video number [0-7010]')
 parser.add_option('-v', '--verbose', help='Show info on command line')
 parser.add_option('-x', '--solr_sensembed_path', help='Show info on command line')
 parser.add_option('-y', '--path_to_train_val_videodatainfo', help='Path to train_val_videodatainfo.json')
+parser.add_option('-z', '--path_to_new_train_val_videodatainfo', help='Path to new train_val_videodatainfo.json')
 (options, args) = parser.parse_args()
 
 if not options.experiment or not options.first or not options.last or not options.pickle_folder or not options.verbose or not options.solr_sensembed_path or not options.path_to_train_val_videodatainfo:
@@ -24,7 +25,7 @@ if not options.experiment or not options.first or not options.last or not option
 first_video = int(options.first)
 last_video = int(options.last)
 experiment = options.experiment
-folder = 'results_data_enhancement/' + experiment
+folder = 'results_pmi_experiments/' + experiment
 log_path = folder + '/' + experiment + '.log'
 
 
@@ -39,6 +40,7 @@ solr_connection = solr.SolrConnection(solr_path)
 
 # Path to train_val_videodatainfo.json of MSR-VTT of caption-guided-saliency project
 path_to_train_val_videodatainfo = options.path_to_train_val_videodatainfo
+path_to_new_train_val_videodatainfo = options.path_to_new_train_val_videodatainfo
 
 
 # If verbose, extra information is shown on shell

@@ -4,14 +4,9 @@
 import json
 import urllib2
 import urllib
-
-import itertools
-
 import conll
-
 import sys
 sys.path.append("../")
-
 import config
 from commons import load_video_captions, add_training_sentences, create_training_sentences
 
@@ -98,9 +93,49 @@ def senses_match(caption1, caption2):
 
     if similarity > 0.435:  # ranking exp > exp4 symmetrical th2
         # print caption1['subject']['text'] + ' ------ IS SIMILAR TO ------ ' + caption2['subject']['text'] + ' (' + str(similarity) + ')'
-        return True
+        return True, similarity
     # print caption1['subject']['text'] + ' ------ IS NOT SIMILAR TO ------ ' + caption2['subject']['text'] + ' (' + str(similarity) + ')'
-    return False
+    return False, similarity
+
+
+def parse_captions(video_captions, training_sentences):
+
+    parser_en = TransitionClient(EN_PARSER)
+
+    parsed_captions = []
+    current_captions = []
+
+    for i, sentence in enumerate(video_captions.sentences):
+
+        # check that sentence was not discarded in the training set we are using (video_captions may not be updated)
+        if sentence.sentence in training_sentences:
+
+            # add original sentence to final sentences
+            current_captions.append(sentence.sentence)
+
+            sentence_conll = parser_en.parse_text(sentence.sentence)
+            if sentence_conll:
+                try:
+                    subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                    subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
+                    subject_text = ' '.join([a.form for a in subject])
+
+                    # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
+                    if ' and ' in subject_text:
+                        subj_singular = False
+
+                    predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+
+                    # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
+                    if subject_text.lower() != 'there':
+                        predicate_text = ' '.join([a.form for a in predicate])
+                        subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
+                        predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
+                        parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
+                except IndexError:
+                    pass
+
+    return parsed_captions, current_captions
 
 
 def combine_subjects_and_predicates():
@@ -109,7 +144,6 @@ def combine_subjects_and_predicates():
         "done adding new training sentences! Added 283313 captions" (with subject sense matching)
         "done adding new training sentences! Added 408177 captions" (with subject sense matching over the previously cleaned training sentences)
     """
-    parser_en = TransitionClient(EN_PARSER)
     videos_new_captions = {}
 
     data_file = open(config.path_to_train_val_videodatainfo)
@@ -118,60 +152,21 @@ def combine_subjects_and_predicates():
 
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
-        parsed_captions = []
-        current_captions = []
+
+        parsed_captions, current_captions = parse_captions(video_captions, training_sentences)
+
         new_captions = []
-
-        for i, sentence in enumerate(video_captions.sentences):
-
-            # check that sentence was not discarded in the training set we are using (video_captions may not be updated)
-            if sentence.sentence in training_sentences:
-
-                # add original sentence to final sentences
-                current_captions.append(sentence.sentence)
-
-                sentence_conll = parser_en.parse_text(sentence.sentence)
-                if sentence_conll:
-                    try:
-                        subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
-                        subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
-                        subject_text = ' '.join([a.form for a in subject])
-
-                        # fix mistake when subject contains 'and' (i.e. A cat and a monkey are playing)
-                        if ' and ' in subject_text:
-                            subj_singular = False
-
-                        predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
-
-                        # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
-                        if subject_text.lower() != 'there':
-                            predicate_text = ' '.join([a.form for a in predicate])
-                            subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
-                            predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
-                            parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
-                    except IndexError:
-                        pass
-
-        # print '\n@@@ Original sentences @@@'
-        # for sentence in video_captions.sentences:
-        #     print sentence.sentence
-
-        # print '\n@@@ Combined sentences @@@'
-
         for caption in parsed_captions:
             # try to combine sentence subject with all other predicates
             subject = caption['subject']
             for caption2 in parsed_captions:
                 number_matching = subject['singular'] == caption2['predicate']['singular']
-                sense_matching = senses_match(caption, caption2)  # TODO lpmayos: put on True to execute first experiment
+                sense_matching, similarity = senses_match(caption, caption2)  # TODO lpmayos: put on True to execute first experiment
 
                 candidate_caption = caption['subject']['text'] + ' ' + caption2['predicate']['text']
                 if number_matching and sense_matching and candidate_caption not in current_captions:
                     new_captions.append(candidate_caption)
 
-        # print '\n ------------------------------------------ video ' + str(video_id) + '\n'
-        # for caption in list(set(new_captions)):
-        #     print caption
         videos_new_captions[video_id] = list(set(new_captions + current_captions))
 
     create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
