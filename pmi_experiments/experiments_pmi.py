@@ -17,6 +17,10 @@ EN_PARSER = "http://services-taln.s.upf.edu:8080/prod/transition-service/en/pars
 
 def do_pmi(combination_words, context_words):
 
+    # TODO for tokens with multiple words, i.e. 'comic strip NN*', we keep first word, 'comic NN*' because the web service does not support multiwords yet
+    context_words = [a.split()[0] + ' ' + a.split()[-1] for a in context_words]
+    combination_words = [a.split()[0] + ' ' + a.split()[-1] for a in combination_words]
+
     solr_url = "http://10.80.27.67:8080/solr/bnc/"
 
     param_dict = {"solr_url": solr_url,
@@ -171,13 +175,18 @@ def replace_best_pmi_subject():
             context = list(set(context))
 
             # find candidate with higher pmi
-            selected_candidate = None
-            max_pmi = 0
-            for candidate in candidates:
-                pmi = do_pmi([candidate.lemma + ' ' + candidate.pos], context)
-                if pmi > max_pmi:
-                    max_pmi = pmi
-                    selected_candidate = candidate
+            try:
+                selected_candidate = None
+                max_pmi = 0
+                for candidate in candidates:
+                    pmi = do_pmi([candidate.lemma + ' ' + candidate.pos], context)
+                    if pmi > max_pmi:
+                        max_pmi = pmi
+                        selected_candidate = candidate
+            except:
+                # just in case the web service for do_pmi fails
+                print '[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.'
+                selected_candidate = candidates[0]
 
             # replace candidates with lower pmi with selected candidate
             for caption_id in group:
