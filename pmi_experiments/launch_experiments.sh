@@ -12,3 +12,7 @@ last=7010  #    7010,   10
 verbose='true'
 
 python experiments_pmi.py --experiment 'replace_best_pmi_subject' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --path_to_new_train_val_videodatainfo $path_to_new_train_val_videodatainfo
+# 7008
+# 7009
+# creating new training sentences...
+# done creating new training sentences! Added 84042 captions
