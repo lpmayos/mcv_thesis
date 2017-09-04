@@ -252,11 +252,10 @@ def show_form_data(typeform_creator, data, video_ids, num_form):
         end_time = video_data['end time']
         captions = video_data['captions']
 
-        typeform_creator.add_video(video_url, start_time, end_time, captions)
         desc = '\nVideo ' + video_id + ': ' + video_url + ' (' + typeform_creator.seconds_to_printable_time(start_time) + ' to ' + typeform_creator.seconds_to_printable_time(end_time) + ').'
         print(desc)
         for caption in captions:
-            text = 'Caption: "' + caption + '"'
+            text = 'Caption: "' + captions[caption] + '"'
             print(text)
     return
 
