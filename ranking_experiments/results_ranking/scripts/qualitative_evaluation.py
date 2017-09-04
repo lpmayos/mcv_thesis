@@ -241,6 +241,26 @@ def create_form_with_data(typeform_creator, data, video_ids, num_form):
     return
 
 
+def show_form_data(typeform_creator, data, video_ids, num_form):
+    """
+    """
+
+    for video_id in video_ids:
+        video_data = data[video_id]
+        video_url = video_data['url']  # https://www.youtube.com/v/qCVmntRBg8A?start=40&end=45&version=3
+        start_time = video_data['start time']
+        end_time = video_data['end time']
+        captions = video_data['captions']
+
+        typeform_creator.add_video(video_url, start_time, end_time, captions)
+        desc = '\nVideo ' + video_id + ': ' + video_url + ' (' + typeform_creator.seconds_to_printable_time(start_time) + ' to ' + typeform_creator.seconds_to_printable_time(end_time) + ').'
+        print(desc)
+        for caption in captions:
+            text = 'Caption: "' + caption + '"'
+            print(text)
+    return
+
+
 def create_demo_form(typeform_creator):
     """
     """
@@ -312,7 +332,8 @@ def create_forms(typeform_creator):
              ['video' + str(random.randint(7010, 9999)) for a in range(10)]]
 
     for i, video_ids in enumerate(forms):
-        create_form_with_data(typeform_creator, data, video_ids, i)
+        # create_form_with_data(typeform_creator, data, video_ids, i)
+        show_form_data(typeform_creator, data, video_ids, i)
 
 
 def main():
