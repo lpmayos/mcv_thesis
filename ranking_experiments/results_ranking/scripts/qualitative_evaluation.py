@@ -145,7 +145,7 @@ class typeformCreator():
         self.add_group(text)
         self.add_opinion_scale_to_last_group('Coherence. Judge the logic and readability of the sentence.', 'Low', 'High')
         self.add_opinion_scale_to_last_group('Correctness. Judge if the sentence is valid for the video (that is, it is not incorrect).', 'Low', 'High')
-        self.add_opinion_scale_to_last_group('Relevance. Judge if the sentence contains the more relevant and important objects/actions/events in the video clip', 'Low', 'High')
+        self.add_opinion_scale_to_last_group('Relevance. Judge if the sentence contains the most relevant and important objects/actions/events in the video clip', 'Low', 'High')
         self.add_opinion_scale_to_last_group('Helpful for blind. Judge how helpful would the sentence be for a blind person to understand what is happening in this video clip', 'Poor', 'Great')
 
     def add_video(self, video_url, start_time, end_time, captions):

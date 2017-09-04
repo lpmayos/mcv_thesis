@@ -1,269 +1,311 @@
-Video video7029: https://www.youtube.com/watch?v=_HvhDNfTZbY (0:00:10 to 0:00:22).
-Caption exp4_symmetrical: "a cartoon character is talking to another man"
-Caption subj_pred_combi: "a cartoon character is talking to a girl"
-Caption exp1: "a cartoon character is talking to a cartoon"
-Caption exp4: "a cartoon character is talking to another man"
-Caption subj_pred_combi_pmi_subj_replace: "a cartoon character is talking to another anime"
-Caption pmi_subj_replace: "a man is talking to a man"
-Caption original: "a cartoon character is talking to a cartoon"
+Video video9519: https://www.youtube.com/watch?v=Ac6SfDoSqh8 (0:01:28 to 0:01:39).
+https://vib.by/v/m1sQSKJV4
+Caption exp4_symmetrical: "A man is talking about a terrorist leader"
+Caption subj_pred_combi: "A man is standing in front of a crowd"
+Caption exp1: "A man is singing"
+Caption exp4: "A man is singing a song and dancing"
+Caption subj_pred_combi_pmi_subj_replace: "A man is standing"
+Caption pmi_subj_replace: "A man is singing"
+Caption original: "A man is talking about something in a stage"
 
 Video video9215: https://www.youtube.com/watch?v=yJuO5qDJDFo (0:00:49 to 0:01:00).
-Caption exp4_symmetrical: "a man is driving a car"
-Caption subj_pred_combi: "a car is parked on the street"
-Caption exp1: "a car is driving down the road"
-Caption exp4: "a car is driving down the road"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about a car"
-Caption pmi_subj_replace: "a car is driving down the street"
-Caption original: "a car is being driven"
+https://vib.by/v/QkmCBF144
+Caption exp4_symmetrical: "A man is driving a car"
+Caption subj_pred_combi: "A car is parked on the street"
+Caption exp1: "A car is driving down the road"
+Caption exp4: "A car is driving down the road"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about a car"
+Caption pmi_subj_replace: "A car is driving down the street"
+Caption original: "A car is being driven"
 
 Video video9136: https://www.youtube.com/watch?v=V9Hi4IKHnF8 (0:00:00 to 0:00:25).
-Caption exp4_symmetrical: "a cartoon of a man and a woman"
-Caption subj_pred_combi: "a cartoon character is talking about a cartoon"
-Caption exp1: "a cartoon of a man talking about something"
-Caption exp4: "a cartoon character is peeped at a piece of paper"
-Caption subj_pred_combi_pmi_subj_replace: "a cartoon car is being played"
-Caption pmi_subj_replace: "a cartoon man is walking around"
-Caption original: "a cartoon character is talking about a cartoon"
+https://vib.by/v/QkAELK1NE
+Caption exp4_symmetrical: "A cartoon of a man and a woman"
+Caption subj_pred_combi: "A cartoon character is talking about a cartoon"
+Caption exp1: "A cartoon of a man talking about something"
+Caption exp4: "A cartoon character is peeped at a piece of paper"
+Caption subj_pred_combi_pmi_subj_replace: "A cartoon car is being played"
+Caption pmi_subj_replace: "A cartoon man is walking around"
+Caption original: "A cartoon character is talking about a cartoon"
 
 Video video9230: https://www.youtube.com/watch?v=UZb2NOHPA2A (0:01:02 to 0:01:14).
-Caption exp4_symmetrical: "a man is talking to a man in a foreign language"
-Caption subj_pred_combi: "a man is talking to a man on a street"
-Caption exp1: "a man is talking to a group of people"
-Caption exp4: "a man is talking to a man"
-Caption subj_pred_combi_pmi_subj_replace: "a man is standing in front of a large building"
-Caption pmi_subj_replace: "a man is talking to a man"
-Caption original: "a man in a black suit and black hat is talking to a man in a black suit"
-
-Video video9193: https://www.youtube.com/watch?v=aj5BVI4OGok (0:01:16 to 0:01:29).
-Caption exp4_symmetrical: "a woman in a red shirt is talking about a woman"
-Caption subj_pred_combi: "a woman with brown hair is talking about a man who is wearing a black dress"
-Caption exp1: "a woman is talking about a movie"
-Caption exp4: "a woman in a red dress is talking to a woman"
-Caption subj_pred_combi_pmi_subj_replace: "a woman is talking about a news"
-Caption pmi_subj_replace: "a woman is talking about a celebrity"
-Caption original: "a woman is talking about celebrities"
-
-Video video7181: https://www.youtube.com/watch?v=1Vehr7uFPhw (0:03:43 to 0:03:55).
-Caption exp4_symmetrical: "a woman is talking about a car"
-Caption subj_pred_combi: "a car is shown"
-Caption exp1: "a man is talking about a car"
-Caption exp4: "a woman is talking about a car"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about a car"
-Caption pmi_subj_replace: "a car is being showcased"
-Caption original: "a car is being displayed"
-
-Video video8142: https://www.youtube.com/watch?v=YapIQIDmEs8 (0:01:08 to 0:01:19).
-Caption exp4_symmetrical: "a man and a woman are having a conversation in a field"
-Caption subj_pred_combi: "a man in a white shirt is talking to a man in a street"
-Caption exp1: "a man is talking to a woman"
-Caption exp4: "a man and woman are talking to each other"
-Caption subj_pred_combi_pmi_subj_replace: "a man in a blue shirt is talking to a woman who is holding a gun"
-Caption pmi_subj_replace: "a man and a woman are talking to each other"
-Caption original: "a man and woman are talking to each other"
-
-Video video9519: https://www.youtube.com/watch?v=Ac6SfDoSqh8 (0:01:28 to 0:01:39).
-Caption exp4_symmetrical: "a man is talking about a terrorist leader"
-Caption subj_pred_combi: "a man is standing in front of a crowd"
-Caption exp1: "a man is singing"
-Caption exp4: "a man is singing a song and dancing"
-Caption subj_pred_combi_pmi_subj_replace: "a man is standing"
-Caption pmi_subj_replace: "a man is singing"
-Caption original: "a man is talking about something in a stage"
-
-Video video9219: https://www.youtube.com/watch?v=g26e89xV1HU (0:00:27 to 0:00:48).
-Caption exp4_symmetrical: "a man is talking about a movie"
-Caption subj_pred_combi: "a man is talking about a car"
-Caption exp1: "a man is driving a car"
-Caption exp4: "a man is talking about the british fleet"
-Caption subj_pred_combi_pmi_subj_replace: "a man is singing a song"
-Caption pmi_subj_replace: "a man is talking about a movie"
-Caption original: "a man is talking about a famous animal"
+https://vib.by/v/Xy8s8FJN4
+Caption exp4_symmetrical: "A man is talking to a man in a foreign language"
+Caption subj_pred_combi: "A man is talking to a man on a street"
+Caption exp1: "A man is talking to a group of people"
+Caption exp4: "A man is talking to a man"
+Caption subj_pred_combi_pmi_subj_replace: "A man is standing in front of a large building"
+Caption pmi_subj_replace: "A man is talking to a man"
+Caption original: "A man in a black suit and black hat is talking to a man in a black suit"
 
 Video video9492: https://www.youtube.com/watch?v=XbtKlKAFsQw (0:03:29 to 0:03:39).
-Caption exp4_symmetrical: "a person is fixing a wall"
-Caption subj_pred_combi: "a man is showing how to use a door"
-Caption exp1: "a woman is talking about her phone"
-Caption exp4: "a man is showing how to use a baby stroller"
-Caption subj_pred_combi_pmi_subj_replace: "a person is showing a do-it-yourself project"
-Caption pmi_subj_replace: "a man is showing how to use a door"
-Caption original: "a person is showing how to use a door"
-
-Video video7548: https://www.youtube.com/watch?v=3tK1nmdAe-4 (0:00:21 to 0:00:38).
-Caption exp4_symmetrical: "a man is walking down a street"
-Caption subj_pred_combi: "a man is talking to another man about the street"
-Caption exp1: "a man is talking to a group of people"
-Caption exp4: "a man is talking to a woman"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking to another man in a room"
-Caption pmi_subj_replace: "a man is talking to a man"
-Caption original: "a man is talking to a woman"
-
-Video video8651: https://www.youtube.com/watch?v=6BQc9Dr7QP0 (0:00:33 to 0:00:43).
-Caption exp4_symmetrical: "a man is driving a car"
-Caption subj_pred_combi: "a man in a black shirt is driving a car and talking about it"
-Caption exp1: "a man is driving a car"
-Caption exp4: "a man is driving a car"
-Caption subj_pred_combi_pmi_subj_replace: "a man is driving a car"
-Caption pmi_subj_replace: "a man is driving a car"
-Caption original: "a man is driving a car"
-
-Video video8279: https://www.youtube.com/watch?v=BkRJgsvC3Tw (0:03:08 to 0:03:18).
-Caption exp4_symmetrical: "a man is playing a ufc video game"
-Caption subj_pred_combi: "a person is talking about a wrestling match"
-Caption exp1: "a man is playing a video game"
-Caption exp4: "a man is talking about wrestling"
-Caption subj_pred_combi_pmi_subj_replace: "a man is playing a video game"
-Caption pmi_subj_replace: "a man is talking about wrestling"
-Caption original: "a man is talking about wrestling match"
-
-Video video9523: https://www.youtube.com/watch?v=vD182vPpunk (0:01:07 to 0:01:17).
-Caption exp4_symmetrical: "a group of people are playing soccer"
-Caption subj_pred_combi: "a man is playing a football game"
-Caption exp1: "a man is playing a football game"
-Caption exp4: "a soccer player kicks a ball across the field"
-Caption subj_pred_combi_pmi_subj_replace: "a man is playing a video game"
-Caption pmi_subj_replace: "a people is playing a video game"
-Caption original: "a man is playing a football video game"
-
-Video video9635: https://www.youtube.com/watch?v=bb7XYaGFEaU (0:02:04 to 0:02:25).
-Caption exp4_symmetrical: "a man is talking about a car"
-Caption subj_pred_combi: "a man is talking about a car"
-Caption exp1: "a man is talking about a product"
-Caption exp4: "a man is talking about a car"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about a car"
-Caption pmi_subj_replace: "a man is talking about a car"
-Caption original: "a man is talking about a car"
+https://vib.by/v/QkRewt1E4
+Caption exp4_symmetrical: "A person is fixing a wall"
+Caption subj_pred_combi: "A man is showing how to use a door"
+Caption exp1: "A woman is talking about her phone"
+Caption exp4: "A man is showing how to use a baby stroller"
+Caption subj_pred_combi_pmi_subj_replace: "A person is showing a do-it-yourself project"
+Caption pmi_subj_replace: "A man is showing how to use a door"
+Caption original: "A person is showing how to use a door"
 
 Video video9115: https://www.youtube.com/watch?v=2q4IdyIF__c (0:02:02 to 0:02:14).
-Caption exp4_symmetrical: "a person is cooking"
-Caption subj_pred_combi: "a woman is showing how to make a recipe"
-Caption exp1: "a woman is talking about a recipe"
-Caption exp4: "a man is cooking potatoes"
-Caption subj_pred_combi_pmi_subj_replace: "a person is talking about a recipe"
-Caption pmi_subj_replace: "a person is showing how to cook a pie"
-Caption original: "a person is cooking"
+https://vib.by/v/myerDFyNN
+Caption exp4_symmetrical: "A person is cooking"
+Caption subj_pred_combi: "A woman is showing how to make a recipe"
+Caption exp1: "A woman is talking about a recipe"
+Caption exp4: "A man is cooking potatoes"
+Caption subj_pred_combi_pmi_subj_replace: "A person is talking about a recipe"
+Caption pmi_subj_replace: "A person is showing how to cook a pie"
+Caption original: "A person is cooking"
 
 Video video8238: https://www.youtube.com/watch?v=ZDQcwuKjOwo (0:00:01 to 0:00:19).
-Caption exp4_symmetrical: "a man is showing how to cook a fish"
-Caption subj_pred_combi: "a man is cutting a piece of meat with a yellow spoon"
-Caption exp1: "a man is preparing a meal with meat and onions"
-Caption exp4: "a man is showing how to make a sandwich"
-Caption subj_pred_combi_pmi_subj_replace: "a man is putting a piece of meat on a table"
-Caption pmi_subj_replace: "a man is talking about a fish in a kitchen"
-Caption original: "a man is cutting a piece of meat and a man is talking about it"
+https://vib.by/v/QJb0PY1VE
+Caption exp4_symmetrical: "A man is showing how to cook a fish"
+Caption subj_pred_combi: "A man is cutting a piece of meat with a yellow spoon"
+Caption exp1: "A man is preparing a meal with meat and onions"
+Caption exp4: "A man is showing how to make a sandwich"
+Caption subj_pred_combi_pmi_subj_replace: "A man is putting a piece of meat on a table"
+Caption pmi_subj_replace: "A man is talking about a fish in a kitchen"
+Caption original: "A man is cutting a piece of meat and a man is talking about it"
 
 Video video8226: https://www.youtube.com/watch?v=JUfsj8PcOLA (0:05:45 to 0:06:00).
-Caption exp4_symmetrical: "a man is talking about a company"
-Caption subj_pred_combi: "a man is talking about a company and its features"
-Caption exp1: "a man is sitting in a chair talking to a group of people"
-Caption exp4: "a man is talking to a woman about a new company"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking"
-Caption pmi_subj_replace: "a man is talking about a man"
-Caption original: "a man is talking about something"
+https://vib.by/v/mJNNuK14E
+Caption exp4_symmetrical: "A man is talking about a company"
+Caption subj_pred_combi: "A man is talking about a company and its features"
+Caption exp1: "A man is sitting in a chair talking to a group of people"
+Caption exp4: "A man is talking to a woman about a new company"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking"
+Caption pmi_subj_replace: "A man is talking about a man"
+Caption original: "A man is talking about something"
 
-Video video9378: https://www.youtube.com/watch?v=9JZgZjjX8Yg (0:22:43 to 0:23:06).
-Caption exp4_symmetrical: "a person is playing with a toy"
-Caption subj_pred_combi: "a woman is playing with a toy"
-Caption exp1: "a cartoon of a girl singing"
-Caption exp4: "a cartoon of animals singing"
-Caption subj_pred_combi_pmi_subj_replace: "a cartoon character is playing with a toy"
-Caption pmi_subj_replace: "a cartoon girl is talking about a toy"
-Caption original: "a cartoon of animals"
+Video video7548: https://www.youtube.com/watch?v=3tK1nmdAe-4 (0:00:21 to 0:00:38).
+https://vib.by/v/m1aOdFJEN
+Caption exp4_symmetrical: "A man is walking down a street"
+Caption subj_pred_combi: "A man is talking to another man about the street"
+Caption exp1: "A man is talking to a group of people"
+Caption exp4: "A man is talking to a woman"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking to another man in a room"
+Caption pmi_subj_replace: "A man is talking to a man"
+Caption original: "A man is talking to a woman"
 
-Video video8535: https://www.youtube.com/watch?v=sR2R8thMzUo (0:00:06 to 0:00:17).
-Caption exp4_symmetrical: "a man is playing a video game"
-Caption subj_pred_combi: "a man is driving a car in a video game"
-Caption exp1: "a man is playing a video game"
-Caption exp4: "a man is playing a video game"
-Caption subj_pred_combi_pmi_subj_replace: "a person is playing a video game"
-Caption pmi_subj_replace: "a man is playing a video game"
-Caption original: "a man is playing a video game"
+Video video9523: https://www.youtube.com/watch?v=vD182vPpunk (0:01:07 to 0:01:17).
+https://vib.by/v/X1je3KyVE
+Caption exp4_symmetrical: "A group of people are playing soccer"
+Caption subj_pred_combi: "A man is playing a football game"
+Caption exp1: "A man is playing a football game"
+Caption exp4: "A soccer player kicks a ball across the field"
+Caption subj_pred_combi_pmi_subj_replace: "A man is playing a video game"
+Caption pmi_subj_replace: "A people is playing a video game"
+Caption original: "A man is playing a football video game"
 
-Video video9320: https://www.youtube.com/watch?v=uv2yjgR6sno (0:00:00 to 0:00:20).
-Caption exp4_symmetrical: "a man is talking to a woman in a bed"
-Caption subj_pred_combi: "a man is laying on the bed with his mother"
-Caption exp1: "a baby and a baby are in the bed"
-Caption exp4: "a man and a woman are having a conversation"
-Caption subj_pred_combi_pmi_subj_replace: "a baby is lying on the bed with a woman"
-Caption pmi_subj_replace: "a woman is laying on the bed and talking to the camera"
-Caption original: "a man and woman are laying in bed"
 
-Video video9029: https://www.youtube.com/watch?v=Lrp5Bxxj4t8 (0:02:34 to 0:02:45).
-Caption exp4_symmetrical: "a man is playing a sport"
-Caption subj_pred_combi: "a man is playing a sport"
-Caption exp1: "a vine of sports highlights"
-Caption exp4: "a man is playing a football video game"
-Caption subj_pred_combi_pmi_subj_replace: "a man is scoring a goal"
-Caption pmi_subj_replace: "a man is playing hockey"
-Caption original: "a man is playing a sport"
+=============================================================================================
 
-Video video8293: https://www.youtube.com/watch?v=1SBPc9kDVVo (0:03:19 to 0:03:32).
-Caption exp4_symmetrical: "a man is talking about a woman s food"
-Caption subj_pred_combi: "a man is eating a woman"
-Caption exp1: "a group of people are sitting at a table and eating"
-Caption exp4: "a man is holding a cup of food"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about food"
-Caption pmi_subj_replace: "a woman is talking about something"
-Caption original: "a man is talking about a woman s food"
 
-Video video9873: https://www.youtube.com/watch?v=I9brRhxPpz8 (0:01:43 to 0:01:53).
-Caption exp4_symmetrical: "a woman is showing how to cook a dish"
-Caption subj_pred_combi: "a person is cutting a vegetables in the dish"
-Caption exp1: "a woman is cooking a dish with a vegetable"
-Caption exp4: "a woman is showing how to make a salad"
-Caption subj_pred_combi_pmi_subj_replace: "a man is describing how to make a dish"
-Caption pmi_subj_replace: "a person is showing how to make a recipe"
-Caption original: "a woman is talking about how to prepare a dish"
+
+
 
 Video video7368: https://www.youtube.com/watch?v=f423MBLdt1U (0:04:27 to 0:04:40).
-Caption exp4_symmetrical: "a woman is talking about her experience"
-Caption subj_pred_combi: "a woman is standing in front of a door"
-Caption exp1: "a woman is talking about a movie"
-Caption exp4: "a woman is talking to a woman"
-Caption subj_pred_combi_pmi_subj_replace: "a woman is standing in front of a door and then a woman is looking at a man"
-Caption pmi_subj_replace: "a girl is talking about something"
-Caption original: "a woman is talking about a movie"
+https://vib.by/v/m17AOF144
+Caption exp4_symmetrical: "A woman is talking about her experience"
+Caption subj_pred_combi: "A woman is standing in front of a door"
+Caption exp1: "A woman is talking about a movie"
+Caption exp4: "A woman is talking to a woman"
+Caption subj_pred_combi_pmi_subj_replace: "A woman is standing in front of a door and then a woman is looking at a man"
+Caption pmi_subj_replace: "A girl is talking about something"
+Caption original: "A woman is talking about a movie"
+
+
+
+
+ERROR Video video7029: https://www.youtube.com/watch?v=_HvhDNfTZbY (0:00:10 to 0:00:22).
+Caption exp4_symmetrical: "A cartoon character is talking to another man"
+Caption subj_pred_combi: "A cartoon character is talking to a girl"
+Caption exp1: "A cartoon character is talking to a cartoon"
+Caption exp4: "A cartoon character is talking to another man"
+Caption subj_pred_combi_pmi_subj_replace: "A cartoon character is talking to another anime"
+Caption pmi_subj_replace: "A man is talking to a man"
+Caption original: "A cartoon character is talking to a cartoon"
+
+
+
+
+
+
+
+ERROR Video video9193: https://www.youtube.com/watch?v=aj5BVI4OGok (0:01:16 to 0:01:29).
+Caption exp4_symmetrical: "A woman in a red shirt is talking about a woman"
+Caption subj_pred_combi: "A woman with brown hair is talking about a man who is wearing a black dress"
+Caption exp1: "A woman is talking about a movie"
+Caption exp4: "A woman in a red dress is talking to a woman"
+Caption subj_pred_combi_pmi_subj_replace: "A woman is talking about a news"
+Caption pmi_subj_replace: "A woman is talking about a celebrity"
+Caption original: "A woman is talking about celebrities"
+
+Video video7181: https://www.youtube.com/watch?v=1Vehr7uFPhw (0:03:43 to 0:03:55).
+Caption exp4_symmetrical: "A woman is talking about a car"
+Caption subj_pred_combi: "A car is shown"
+Caption exp1: "A man is talking about a car"
+Caption exp4: "A woman is talking about a car"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about a car"
+Caption pmi_subj_replace: "A car is being showcased"
+Caption original: "A car is being displayed"
+
+Video video8142: https://www.youtube.com/watch?v=YapIQIDmEs8 (0:01:08 to 0:01:19).
+Caption exp4_symmetrical: "A man and a woman are having a conversation in a field"
+Caption subj_pred_combi: "A man in a white shirt is talking to a man in a street"
+Caption exp1: "A man is talking to a woman"
+Caption exp4: "A man and woman are talking to each other"
+Caption subj_pred_combi_pmi_subj_replace: "A man in a blue shirt is talking to a woman who is holding a gun"
+Caption pmi_subj_replace: "A man and a woman are talking to each other"
+Caption original: "A man and woman are talking to each other"
+
+
+
+Video video9219: https://www.youtube.com/watch?v=g26e89xV1HU (0:00:27 to 0:00:48).
+Caption exp4_symmetrical: "A man is talking about a movie"
+Caption subj_pred_combi: "A man is talking about a car"
+Caption exp1: "A man is driving a car"
+Caption exp4: "A man is talking about the british fleet"
+Caption subj_pred_combi_pmi_subj_replace: "A man is singing a song"
+Caption pmi_subj_replace: "A man is talking about a movie"
+Caption original: "A man is talking about a famous animal"
+
+
+
+
+Video video8651: https://www.youtube.com/watch?v=6BQc9Dr7QP0 (0:00:33 to 0:00:43).
+Caption exp4_symmetrical: "A man is driving a car"
+Caption subj_pred_combi: "A man in a black shirt is driving a car and talking about it"
+Caption exp1: "A man is driving a car"
+Caption exp4: "A man is driving a car"
+Caption subj_pred_combi_pmi_subj_replace: "A man is driving a car"
+Caption pmi_subj_replace: "A man is driving a car"
+Caption original: "A man is driving a car"
+
+Video video8279: https://www.youtube.com/watch?v=BkRJgsvC3Tw (0:03:08 to 0:03:18).
+Caption exp4_symmetrical: "A man is playing a ufc video game"
+Caption subj_pred_combi: "A person is talking about a wrestling match"
+Caption exp1: "A man is playing a video game"
+Caption exp4: "A man is talking about wrestling"
+Caption subj_pred_combi_pmi_subj_replace: "A man is playing a video game"
+Caption pmi_subj_replace: "A man is talking about wrestling"
+Caption original: "A man is talking about wrestling match"
+
+
+
+Video video9635: https://www.youtube.com/watch?v=bb7XYaGFEaU (0:02:04 to 0:02:25).
+Caption exp4_symmetrical: "A man is talking about a car"
+Caption subj_pred_combi: "A man is talking about a car"
+Caption exp1: "A man is talking about a product"
+Caption exp4: "A man is talking about a car"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about a car"
+Caption pmi_subj_replace: "A man is talking about a car"
+Caption original: "A man is talking about a car"
+
+
+
+
+
+
+
+Video video9378: https://www.youtube.com/watch?v=9JZgZjjX8Yg (0:22:43 to 0:23:06).
+Caption exp4_symmetrical: "A person is playing with a toy"
+Caption subj_pred_combi: "A woman is playing with a toy"
+Caption exp1: "A cartoon of a girl singing"
+Caption exp4: "A cartoon of animals singing"
+Caption subj_pred_combi_pmi_subj_replace: "A cartoon character is playing with a toy"
+Caption pmi_subj_replace: "A cartoon girl is talking about a toy"
+Caption original: "A cartoon of animals"
+
+Video video8535: https://www.youtube.com/watch?v=sR2R8thMzUo (0:00:06 to 0:00:17).
+Caption exp4_symmetrical: "A man is playing a video game"
+Caption subj_pred_combi: "A man is driving a car in a video game"
+Caption exp1: "A man is playing a video game"
+Caption exp4: "A man is playing a video game"
+Caption subj_pred_combi_pmi_subj_replace: "A person is playing a video game"
+Caption pmi_subj_replace: "A man is playing a video game"
+Caption original: "A man is playing a video game"
+
+Video video9320: https://www.youtube.com/watch?v=uv2yjgR6sno (0:00:00 to 0:00:20).
+Caption exp4_symmetrical: "A man is talking to a woman in a bed"
+Caption subj_pred_combi: "A man is laying on the bed with his mother"
+Caption exp1: "A baby and a baby are in the bed"
+Caption exp4: "A man and a woman are having a conversation"
+Caption subj_pred_combi_pmi_subj_replace: "A baby is lying on the bed with a woman"
+Caption pmi_subj_replace: "A woman is laying on the bed and talking to the camera"
+Caption original: "A man and woman are laying in bed"
+
+ERROR Video video9029: https://www.youtube.com/watch?v=Lrp5Bxxj4t8 (0:02:34 to 0:02:45).
+Caption exp4_symmetrical: "A man is playing a sport"
+Caption subj_pred_combi: "A man is playing a sport"
+Caption exp1: "A vine of sports highlights"
+Caption exp4: "A man is playing a football video game"
+Caption subj_pred_combi_pmi_subj_replace: "A man is scoring a goal"
+Caption pmi_subj_replace: "A man is playing hockey"
+Caption original: "A man is playing a sport"
+
+Video video8293: https://www.youtube.com/watch?v=1SBPc9kDVVo (0:03:19 to 0:03:32).
+Caption exp4_symmetrical: "A man is talking about a woman s food"
+Caption subj_pred_combi: "A man is eating a woman"
+Caption exp1: "A group of people are sitting at a table and eating"
+Caption exp4: "A man is holding a cup of food"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about food"
+Caption pmi_subj_replace: "A woman is talking about something"
+Caption original: "A man is talking about a woman s food"
+
+Video video9873: https://www.youtube.com/watch?v=I9brRhxPpz8 (0:01:43 to 0:01:53).
+Caption exp4_symmetrical: "A woman is showing how to cook a dish"
+Caption subj_pred_combi: "A person is cutting a vegetables in the dish"
+Caption exp1: "A woman is cooking a dish with a vegetable"
+Caption exp4: "A woman is showing how to make a salad"
+Caption subj_pred_combi_pmi_subj_replace: "A man is describing how to make a dish"
+Caption pmi_subj_replace: "A person is showing how to make a recipe"
+Caption original: "A woman is talking about how to prepare a dish"
+
+
 
 Video video9249: https://www.youtube.com/watch?v=c7qxSDENY4w (0:42:08 to 0:42:32).
-Caption exp4_symmetrical: "a man is talking about something"
-Caption subj_pred_combi: "a man is talking about his college computer"
-Caption exp1: "a man is talking about technology"
-Caption exp4: "a man is talking about something"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about the glycemic index of a boiled potato in a classroom"
-Caption pmi_subj_replace: "a man is talking about the need of the computer"
-Caption original: "a man in a black shirt is talking about something"
+Caption exp4_symmetrical: "A man is talking about something"
+Caption subj_pred_combi: "A man is talking about his college computer"
+Caption exp1: "A man is talking about technology"
+Caption exp4: "A man is talking about something"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about the glycemic index of a boiled potato in a classroom"
+Caption pmi_subj_replace: "A man is talking about the need of the computer"
+Caption original: "A man in a black shirt is talking about something"
 
 Video video7428: https://www.youtube.com/watch?v=JtNHvgXR2LQ (0:03:45 to 0:04:06).
-Caption exp4_symmetrical: "a boy is playing with a barbie"
-Caption subj_pred_combi: "a little girl is playing with a doll"
-Caption exp1: "a boy is playing with a doll"
-Caption exp4: "a child is playing with a doll"
-Caption subj_pred_combi_pmi_subj_replace: "a child is playing with a toy"
-Caption pmi_subj_replace: "a child is playing with a doll"
-Caption original: "a child is playing with a toy"
+Caption exp4_symmetrical: "A boy is playing with a barbie"
+Caption subj_pred_combi: "A little girl is playing with a doll"
+Caption exp1: "A boy is playing with a doll"
+Caption exp4: "A child is playing with a doll"
+Caption subj_pred_combi_pmi_subj_replace: "A child is playing with a toy"
+Caption pmi_subj_replace: "A child is playing with a doll"
+Caption original: "A child is playing with a toy"
 
 Video video8499: https://www.youtube.com/watch?v=6VkKeM-OK6g (0:09:27 to 0:09:42).
-Caption exp4_symmetrical: "a man is talking to another man in a mask"
-Caption subj_pred_combi: "a man in a uniform is talking about a movie"
-Caption exp1: "a man is talking to a group of people"
-Caption exp4: "a man is talking about a military"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking about a man in a front of a construction"
-Caption pmi_subj_replace: "a man is talking about military soldiers"
-Caption original: "a man is talking about a military man"
+Caption exp4_symmetrical: "A man is talking to another man in a mask"
+Caption subj_pred_combi: "A man in a uniform is talking about a movie"
+Caption exp1: "A man is talking to a group of people"
+Caption exp4: "A man is talking about a military"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking about a man in a front of a construction"
+Caption pmi_subj_replace: "A man is talking about military soldiers"
+Caption original: "A man is talking about a military man"
 
 Video video8007: https://www.youtube.com/watch?v=SGSE_XPF4_g (0:02:04 to 0:02:27).
-Caption exp4_symmetrical: "a man is talking to a woman"
-Caption subj_pred_combi: "a man is running on the road"
-Caption exp1: "a man is talking to a woman"
-Caption exp4: "a man is talking to a woman"
-Caption subj_pred_combi_pmi_subj_replace: "a man is talking to a man"
-Caption pmi_subj_replace: "a man is talking about a movie"
-Caption original: "a man is talking to a man"
+Caption exp4_symmetrical: "A man is talking to a woman"
+Caption subj_pred_combi: "A man is running on the road"
+Caption exp1: "A man is talking to a woman"
+Caption exp4: "A man is talking to a woman"
+Caption subj_pred_combi_pmi_subj_replace: "A man is talking to a man"
+Caption pmi_subj_replace: "A man is talking about a movie"
+Caption original: "A man is talking to a man"
 
 Video video9323: https://www.youtube.com/watch?v=1OHQ5oMywMk (0:16:17 to 0:16:29).
-Caption exp4_symmetrical: "a man is talking about a woman"
-Caption subj_pred_combi: "a man is walking down the street"
-Caption exp1: "a man is running on the road"
-Caption exp4: "a man is talking about a movie"
-Caption subj_pred_combi_pmi_subj_replace: "a woman is riding a bike"
-Caption pmi_subj_replace: "a man is talking about a movie"
-Caption original: "a man is talking about a movie"
+Caption exp4_symmetrical: "A man is talking about a woman"
+Caption subj_pred_combi: "A man is walking down the street"
+Caption exp1: "A man is running on the road"
+Caption exp4: "A man is talking about a movie"
+Caption subj_pred_combi_pmi_subj_replace: "A woman is riding a bike"
+Caption pmi_subj_replace: "A man is talking about a movie"
+Caption original: "A man is talking about a movie"
