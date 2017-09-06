@@ -86,19 +86,23 @@ class ConllSentence(object):
         return dict
 
     def get_subject_and_predicate(self):
-        subject_root = [a for a in self.root.children if a.deprel == 'SBJ'][0]
-        subject_root.subject_root = True
-        subject_dict = self._add_children(subject_root, {subject_root.id: subject_root})
+        try:
+            subject_root = [a for a in self.root.children if a.deprel == 'SBJ'][0]
+            subject_root.subject_root = True
+            subject_dict = self._add_children(subject_root, {subject_root.id: subject_root})
 
-        predicate_root = [a for a in self.root.children if a.deprel != 'SBJ'][0]
-        predicate_root.predicate_root = True
+            predicate_root = [a for a in self.root.children if a.deprel != 'SBJ'][0]
+            predicate_root.predicate_root = True
 
-        subject_keys_sorted = [str(b) for b in sorted(int(a) for a in subject_dict.keys())]
-        subject_list = [subject_dict[a] for a in subject_keys_sorted]
+            subject_keys_sorted = [str(b) for b in sorted(int(a) for a in subject_dict.keys())]
+            subject_list = [subject_dict[a] for a in subject_keys_sorted]
 
-        predicate_list = [a for a in self.token_list if a not in subject_list]
+            predicate_list = [a for a in self.token_list if a not in subject_list]
 
-        return subject_list, predicate_list
+            return subject_list, predicate_list
+        except:
+            # it is probably a nominal sentence, i.e. "A man driving a car".
+            return None, None
 
 
 class ConllToken2009(object):

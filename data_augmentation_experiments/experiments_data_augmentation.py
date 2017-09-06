@@ -98,7 +98,7 @@ def senses_match(caption1, caption2):
     return False, similarity
 
 
-def parse_captions(video_captions, training_sentences):
+def parse_captions(video_captions, video_id, training_sentences):
 
     parser_en = TransitionClient(EN_PARSER)
 
@@ -106,19 +106,38 @@ def parse_captions(video_captions, training_sentences):
     current_captions = []
 
     for i, sentence in enumerate(video_captions.sentences):
-
-        import ipdb; ipdb.set_trace()
+        subject, predicate = None, None
 
         # check that sentence was not discarded in the training set we are using (video_captions may not be updated)
-        if sentence.sentence in training_sentences:
+        if sentence.sentence in training_sentences['video' + str(video_id)]:
 
             # add original sentence to final sentences
             current_captions.append(sentence.sentence)
 
             sentence_conll = parser_en.parse_text(sentence.sentence)
             if sentence_conll:
-                try:
-                    subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                if not subject:
+                    try:
+                        # It is probably a nominal sentence, i.e. "A man driving a car" --> transform it to "A man is driving a car" and parse it again
+                        conll_sentence = sentence_conll.sentences[0]
+                        root_position = int(conll_sentence.root.id)  # 2 for "A man is driving", the position of 'man' staring with 1
+
+                        if sentence.sentence.split()[root_position].endswith('ing'):  # sentences like 'a superman movie clip' can not be transformed this way
+
+                            if conll_sentence.root.pfeatures['number'] == 'SG':
+                                verb = 'is'
+                            else:
+                                verb = 'are'
+
+                            new_sentence = ' '.join(sentence.sentence.split()[0:root_position] + [verb] + sentence.sentence.split()[root_position:])
+                            print 'new sentence: ' + new_sentence
+                            sentence_conll = parser_en.parse_text(new_sentence)
+                            subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
+                    except:
+                        print '[ERROR] Not able to split in subject and predicate: ' + sentence.sentence
+
+                if subject and predicate:
                     subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
                     subject_text = ' '.join([a.form for a in subject])
 
@@ -134,8 +153,6 @@ def parse_captions(video_captions, training_sentences):
                         subject = {'subject': subject, 'text': subject_text, 'singular': subj_singular}
                         predicate = {'predicate': predicate, 'text': predicate_text, 'singular': predicate_singular}
                         parsed_captions.append({'sentence': sentence, 'subject': subject, 'predicate': predicate})
-                except IndexError:
-                    pass
 
     return parsed_captions, current_captions
 
@@ -150,12 +167,18 @@ def combine_subjects_and_predicates():
 
     data_file = open(config.path_to_train_val_videodatainfo)
     data = json.load(data_file)
-    training_sentences = [a['caption'] for a in data['sentences']]
+
+    training_sentences = {}
+    for caption in data['sentences']:
+        if caption['video_id'] in training_sentences:
+            training_sentences[caption['video_id']].append(caption['caption'])
+        else:
+            training_sentences[caption['video_id']] = [caption['caption']]
 
     for video_id in range(config.first_video, config.last_video):
         video_captions = load_video_captions(video_id)
 
-        parsed_captions, current_captions = parse_captions(video_captions, training_sentences)
+        parsed_captions, current_captions = parse_captions(video_captions, video_id, training_sentences)
 
         new_captions = []
         for caption in parsed_captions:

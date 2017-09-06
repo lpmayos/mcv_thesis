@@ -143,14 +143,19 @@ def replace_best_pmi_subject():
 
     data_file = open(config.path_to_train_val_videodatainfo)
     data = json.load(data_file)
-    training_sentences = [a['caption'] for a in data['sentences']]
+
+    training_sentences = {}
+    for caption in data['sentences']:
+        if caption['video_id'] in training_sentences:
+            training_sentences[caption['video_id']].append(caption['caption'])
+        else:
+            training_sentences[caption['video_id']] = [caption['caption']]
 
     for video_id in range(config.first_video, config.last_video):
-        import ipdb; ipdb.set_trace()
         print video_id
 
         video_captions = load_video_captions(video_id)
-        parsed_captions, current_captions = parse_captions(video_captions, training_sentences)
+        parsed_captions, current_captions = parse_captions(video_captions, video_id, training_sentences)
 
         # create groups of captions whose subjects can be replaced by one of the subjects in the group (same number and meaning)
         groups = create_groups(parsed_captions)
@@ -202,7 +207,7 @@ def replace_best_pmi_subject():
 
         videos_new_captions[video_id] = list(set(new_captions))
 
-    # create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
+    create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():
