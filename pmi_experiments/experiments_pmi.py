@@ -146,6 +146,7 @@ def replace_best_pmi_subject():
     training_sentences = [a['caption'] for a in data['sentences']]
 
     for video_id in range(config.first_video, config.last_video):
+        import ipdb; ipdb.set_trace()
         print video_id
 
         video_captions = load_video_captions(video_id)
@@ -201,7 +202,7 @@ def replace_best_pmi_subject():
 
         videos_new_captions[video_id] = list(set(new_captions))
 
-    create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
+    # create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():

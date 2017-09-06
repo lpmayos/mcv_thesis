@@ -107,6 +107,8 @@ def parse_captions(video_captions, training_sentences):
 
     for i, sentence in enumerate(video_captions.sentences):
 
+        import ipdb; ipdb.set_trace()
+
         # check that sentence was not discarded in the training set we are using (video_captions may not be updated)
         if sentence.sentence in training_sentences:
 
