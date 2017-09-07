@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $HOME/code/mcv_thesis/data_augmentation_experiments
+cd $HOME/code/mcv_thesis/experiments_data_augmentation
 
 pickle_folder="../pickle"
 # pickle_folder="../pickle_small"

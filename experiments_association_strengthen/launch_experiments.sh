@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $HOME/code/mcv_thesis/pmi_experiments
+cd $HOME/code/mcv_thesis/experiments_association_strengthen
 
 pickle_folder="../pickle"
 # pickle_folder="../pickle_small"
@@ -11,7 +11,7 @@ first=0  #  0,      0
 last=7010  #    7010,   10
 verbose='true'
 
-python experiments_pmi.py --experiment 'replace_best_pmi_subject' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --path_to_new_train_val_videodatainfo $path_to_new_train_val_videodatainfo
+python experiments_association_strengthen.py --experiment 'replace_best_pmi_subject' --pickle_folder $pickle_folder --first $first --last $last -v $verbose --solr_sensembed_path $solr_sensembed_path --path_to_train_val_videodatainfo $path_to_train_val_videodatainfo --path_to_new_train_val_videodatainfo $path_to_new_train_val_videodatainfo
 # 7008
 # 7009
 # creating new training sentences...

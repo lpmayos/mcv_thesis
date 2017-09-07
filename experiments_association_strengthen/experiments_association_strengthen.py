@@ -6,7 +6,7 @@ import urllib2
 import urllib
 import sys
 sys.path.append("../")
-sys.path.append("../data_augmentation_experiments")
+sys.path.append("../experiments_data_augmentation")
 import config
 from commons import load_video_captions, add_training_sentences, create_training_sentences
 from experiments_data_augmentation import TransitionClient, parse_captions
