@@ -5,6 +5,9 @@ import json
 import urllib2
 import urllib
 import sys
+from nltk.corpus import wordnet as wn
+import pattern
+from pattern.en import conjugate, PARTICIPLE, PAST, PRESENT, PLURAL, SINGULAR
 sys.path.append("../")
 sys.path.append("../experiments_data_augmentation")
 import config
@@ -136,9 +139,64 @@ def create_groups(parsed_captions):
     return groups
 
 
-def replace_best_pmi_subject():
-    """ generates new training sentences by replacing those subjects with lower PMI with the ones with higher PMI
+def find_candidates_and_contexts(group, parsed_captions):
+    candidates = []  # contruct candidates with central element of subjects
+    context = []  # construct context with relevant elements from predicates
+    for caption_id in group:
+        caption = parsed_captions[caption_id]
+        subject = caption['subject']['subject']
+        candidates += [a for a in subject if a.subject_root and a.lemma not in [b.lemma for b in candidates]]
+
+        caption['predicate']['context'] = []  # for each predicate, save individual context (relevant elements from subjects and predicate, excluding verbs)
+        predicate = caption['predicate']['predicate']
+        for element in predicate:
+            if element.pos.startswith('NN'):
+                context.append(element.lemma + ' NN*')
+                caption['predicate']['context'].append(element.lemma + ' NN*')
+            elif element.pos.startswith('VB'):
+                context.append(element.lemma + ' VB*')
+            elif element.pos.startswith('JJ'):
+                context.append(element.lemma + ' JJ*')
+                caption['predicate']['context'].append(element.lemma + ' JJ*')
+
+        for element in subject:
+            if element.pos.startswith('NN'):
+                caption['predicate']['context'].append(element.lemma + ' NN*')
+            elif element.pos.startswith('JJ'):
+                caption['predicate']['context'].append(element.lemma + ' JJ*')
+
+    context = list(set(context))
+
+    return candidates, context
+
+
+def select_candidate(candidates, context):
+
+    # find candidate with higher pmi
+    try:
+        selected_candidate = None
+        max_pmi = 0
+        for candidate in candidates:
+            pmi = do_pmi([candidate.lemma + ' ' + candidate.pos], context)
+            if pmi['normalized_pmi'] > max_pmi:
+                max_pmi = pmi['normalized_pmi']
+                selected_candidate = candidate
+        print 'from candidates @@@ ' + str([a.lemma for a in candidates]) + ' @@@ and context @@@ ' + str(context) + ' @@@ we choose @@@ ' + selected_candidate.lemma + ' @@@'
+    except:
+        # just in case the web service for do_pmi fails
+        print '[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.'
+        selected_candidate = candidates[0]
+
+    return selected_candidate
+
+
+def association_strengthen():
+    """ generates new training sentences by replacing those subjects with lower PMI with the ones with higher PMI,
+    and replacing the verbs with the synset with higher PMI
     """
+
+    synsets_dict = {}
+
     videos_new_captions = {}
 
     data_file = open(config.path_to_train_val_videodatainfo)
@@ -152,6 +210,7 @@ def replace_best_pmi_subject():
             training_sentences[caption['video_id']] = [caption['caption']]
 
     for video_id in range(config.first_video, config.last_video):
+        import ipdb; ipdb.set_trace()
         print video_id
 
         video_captions = load_video_captions(video_id)
@@ -165,37 +224,15 @@ def replace_best_pmi_subject():
         for i, group in enumerate(groups):
 
             # find candidates and context
-            candidates = []  # contruct candidates with central element of subjects
-            context = []  # construct context with relevant elements from predicates
+            candidates_subject, context_predicates = find_candidates_and_contexts(group, parsed_captions)
+
+            selected_candidate = select_candidate(candidates_subject, context_predicates)
+
             for caption_id in group:
-                caption = parsed_captions[caption_id]
-                subject = caption['subject']['subject']
-                candidates += [a for a in subject if a.subject_root and a.lemma not in [b.lemma for b in candidates]]
 
-                predicate = caption['predicate']['predicate']
-                for element in predicate:
-                    if element.pos.startswith('NN'):
-                        context.append(element.lemma + ' NN*')
-                    if element.pos.startswith('VB'):
-                        context.append(element.lemma + ' VB*')
-            context = list(set(context))
+                import ipdb; ipdb.set_trace()
 
-            # find candidate with higher pmi
-            try:
-                selected_candidate = None
-                max_pmi = 0
-                for candidate in candidates:
-                    pmi = do_pmi([candidate.lemma + ' ' + candidate.pos], context)
-                    if pmi > max_pmi:
-                        max_pmi = pmi
-                        selected_candidate = candidate
-            except:
-                # just in case the web service for do_pmi fails
-                print '[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.'
-                selected_candidate = candidates[0]
-
-            # replace candidates with lower pmi with selected candidate
-            for caption_id in group:
+                # replace candidates with lower pmi with selected candidate
                 caption = parsed_captions[caption_id]
                 subject = ''
                 for i, element in enumerate(caption['subject']['subject']):
@@ -203,18 +240,86 @@ def replace_best_pmi_subject():
                         subject += selected_candidate.form + ' '
                     else:
                         subject += caption['subject']['subject'][i].form + ' '
+
+                # find verb synset with higher PMI and replace current verb
+                predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB')]
+                for predicate_verb in predicate_verbs:
+                    verb_lemma = predicate_verb.lemma
+
+                    if verb_lemma != 'be':  # to avoid problems with 'a car is shown', for example
+
+                        # save in dict because it takes long time to compute
+                        if verb_lemma in synsets_dict:
+                            verb_synsets_unique = synsets_dict[verb_lemma]
+                        else:
+                            verb_synsets = wn.synsets(verb_lemma, pos=wn.VERB)
+                            verb_synsets_unique = []
+                            for verb_synset in verb_synsets:
+                                if len([a for a in verb_synsets_unique if a.lemmas()[0].name() == verb_synset.lemmas()[0].name()]) == 0:
+                                    verb_synsets_unique.append(verb_synset)
+                            synsets_dict[verb_lemma] = verb_synsets_unique
+
+                        selected_verb = None
+                        max_pmi = 0
+                        for verb_synset in verb_synsets_unique:
+                            pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
+                            if pmi['normalized_pmi'] > max_pmi:
+                                max_pmi = pmi['normalized_pmi']
+                                selected_verb = verb_synset
+
+                        if selected_verb:
+                            print 'from verbs @@@ ' + str(verb_synsets_unique) + ' @@@ and context @@@ ' + str(caption['predicate']['context']) + ' @@@ we choose @@@ ' + selected_verb.lemmas()[0].name() + ' @@@'
+                            # properly conjugate the selected verb and replace it in caption['predicate']['text']
+
+                            # finiteness = predicate_verb.pfeatures['finiteness']  # PART, FIN
+                            # tense = predicate_verb.pfeatures['tense']  # PRES, PAST
+                            # person = predicate_verb.pfeatures['person']  # '3'
+
+                            try:
+                                if predicate_verb.features['finiteness'] == 'PART':
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PARTICIPLE)
+                                elif predicate_verb.features['finiteness'] == 'GER':
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=pattern.text.GERUND)
+                                elif predicate_verb.features['tense'] == 'PAST':
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PAST)
+                                elif predicate_verb.features['tense'] == 'PRES':
+                                    if 'person' in predicate_verb.features and predicate_verb.features['person'] == '3':
+                                        new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=SINGULAR)
+                                    else:
+                                        new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=PLURAL)
+                            except KeyError, e:
+                                print '[KeyError] I got a KeyError - reason "%s"' % str(e)
+                                print predicate_verb.features
+
+                            start = int(predicate_verb.features['start_string']) - len(subject)
+                            end = int(predicate_verb.features['end_string']) - len(subject)
+
+                            caption['predicate']['text'] = caption['predicate']['text'][:start] + new_verb + caption['predicate']['text'][end:]
+
+                        else:
+                            print '[NO VERB]'
+
                 new_captions.append(subject + caption['predicate']['text'])
 
         videos_new_captions[video_id] = list(set(new_captions))
 
-    create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
+        original_sentences = training_sentences['video' + str(video_id)]
+        print '**************** Original sentences:**************************************'
+        for sentence in original_sentences:
+            print '\t' + sentence
+
+        print '**************** New sentences:**************************************'
+        for sentence in new_captions:
+            print '\t' + sentence
+
+    # create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():
     print '====================================== ' + config.options.experiment
 
-    if config.options.experiment == 'replace_best_pmi_subject':
-        replace_best_pmi_subject()
+    if config.options.experiment == 'association_strengthen':
+        association_strengthen()
     else:
         print 'bye!'
 

@@ -99,7 +99,7 @@ def senses_match(caption1, caption2):
 
 
 def parse_captions(video_captions, video_id, training_sentences):
-
+    import ipdb; ipdb.set_trace()
     parser_en = TransitionClient(EN_PARSER)
 
     parsed_captions = []

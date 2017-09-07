@@ -1,0 +1,301 @@
+====================================== replace_best_pmi_subject
+0
+from candidates @@@ [u'car'] @@@ and context @@@ [u'be VB*', u'show VB*'] @@@ we choose @@@ car @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'car NN*'] @@@ we choose @@@ prove @@@
+from candidates @@@ [u'man', u'person', u'guy'] @@@ and context @@@ [u'talk VB*', u'be VB*', u'road NN*', u'part NN*', u'audi NN*', u'drive VB*', u'ride VB*', u'show VB*', u'smooth JJ*', u'tell VB*', u'possible JJ*', u'feature NN*', u'narrate VB*', u'narrow JJ*', u'countryside NN*', u'commercial NN*', u'experience NN*', u'various JJ*', u'car NN*', u'vehicle NN*', u'curve NN*'] @@@ we choose @@@ person @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'vehicle NN*', u'countryside NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+[NO VERB]
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'road NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+[NO VERB]
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('ride.v.01'), Synset('tease.v.02'), Synset('drive.v.12'), Synset('depend_on.v.01')] @@@ and context @@@ [u'car NN*', u'narrow JJ*', u'road NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'various JJ*', u'feature NN*', u'car NN*', u'man NN*'] @@@ we choose @@@ indicate @@@
+from verbs @@@ [Synset('narrate.v.01'), Synset('tell.v.03')] @@@ and context @@@ [u'experience NN*', u'audi NN*', u'man NN*'] @@@ we choose @@@ tell @@@
+[NO VERB]
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'curve NN*', u'road NN*', u'person NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('state.v.01'), Synset('tell.v.02'), Synset('order.v.01'), Synset('assure.v.02'), Synset('distinguish.v.01')] @@@ and context @@@ [u'car NN*', u'person NN*'] @@@ we choose @@@ order @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'road NN*', u'guy NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ drive @@@
+[NO VERB]
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ drive @@@
+from verbs @@@ [Synset('drive.v.01'), Synset('force.v.06'), Synset('repel.v.01'), Synset('tug.v.02')] @@@ and context @@@ [u'car NN*', u'road NN*', u'guy NN*'] @@@ we choose @@@ drive @@@
+1
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'kitchen NN*', u'different JJ*', u'ingredient NN*', u'pot NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+from verbs @@@ [Synset('stir.v.01'), Synset('stimulate.v.06'), Synset('touch.v.03'), Synset('raise.v.07'), Synset('arouse.v.06')] @@@ and context @@@ [u'kitchen NN*', u'different JJ*', u'ingredient NN*', u'pot NN*', u'woman NN*'] @@@ we choose @@@ stir @@@
+from verbs @@@ [Synset('put.v.01'), Synset('frame.v.04'), Synset('invest.v.01'), Synset('place.v.11'), Synset('arrange.v.07')] @@@ and context @@@ [u'prawn NN*', u'seasoning NN*', u'large JJ*', u'pot NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ place @@@
+from verbs @@@ [Synset('make.v.01'), Synset('induce.v.02'), Synset('cause.v.01'), Synset('produce.v.02'), Synset('draw.v.04'), Synset('create.v.05'), Synset('gain.v.08'), Synset('do.v.08'), Synset('form.v.02'), Synset('reach.v.07'), Synset('construct.v.01'), Synset('name.v.03'), Synset('have.v.17'), Synset('lay_down.v.01'), Synset('hold.v.03'), Synset('take.v.27'), Synset('stool.v.04'), Synset('cook.v.02'), Synset('seduce.v.01')] @@@ and context @@@ [u'kitchen NN*', u'dish NN*', u'ingredient NN*', u'flame NN*', u'woman NN*'] @@@ we choose @@@ cook @@@
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'kitchen NN*', u'dish NN*', u'ingredient NN*', u'flame NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+[NO VERB]
+from verbs @@@ [Synset('let.v.01'), Synset('permit.v.01'), Synset('allow.v.03'), Synset('leave.v.06'), Synset('admit.v.05'), Synset('give_up.v.11')] @@@ and context @@@ [u'kitchen NN*', u'dish NN*', u'ingredient NN*', u'flame NN*', u'woman NN*'] @@@ we choose @@@ leave @@@
+[NO VERB]
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'ingredient NN*', u'pot NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+from verbs @@@ [Synset('stir.v.01'), Synset('stimulate.v.06'), Synset('touch.v.03'), Synset('raise.v.07'), Synset('arouse.v.06')] @@@ and context @@@ [u'ingredient NN*', u'pot NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ stir @@@
+from verbs @@@ [Synset('make.v.01'), Synset('induce.v.02'), Synset('cause.v.01'), Synset('produce.v.02'), Synset('draw.v.04'), Synset('create.v.05'), Synset('gain.v.08'), Synset('do.v.08'), Synset('form.v.02'), Synset('reach.v.07'), Synset('construct.v.01'), Synset('name.v.03'), Synset('have.v.17'), Synset('lay_down.v.01'), Synset('hold.v.03'), Synset('take.v.27'), Synset('stool.v.04'), Synset('cook.v.02'), Synset('seduce.v.01')] @@@ and context @@@ [u'kitchen NN*', u'recipe NN*', u'large JJ*', u'pot NN*', u'ingredient NN*', u'woman NN*'] @@@ we choose @@@ cook @@@
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'packet NN*', u'spice NN*', u'spoonful NN*', u'tomato NN*', u'sauce NN*', u'pot NN*', u'pot NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('put.v.01'), Synset('frame.v.04'), Synset('invest.v.01'), Synset('place.v.11'), Synset('arrange.v.07')] @@@ and context @@@ [u'item NN*', u'pot NN*', u'stove NN*', u'kitchen NN*', u'person NN*'] @@@ we choose @@@ put @@@
+from verbs @@@ [Synset('cook.v.01'), Synset('fudge.v.01')] @@@ and context @@@ [u'food NN*', u'metal NN*', u'pan NN*', u'top NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ cook @@@
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'different JJ*', u'ingredient NN*', u'pot NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+from verbs @@@ [Synset('cook.v.01'), Synset('fudge.v.01')] @@@ and context @@@ [u'stew NN*', u'large JJ*', u'pan NN*', u'stove NN*', u'woman NN*', u'kitchen NN*'] @@@ we choose @@@ cook @@@
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'ingredient NN*', u'pot NN*', u'stove NN*', u'woman NN*'] @@@ we choose @@@ add @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('add.v.01'), Synset('lend.v.01'), Synset('total.v.02')] @@@ and context @@@ [u'dry JJ*', u'prawn NN*', u'tomato NN*', u'puree NN*', u'salt NN*', u'lady NN*'] @@@ we choose @@@ add @@@
+[NO VERB]
+[NO VERB]
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+2
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('repair.v.01'), Synset('fasten.v.01'), Synset('specify.v.02'), Synset('cook.v.02'), Synset('pay_back.v.02'), Synset('fix.v.06'), Synset('fixate.v.03'), Synset('sterilize.v.02'), Synset('situate.v.02')] @@@ and context @@@ [u'car NN*', u'man NN*'] @@@ we choose @@@ repair @@@
+from verbs @@@ [Synset('keep.v.01'), Synset('hold.v.02'), Synset('have.v.01'), Synset('deem.v.01'), Synset('harbor.v.01'), Synset('restrain.v.03'), Synset('retain.v.03'), Synset('bear.v.11'), Synset('accommodate.v.04'), Synset('prevail.v.02'), Synset('contain.v.05'), Synset('reserve.v.04'), Synset('defend.v.03'), Synset('oblige.v.02'), Synset('defy.v.01'), Synset('apply.v.02'), Synset('control.v.02'), Synset('halt.v.01'), Synset('carry.v.33'), Synset('declare.v.04'), Synset('agree.v.01')] @@@ and context @@@ [u'combustion NN*', u'leak NN*', u'tester NN*', u'man NN*'] @@@ we choose @@@ have @@@
+[NO VERB]
+from verbs @@@ [Synset('use.v.01'), Synset('practice.v.04')] @@@ and context @@@ [u'car NN*', u'repair NN*', u'kit NN*', u'man NN*'] @@@ we choose @@@ use @@@
+[KeyError] I got a KeyError - reason "'finiteness'"
+{u'start_string': u'27', u'spos': u'VV', u'end_string': u'30'}
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'pack NN*', u'man NN*'] @@@ we choose @@@ testify @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'vehicle NN*', u'leak NN*', u'man NN*'] @@@ we choose @@@ show @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'next JJ*', u'car NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'tool NN*', u'box NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ lecture @@@
+[NO VERB]
+from verbs @@@ [Synset('show.v.01'), Synset('present.v.02'), Synset('stage.v.01'), Synset('award.v.01'), Synset('give.v.08'), Synset('deliver.v.01'), Synset('introduce.v.01'), Synset('portray.v.04'), Synset('confront.v.03'), Synset('salute.v.06')] @@@ and context @@@ [u'piece NN*', u'equipment NN*', u'man NN*'] @@@ we choose @@@ present @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'item NN*', u'car NN*', u'repair NN*', u'man NN*'] @@@ we choose @@@ show @@@
+from verbs @@@ [Synset('use.v.01'), Synset('practice.v.04')] @@@ and context @@@ [u'item NN*', u'car NN*', u'repair NN*', u'man NN*'] @@@ we choose @@@ use @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'tool NN*', u'car NN*', u'man NN*'] @@@ we choose @@@ prove @@@
+from verbs @@@ [Synset('repair.v.01'), Synset('fasten.v.01'), Synset('specify.v.02'), Synset('cook.v.02'), Synset('pay_back.v.02'), Synset('fix.v.06'), Synset('fixate.v.03'), Synset('sterilize.v.02'), Synset('situate.v.02')] @@@ and context @@@ [u'tool NN*', u'car NN*', u'man NN*'] @@@ we choose @@@ fix @@@
+[KeyError] I got a KeyError - reason "'finiteness'"
+{u'start_string': u'29', u'spos': u'VV', u'end_string': u'32'}
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'car NN*', u'things NN*', u'man NN*'] @@@ we choose @@@ talk @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'vehicle NN*', u'leak NN*', u'man NN*'] @@@ we choose @@@ show @@@
+[NO VERB]
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+[NO VERB]
+3
+from candidates @@@ [u'door', u'gate', u'wall'] @@@ and context @@@ [u'game NN*', u'video NN*', u'be VB*', u'let VB*', u'pink JJ*', u'light JJ*', u'show VB*', u'bright JJ*', u'shine NN*', u'open VB*', u'light NN*'] @@@ we choose @@@ door @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'video NN*', u'game NN*', u'big JJ*', u'door NN*'] @@@ we choose @@@ open @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'bright JJ*', u'light NN*', u'door NN*'] @@@ we choose @@@ open @@@
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'bright JJ*', u'light NN*', u'door NN*'] @@@ we choose @@@ show @@@
+[NO VERB]
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'bright JJ*', u'light NN*', u'door NN*'] @@@ we choose @@@ open @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'light NN*', u'gate NN*'] @@@ we choose @@@ open @@@
+from verbs @@@ [Synset('let.v.01'), Synset('permit.v.01'), Synset('get.v.03'), Synset('lease.v.03')] @@@ and context @@@ [u'light NN*', u'gate NN*'] @@@ we choose @@@ let @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'door NN*'] @@@ we choose @@@ open @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'wall NN*'] @@@ we choose @@@ open @@@
+[NO VERB]
+from candidates @@@ [u'light'] @@@ and context @@@ [u'be VB*', u'flash VB*'] @@@ we choose @@@ light @@@
+[NO VERB]
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from candidates @@@ [u'ray'] @@@ and context @@@ [u'come VB*', u'open VB*', u'door NN*'] @@@ we choose @@@ ray @@@
+from verbs @@@ [Synset('come.v.01'), Synset('arrive.v.01'), Synset('issue_forth.v.01'), Synset('hail.v.02'), Synset('fall.v.04'), Synset('total.v.01'), Synset('occur.v.02'), Synset('derive.v.05'), Synset('do.v.04')] @@@ and context @@@ [u'door NN*', u'light JJ*', u'ray NN*'] @@@ we choose @@@ arrive @@@
+from verbs @@@ [Synset('open.v.01'), Synset('unfold.v.04'), Synset('afford.v.04')] @@@ and context @@@ [u'door NN*', u'light JJ*', u'ray NN*'] @@@ we choose @@@ open @@@
+from candidates @@@ [u'3d', u'video', u'sequence'] @@@ and context @@@ [u'render VB*', u'game NN*', u'video NN*', u'be VB*', u'hall NN*', u'show VB*', u'door NN*', u'take VB*', u'large JJ*', u'open VB*', u'movie NN*'] @@@ we choose @@@ video @@@
+[NO VERB]
+from verbs @@@ [Synset('take.v.01'), Synset('lead.v.01'), Synset('assume.v.03'), Synset('bring.v.01'), Synset('choose.v.01'), Synset('accept.v.02'), Synset('fill.v.04'), Synset('consider.v.03'), Synset('necessitate.v.01'), Synset('film.v.01'), Synset('remove.v.01'), Synset('consume.v.02'), Synset('learn.v.04'), Synset('claim.v.05'), Synset('aim.v.01'), Synset('carry.v.02'), Synset('lease.v.04'), Synset('subscribe.v.05'), Synset('contain.v.05'), Synset('drive.v.16'), Synset('contract.v.04')] @@@ and context @@@ [u'video NN*', u'game NN*', u'movie NN*', u'short JJ*', u'3d NN*'] @@@ we choose @@@ take @@@
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'door NN*', u'large JJ*', u'hall NN*', u'video NN*', u'game NN*', u'transition NN*', u'sequence NN*'] @@@ we choose @@@ show @@@
+[NO VERB]
+4
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('wear.v.01'), Synset('break.v.42'), Synset('tire.v.02')] @@@ and context @@@ [u'black JJ*', u'shirt NN*', u'girl NN*'] @@@ we choose @@@ wear @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('necessitate.v.01'), Synset('want.v.02'), Synset('need.v.03')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ want @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'woman NN*', u'eye NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('necessitate.v.01'), Synset('want.v.02'), Synset('need.v.03')] @@@ and context @@@ [u'woman NN*', u'eye NN*', u'man NN*'] @@@ we choose @@@ want @@@
+[NO VERB]
+from verbs @@@ [Synset('state.v.01'), Synset('tell.v.02'), Synset('order.v.01'), Synset('assure.v.02'), Synset('distinguish.v.01')] @@@ and context @@@ [u'lady NN*', u's NN*', u'man NN*'] @@@ we choose @@@ tell @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+[NO VERB]
+from verbs @@@ [Synset('necessitate.v.01'), Synset('want.v.02'), Synset('need.v.03')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ want @@@
+from verbs @@@ [Synset('walk.v.01')] @@@ and context @@@ [u'kitchen NN*', u'woman NN*'] @@@ we choose @@@ walk @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'eyebrow NN*', u'woman NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('check.v.01'), Synset('see.v.10'), Synset('control.v.02'), Synset('match.v.01'), Synset('discipline.v.01'), Synset('determine.v.08'), Synset('crack.v.01')] @@@ and context @@@ [u'kitchen NN*', u'food NN*', u'oven NN*', u'girl NN*'] @@@ we choose @@@ check @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ speak @@@
+from verbs @@@ [Synset('state.v.01'), Synset('tell.v.02'), Synset('order.v.01'), Synset('assure.v.02'), Synset('distinguish.v.01')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ tell @@@
+[NO VERB]
+from verbs @@@ [Synset('necessitate.v.01'), Synset('want.v.02'), Synset('need.v.03')] @@@ and context @@@ [u'woman NN*', u'eyebrow NN*', u'man NN*'] @@@ we choose @@@ want @@@
+[NO VERB]
+from verbs @@@ [Synset('show.v.01'), Synset('prove.v.02'), Synset('testify.v.02'), Synset('picture.v.02'), Synset('express.v.01'), Synset('indicate.v.02'), Synset('read.v.08'), Synset('usher.v.01')] @@@ and context @@@ [u'kitchen NN*', u'woman NN*'] @@@ we choose @@@ picture @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'man NN*', u'woman NN*'] @@@ we choose @@@ lecture @@@
+5
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'baby NN*', u'toy NN*', u'can NN*'] @@@ we choose @@@ play @@@
+from candidates @@@ [u'bat', u'cat', u'be', u'play'] @@@ and context @@@ [u'bouncy NN*', u'toy NN*', u'toddler NN*', u'be VB*', u'play VB*', u'next JJ*', u'hang VB*', u'make VB*', u'baby NN*', u'playing NN*', u'chair NN*', u'happy JJ*', u's VB*', u'sit VB*', u'carriage NN*', u'crib NN*', u'stuff JJ*', u'seat NN*', u'child NN*', u'look VB*'] @@@ we choose @@@ be @@@
+[NO VERB]
+from verbs @@@ [Synset('make.v.01'), Synset('induce.v.02'), Synset('cause.v.01'), Synset('produce.v.02'), Synset('draw.v.04'), Synset('create.v.05'), Synset('gain.v.08'), Synset('do.v.08'), Synset('form.v.02'), Synset('reach.v.07'), Synset('construct.v.01'), Synset('name.v.03'), Synset('have.v.17'), Synset('lay_down.v.01'), Synset('hold.v.03'), Synset('take.v.27'), Synset('stool.v.04'), Synset('cook.v.02'), Synset('seduce.v.01')] @@@ and context @@@ [u'child NN*', u'happy JJ*', u'cat NN*'] @@@ we choose @@@ make @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'baby NN*', u'toy NN*', u'cat NN*'] @@@ we choose @@@ play @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'baby NN*', u'cat NN*'] @@@ we choose @@@ play @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'baby NN*', u'cat NN*'] @@@ we choose @@@ play @@@
+from verbs @@@ [Synset('look.v.01'), Synset('search.v.02'), Synset('front.v.01'), Synset('attend.v.02'), Synset('expect.v.03'), Synset('count.v.08')] @@@ and context @@@ [u'cat NN*', u'baby NN*', u'baby NN*'] @@@ we choose @@@ look @@@
+[NO VERB]
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'toy NN*', u'cat NN*'] @@@ we choose @@@ play @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'next JJ*', u'baby NN*', u'playing NN*', u'cat NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'toddler NN*', u'cat NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'baby NN*', u'cat NN*'] @@@ we choose @@@ play @@@
+6
+from candidates @@@ [u'cat', u'monkey', u'animal'] @@@ and context @@@ [u'climb VB*', u'fight VB*', u'be VB*', u'play VB*', u'things NN*'] @@@ we choose @@@ cat @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'monkey NN*', u'car NN*'] @@@ we choose @@@ meet @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'monkey NN*', u'cat NN*'] @@@ we choose @@@ bring @@@
+[NO VERB]
+from verbs @@@ [Synset('climb.v.01'), Synset('wax.v.02'), Synset('rise.v.02')] @@@ and context @@@ [u'things NN*', u'animal NN*'] @@@ we choose @@@ climb @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'monkey NN*', u'cat NN*'] @@@ we choose @@@ bring @@@
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('jump.v.01'), Synset('startle.v.02'), Synset('leap_out.v.01'), Synset('rise.v.11'), Synset('derail.v.02'), Synset('chute.v.01'), Synset('jumpstart.v.01'), Synset('leap.v.02'), Synset('alternate.v.01')] @@@ and context @@@ [u'cat NN*', u'monkey NN*'] @@@ we choose @@@ jump @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'small JJ*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+from verbs @@@ [Synset('play.v.01'), Synset('act.v.03'), Synset('toy.v.02'), Synset('dally.v.04'), Synset('bring.v.03'), Synset('bet.v.02'), Synset('meet.v.10')] @@@ and context @@@ [u'cat NN*', u'small JJ*', u'monkey NN*'] @@@ we choose @@@ bring @@@
+7
+from candidates @@@ [u'man', u'dog'] @@@ and context @@@ [u'be VB*', u'kitchen NN*', u'comment VB*', u'floor NN*', u'eat VB*', u'cat NN*', u'dog NN*', u'food NN*'] @@@ we choose @@@ dog @@@
+[NO VERB]
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'cat NN*', u'dog NN*', u'food NN*', u'man NN*'] @@@ we choose @@@ eat @@@
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'food NN*', u'cat NN*', u'kitchen NN*', u'floor NN*', u'large JJ*', u'dog NN*'] @@@ we choose @@@ eat @@@
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'same JJ*', u'pan NN*', u'cat NN*', u'dog NN*'] @@@ we choose @@@ eat @@@
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'food NN*', u'same JJ*', u'plate NN*', u'dog NN*', u'cat NN*'] @@@ we choose @@@ eat @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('share.v.01'), Synset('partake.v.02')] @@@ and context @@@ [u'bowl NN*', u'food NN*', u'cat NN*', u'big JJ*', u'dog NN*'] @@@ we choose @@@ share @@@
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'same JJ*', u'dish NN*', u'floor NN*', u'dog NN*', u'cat NN*'] @@@ we choose @@@ eat @@@
+from verbs @@@ [Synset('eat.v.01'), Synset('feed.v.06'), Synset('consume.v.05'), Synset('corrode.v.01')] @@@ and context @@@ [u'food NN*', u'cat NN*', u'dog NN*'] @@@ we choose @@@ eat @@@
+from verbs @@@ [Synset('share.v.01'), Synset('partake.v.02')] @@@ and context @@@ [u'food NN*', u'bowl NN*', u'dog NN*', u'cat NN*'] @@@ we choose @@@ share @@@
+8
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'chair NN*', u'camera NN*', u'guy NN*'] @@@ we choose @@@ talk @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'chair NN*', u'guy NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'chair NN*', u'guy NN*'] @@@ we choose @@@ talk @@@
+from verbs @@@ [Synset('read.v.01'), Synset('take.v.06'), Synset('learn.v.04'), Synset('understand.v.03')] @@@ and context @@@ [u'note NN*', u'man NN*'] @@@ we choose @@@ read @@@
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'chair NN*', u'man NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ lecture @@@
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ ride @@@
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'chair NN*', u'pad NN*', u'paper NN*', u'man NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('read.v.01'), Synset('take.v.06'), Synset('learn.v.04'), Synset('understand.v.03')] @@@ and context @@@ [u'chair NN*', u'pad NN*', u'paper NN*', u'man NN*'] @@@ we choose @@@ read @@@
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'room NN*', u'lyric NN*', u'man NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('write.v.01'), Synset('publish.v.03'), Synset('compose.v.02'), Synset('spell.v.03')] @@@ and context @@@ [u'room NN*', u'lyric NN*', u'man NN*'] @@@ we choose @@@ write @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'chair NN*', u'pad NN*', u'paper NN*', u'guy NN*'] @@@ we choose @@@ sit @@@
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ ride @@@
+from verbs @@@ [Synset('write.v.01'), Synset('publish.v.03'), Synset('compose.v.02'), Synset('spell.v.03')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ compose @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ lecture @@@
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ ride @@@
+from verbs @@@ [Synset('sit.v.01'), Synset('sit_down.v.01'), Synset('model.v.03'), Synset('ride.v.01'), Synset('baby-sit.v.02'), Synset('seat.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ ride @@@
+from verbs @@@ [Synset('write.v.01'), Synset('publish.v.03'), Synset('compose.v.02'), Synset('spell.v.03')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ compose @@@
+9
+from candidates @@@ [u'man', u'someone'] @@@ and context @@@ [u'talk VB*', u'program NN*', u'society NN*', u'discuss VB*', u'programme NN*', u'issue NN*', u'african JJ*', u'news NN*', u'television NN*', u'show NN*', u'talks VB*', u'be VB*', u'tv NN*', u'interview VB*', u'man NN*'] @@@ we choose @@@ man @@@
+[NO VERB]
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'man NN*', u'man NN*', u'suit NN*'] @@@ we choose @@@ talk @@@
+from verbs @@@ [Synset('interview.v.01')] @@@ and context @@@ [u'man NN*'] @@@ we choose @@@ interview @@@
+from verbs @@@ [Synset('interview.v.01')] @@@ and context @@@ [u'television NN*', u'program NN*', u'man NN*'] @@@ we choose @@@ interview @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'african JJ*', u'society NN*', u'news NN*', u'show NN*', u'man NN*'] @@@ we choose @@@ talk @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'tv NN*', u'show NN*', u'someone NN*'] @@@ we choose @@@ talk @@@
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+from candidates @@@ [u'personality'] @@@ and context @@@ [u'program NN*', u'interview VB*', u'be VB*'] @@@ we choose @@@ personality @@@
+[NO VERB]
+from candidates @@@ [u'show'] @@@ and context @@@ [u'discuss VB*', u'be VB*', u'race NN*', u'politics NN*'] @@@ we choose @@@ show @@@
+[NO VERB]
+[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.
+[NO VERB]
+[NO VERB]
+from verbs @@@ [Synset('have.v.01'), Synset('experience.v.03'), Synset('own.v.01'), Synset('get.v.03'), Synset('consume.v.02'), Synset('hold.v.03'), Synset('induce.v.02'), Synset('accept.v.02'), Synset('receive.v.01'), Synset('suffer.v.02'), Synset('give_birth.v.01'), Synset('take.v.35')] @@@ and context @@@ [u'discussion NN*', u'morning NN*', u'talk NN*', u'show NN*', u'black JJ*', u'men NN*'] @@@ we choose @@@ have @@@
+from verbs @@@ [Synset('have.v.01'), Synset('experience.v.03'), Synset('own.v.01'), Synset('get.v.03'), Synset('consume.v.02'), Synset('hold.v.03'), Synset('induce.v.02'), Synset('accept.v.02'), Synset('receive.v.01'), Synset('suffer.v.02'), Synset('give_birth.v.01'), Synset('take.v.35')] @@@ and context @@@ [u'conversation NN*', u'political JJ*', u'tv NN*', u'show NN*', u'men NN*'] @@@ we choose @@@ receive @@@
+from verbs @@@ [Synset('talk.v.01'), Synset('speak.v.03'), Synset('spill.v.05'), Synset('spill_the_beans.v.01'), Synset('lecture.v.01')] @@@ and context @@@ [u'news NN*', u'show NN*', u'african JJ*', u'issue NN*', u'men NN*'] @@@ we choose @@@ talk @@@
+[NO VERB]
+[NO VERB]
+[NO VERB]
+**************** Original sentences:**************************************
+	a man discusses african issues on a news programme
+	a man in a suit talks to another man
+	a man is being interviewed
+	a man is interviewed on a television program
+	a man talks about african society on a news show
+	a news anchor reporting a story about children
+	a personality is being interviewed in a program
+	an african american television show discussing politics and race
+	discussion about african culture
+	men are discussing politics
+	men talk about education and african society
+	someone talking on a tv show
+	the tv news channel and speak two
+	there is a teenage girl talking on her cell phone
+	two black men have a discussion on a morning talk show
+	two men are having a conversation on a political tv show
+	two men are on a news show talking about african issues
+	two men discuss a subject on a news show
+	two men discuss education and philanthropy on a news program
+	two men talking about education
+**************** New sentences:**************************************
+	a man discusses african issues on a news programme
+	a man in a suit talks to another man
+	a man is being interviewing
+	a man is interviewing on a television program
+	a man talks about african society on a news show
+	man is talktalkinga tv show
+	a news anchor is reporting a story about children
+	a personality is being interviewed in a program
+	an african american television show is discussing politics and race
+	men are discussing politics
+	men talk about education and african society
+	two black men have a discussion on a morning talk show
+	two men are receiving a conversation on a political tv show
+	two men are on a news show talking about african issues
+	two men discuss a subject on a news show
+	two men discuss education and philanthropy on a news program
+	two men are talking about education
