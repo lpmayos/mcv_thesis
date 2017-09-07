@@ -6,7 +6,7 @@ import json
 
 class ResultsAnalysis:
 
-    experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'pmi_subj_replace', 'pmi_subj_replace_fixed', 'subj_pred_combi_pmi_subj_replace']
+    experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'pmi_subj_replace', 'subj_pred_combi_pmi_subj_replace']
 
     # training data for each experiment
     training_data = {'original': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json',

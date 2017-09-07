@@ -109,20 +109,7 @@ subj_pred_combi 23
 	the man is driving his car around curves in the road
 	a person is driving in a car as part of a commercial
 
-pmi_subj_replace 11
-	a person is driving his car around curves in the road
-	a person is driving down a road
-	a person drives down the road in an audi
-	the person drives the car
-	a person drives a vehicle through the countryside
-	a person is driving a car
-	a person is driving
-	a car is shown
-	a group is dancing
-	a person is driving in a car as part of a commercial
-	a person silently narrates his experience driving an audi
-
-pmi_subj_replace_fixed 16
+pmi_subj_replace 16
 	a person is showing the various features of a car
 	a person is driving down a road
 	a person is riding the car speedly in a narrow road
