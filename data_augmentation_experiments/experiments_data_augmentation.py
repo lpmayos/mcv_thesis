@@ -131,11 +131,12 @@ def parse_captions(video_captions, video_id, training_sentences):
                                 verb = 'are'
 
                             new_sentence = ' '.join(sentence.sentence.split()[0:root_position] + [verb] + sentence.sentence.split()[root_position:])
-                            print 'new sentence: ' + new_sentence
+                            # print 'new sentence: ' + new_sentence
                             sentence_conll = parser_en.parse_text(new_sentence)
                             subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()
                     except:
-                        print '[ERROR] Not able to split in subject and predicate: ' + sentence.sentence
+                        # print '[ERROR] Not able to split in subject and predicate: ' + sentence.sentence
+                        pass
 
                 if subject and predicate:
                     subj_singular = 'number=SG' in [a for a in subject if a.subject_root][0].pfeat
@@ -145,7 +146,11 @@ def parse_captions(video_captions, video_id, training_sentences):
                     if ' and ' in subject_text:
                         subj_singular = False
 
-                    predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+                    try:
+                        predicate_singular = 'number=SG' in [a.feat for a in predicate if a.pos.startswith('VB')][0] and [a.form for a in predicate if a.pos.startswith('VB')][0] != 'are'
+                    except:
+                        # in case of error (i.e. sentence 'a graphic design project a paragraph in white letters'), predicate number = subject number
+                        predicate_singular = subj_singular
 
                     # don't consider sentences starting with 'there' as they are hard to combine (i.e. there is a dog sharing food with a cat)
                     if subject_text.lower() != 'there':

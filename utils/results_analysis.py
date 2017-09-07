@@ -1,33 +1,64 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import json
 
 
-# training data for each experiment
-experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'pmi_subj_replace', 'subj_pred_combi_pmi_subj_replace']
+class ResultsAnalysis:
 
-training_data = {'original': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json',
-                 'exp1': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e1_th2_0.785.json',
-                 'exp4': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e4_th1_0.09_th2_0.506.json',
-                 'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435.json',
-                 'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_subj_pred_combi_senses.json',
-                 'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement.json',
-                 'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement_subj_pred_combi.json'}
+    experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'pmi_subj_replace', 'pmi_subj_replace_fixed', 'subj_pred_combi_pmi_subj_replace']
 
-# test results for each experiment
-generated_captions = {'original': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
-                      'exp1': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment1/model-99.json',
-                      'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
-                      'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4_symmetrical/model-99.json',
-                      'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
-                      'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
-                      'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
+    # training data for each experiment
+    training_data = {'original': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json',
+                     'exp1': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e1_th2_0.785.json',
+                     'exp4': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e4_th1_0.09_th2_0.506.json',
+                     'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435.json',
+                     'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_subj_pred_combi_senses.json',
+                     'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement.json',
+                     'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement_subj_pred_combi.json'}
 
-video = 'video0'
+    # test results for each experiment
+    generated_captions = {'original': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
+                          'exp1': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment1/model-99.json',
+                          'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
+                          'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4_symmetrical/model-99.json',
+                          'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
+                          'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
+                          'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
 
-for experiment in experiments:
-    file = open(training_data[experiment])
-    data = json.load(file)
+    def compare_generated_captions(self, video):
+        """ Shows the captions generated by the system trained with the different
+        experiments for video 'video'
+        """
 
-    captions = [a['caption'] for a in data['sentences'] if a['video_id'] == video]
-    print '\n' + experiment + ' ' + str(len(captions))
-    for caption in captions:
-        print '\t' + caption
+        for experiment in self.experiments:
+            file = open(self.generated_captions[experiment])
+            data = json.load(file)
+
+            captions = [a['caption'] for a in data['sentences'] if a['video_id'] == video]
+            print '\n' + experiment + ' ' + str(len(captions))
+            for caption in captions:
+                print '\t' + caption
+
+    def compare_training_data(self, video):
+        """ Shows the captions generated by the system trained with the different
+        experiments for video 'video'
+        """
+
+        for experiment in self.experiments:
+            file = open(self.training_data[experiment])
+            data = json.load(file)
+
+            captions = [a['caption'] for a in data['sentences'] if a['video_id'] == video]
+            print '\n' + experiment + ' ' + str(len(captions))
+            for caption in captions:
+                print '\t' + caption
+
+
+def main():
+    resultsAnalysis = ResultsAnalysis()
+    resultsAnalysis.compare_training_data('video0')
+
+
+if __name__ == "__main__":
+    main()
