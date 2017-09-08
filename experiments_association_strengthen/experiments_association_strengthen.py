@@ -267,6 +267,10 @@ def association_strengthen():
             candidates_subject, context_predicates = find_candidates_and_contexts(group, parsed_captions)
 
             selected_candidate = select_candidate(candidates_subject, context_predicates)
+            selected_candidate_offset = min([int(a.features['start_string']) for a in parsed_captions[selected_candidate['caption_id']]['subject']['subject']])
+            selected_candidate_start = selected_candidate['start'] - selected_candidate_offset
+            selected_candidate_end = selected_candidate['end'] - selected_candidate_offset
+            selected_candidate_text = selected_candidate['subject_text'][selected_candidate_start:selected_candidate_end]
 
             for caption_id in group:
 
@@ -274,11 +278,15 @@ def association_strengthen():
 
                 # replace candidates with lower pmi with selected candidate
                 caption_subject = [a for a in candidates_subject if a['caption_id'] == caption_id][0]
-                selected_candidate_text = selected_candidate['subject_text'][selected_candidate['start']:selected_candidate['end']]
-                subject = caption_subject['subject_text'][:caption_subject['start']] + selected_candidate_text + caption_subject['subject_text'][caption_subject['end']:]
+                subject_offset = min([int(a.features['start_string']) for a in caption['subject']['subject']])
+
+                start = caption_subject['start'] - subject_offset
+                end = caption_subject['end'] - subject_offset
+                subject = caption_subject['subject_text'][:start] + selected_candidate_text + caption_subject['subject_text'][end:]
 
                 # find verb synset with higher PMI and replace current verb
-                predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB') and a.predicate_root]
+                replaceable_verbs = []
+                predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB')]  # and a.predicate_root]
                 for predicate_verb in predicate_verbs:
                     verb_lemma = predicate_verb.lemma
 
@@ -296,7 +304,7 @@ def association_strengthen():
                             synsets_dict[verb_lemma] = verb_synsets_unique
 
                         selected_verb = None
-                        max_pmi = 0
+                        max_pmi = float('-inf')
                         for verb_synset in verb_synsets_unique:
                             pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
                             if pmi['normalized_pmi'] > max_pmi:
@@ -304,13 +312,9 @@ def association_strengthen():
                                 selected_verb = verb_synset
 
                         if selected_verb:
-                            print 'from verbs @@@ ' + str(verb_synsets_unique) + ' @@@ and context @@@ ' + str(caption['predicate']['context']) + ' @@@ we choose @@@ ' + selected_verb.lemmas()[0].name() + ' @@@'
+                            # print 'from verbs @@@ ' + str(verb_synsets_unique) + ' @@@ and context @@@ ' + str(caption['predicate']['context']) + ' @@@ we choose @@@ ' + selected_verb.lemmas()[0].name() + ' @@@'
+
                             # properly conjugate the selected verb and replace it in caption['predicate']['text']
-
-                            # finiteness = predicate_verb.pfeatures['finiteness']  # PART, FIN
-                            # tense = predicate_verb.pfeatures['tense']  # PRES, PAST
-                            # person = predicate_verb.pfeatures['person']  # '3'
-
                             try:
                                 if predicate_verb.features['finiteness'] == 'PART':
                                     new_verb = conjugate(selected_verb.lemma_names()[0], tense=(pattern.en.PAST + pattern.en.PARTICIPLE))
@@ -327,15 +331,25 @@ def association_strengthen():
                                 print '[KeyError] I got a KeyError - reason "%s"' % str(e)
                                 print predicate_verb.features
 
-                            start = int(predicate_verb.features['start_string']) - len(caption['subject']['text']) - 1
-                            end = int(predicate_verb.features['end_string']) - len(caption['subject']['text']) - 1
+                            start = int(predicate_verb.features['start_string'])
+                            end = int(predicate_verb.features['end_string'])
+                            replaceable_verbs.append((caption['sentence'].sentence[start:end], new_verb))
 
-                            caption['predicate']['text'] = caption['predicate']['text'][:start] + new_verb + caption['predicate']['text'][end:]
+                            # caption['predicate']['text'] = caption['predicate']['text'][:start] + new_verb + caption['predicate']['text'][end:]
 
                         else:
-                            print '[NO VERB]'
+                            print '[NO VERB SELECTED] predicate text not changed'
 
-                new_captions.append(subject + ' ' + caption['predicate']['text'])
+                predicate = caption['predicate']['text']
+                for verb_pair in replaceable_verbs:
+                    # temporal fix: to avoid replacing parts of words, we look for a verb with at least one preceeding space
+                    if ' ' + verb_pair[0] + ' ' in predicate:
+                        predicate = predicate.replace(' ' + verb_pair[0] + ' ', ' ' + verb_pair[1] + ' ')
+                    elif ' ' + verb_pair[0] in predicate:
+                        predicate = predicate.replace(' ' + verb_pair[0], ' ' + verb_pair[1])
+                    elif verb_pair[0] + ' ' in predicate:
+                        predicate = predicate.replace(verb_pair[0] + ' ', verb_pair[1] + ' ')
+                new_captions.append(subject + ' ' + predicate)
 
         videos_new_captions[video_id] = list(set(new_captions))
 
