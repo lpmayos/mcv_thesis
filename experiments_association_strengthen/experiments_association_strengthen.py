@@ -222,7 +222,7 @@ def select_candidate(candidates, context):
                 max_pmi = pmi['normalized_pmi']
                 selected_candidate = candidate
 
-        print 'from candidates @@@ ' + str(candidates) + ' @@@ and context @@@ ' + str(context) + ' @@@ we choose @@@ ' + str(selected_candidate) + ' @@@'
+        # print 'from candidates @@@ ' + str(candidates) + ' @@@ and context @@@ ' + str(context) + ' @@@ we choose @@@ ' + str(selected_candidate) + ' @@@'
     except:
         # just in case the web service for do_pmi fails
         print '[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.'
@@ -348,7 +348,7 @@ def association_strengthen():
         for sentence in new_captions:
             print '\t' + sentence
 
-    # create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
+    create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
 
 def main():
