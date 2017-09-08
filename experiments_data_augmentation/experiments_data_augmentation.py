@@ -99,7 +99,6 @@ def senses_match(caption1, caption2):
 
 
 def parse_captions(video_captions, video_id, training_sentences):
-    import ipdb; ipdb.set_trace()
     parser_en = TransitionClient(EN_PARSER)
 
     parsed_captions = []
@@ -121,16 +120,16 @@ def parse_captions(video_captions, video_id, training_sentences):
                     try:
                         # It is probably a nominal sentence, i.e. "A man driving a car" --> transform it to "A man is driving a car" and parse it again
                         conll_sentence = sentence_conll.sentences[0]
-                        root_position = int(conll_sentence.root.id)  # 2 for "A man is driving", the position of 'man' staring with 1
+                        gerund_position = [int(a.id) for a in conll_sentence.token_list if 'finiteness' in a.pfeatures and a.features['finiteness'] == 'GER']
 
-                        if sentence.sentence.split()[root_position].endswith('ing'):  # sentences like 'a superman movie clip' can not be transformed this way
+                        if len(gerund_position) > 0:  # sentences like 'a superman movie clip' can not be transformed this way
 
                             if conll_sentence.root.pfeatures['number'] == 'SG':
                                 verb = 'is'
                             else:
                                 verb = 'are'
 
-                            new_sentence = ' '.join(sentence.sentence.split()[0:root_position] + [verb] + sentence.sentence.split()[root_position:])
+                            new_sentence = ' '.join(sentence.sentence.split()[0:gerund_position[0] - 1] + [verb] + sentence.sentence.split()[gerund_position[0] - 1:])
                             # print 'new sentence: ' + new_sentence
                             sentence_conll = parser_en.parse_text(new_sentence)
                             subject, predicate = sentence_conll.sentences[0].get_subject_and_predicate()

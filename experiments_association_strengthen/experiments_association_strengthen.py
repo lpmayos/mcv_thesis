@@ -18,11 +18,15 @@ from experiments_data_augmentation import TransitionClient, parse_captions
 EN_PARSER = "http://services-taln.s.upf.edu:8080/prod/transition-service/en/parse"
 
 
+# 'of$IN|NN$group|*'
+# http://10.80.27.67/webservice/test_pmi?solr_url=http%3A%2F%2F10.80.27.67%3A8080%2Fsolr%2Fbnc%2F&base=group&base_pos=NN&collocative=people&collocative_pos=NN&base_preposition=of&lang=en
+# 10.80.27.67/webservice/test_pmi?solr_url=http%3A%2F%2F10.80.27.67%3A8080%2Fsolr%2Fbnc%2F&lang=en&base=group&base_pos=NN&collocative=people&collocative_pos=NN&base_preposition=of
+
 def do_pmi(combination_words, context_words):
 
-    # TODO for tokens with multiple words, i.e. 'comic strip NN*', we keep first word, 'comic NN*' because the web service does not support multiwords yet
-    context_words = [a.split()[0] + ' ' + a.split()[-1] for a in context_words]
-    combination_words = [a.split()[0] + ' ' + a.split()[-1] for a in combination_words]
+    # # TODO for tokens with multiple words, i.e. 'comic strip NN*', we keep first word, 'comic NN*' because the web service does not support multiwords yet
+    # context_words = [a.split()[0] + ' ' + a.split()[-1] for a in context_words]
+    # combination_words = [a.split()[0] + ' ' + a.split()[-1] for a in combination_words]
 
     solr_url = "http://10.80.27.67:8080/solr/bnc/"
 
@@ -108,7 +112,7 @@ def senses_match(caption1, caption2):
     # a trailer for superman a man (False, 0.10629458762267459)
     # man a play (False, 0)
 
-    if similarity > 0.11:  # threshold determined manually bi inspecting results
+    if similarity > 0.14:  # threshold determined manually by inspecting results
         return True, similarity
     return False, similarity
 
@@ -210,7 +214,6 @@ def association_strengthen():
             training_sentences[caption['video_id']] = [caption['caption']]
 
     for video_id in range(config.first_video, config.last_video):
-        import ipdb; ipdb.set_trace()
         print video_id
 
         video_captions = load_video_captions(video_id)
@@ -230,10 +233,9 @@ def association_strengthen():
 
             for caption_id in group:
 
-                import ipdb; ipdb.set_trace()
-
                 # replace candidates with lower pmi with selected candidate
                 caption = parsed_captions[caption_id]
+
                 subject = ''
                 for i, element in enumerate(caption['subject']['subject']):
                     if element.subject_root:
@@ -242,7 +244,7 @@ def association_strengthen():
                         subject += caption['subject']['subject'][i].form + ' '
 
                 # find verb synset with higher PMI and replace current verb
-                predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB')]
+                predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB') and a.predicate_root]
                 for predicate_verb in predicate_verbs:
                     verb_lemma = predicate_verb.lemma
 
@@ -277,7 +279,7 @@ def association_strengthen():
 
                             try:
                                 if predicate_verb.features['finiteness'] == 'PART':
-                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PARTICIPLE)
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=(pattern.en.PAST + pattern.en.PARTICIPLE))
                                 elif predicate_verb.features['finiteness'] == 'GER':
                                     new_verb = conjugate(selected_verb.lemma_names()[0], tense=pattern.text.GERUND)
                                 elif predicate_verb.features['tense'] == 'PAST':
@@ -291,8 +293,8 @@ def association_strengthen():
                                 print '[KeyError] I got a KeyError - reason "%s"' % str(e)
                                 print predicate_verb.features
 
-                            start = int(predicate_verb.features['start_string']) - len(subject)
-                            end = int(predicate_verb.features['end_string']) - len(subject)
+                            start = int(predicate_verb.features['start_string']) - len(caption['subject']['text']) - 1
+                            end = int(predicate_verb.features['end_string']) - len(caption['subject']['text']) - 1
 
                             caption['predicate']['text'] = caption['predicate']['text'][:start] + new_verb + caption['predicate']['text'][end:]
 
