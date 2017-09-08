@@ -20,7 +20,7 @@ EN_PARSER = "http://services-taln.s.upf.edu:8080/prod/transition-service/en/pars
 
 # 'of$IN|NN$group|*'
 # http://10.80.27.67/webservice/test_pmi?solr_url=http%3A%2F%2F10.80.27.67%3A8080%2Fsolr%2Fbnc%2F&base=group&base_pos=NN&collocative=people&collocative_pos=NN&base_preposition=of&lang=en
-# 10.80.27.67/webservice/test_pmi?solr_url=http%3A%2F%2F10.80.27.67%3A8080%2Fsolr%2Fbnc%2F&lang=en&base=group&base_pos=NN&collocative=people&collocative_pos=NN&base_preposition=of
+# http://10.80.27.67/webservice/test_pmi?solr_url=http%3A%2F%2F10.80.27.67%3A8080%2Fsolr%2Fbnc%2F&lang=en&base=group&base_pos=NN&collocative=people&collocative_pos=NN&base_preposition=of
 
 def do_pmi(combination_words, context_words):
 
@@ -149,7 +149,37 @@ def find_candidates_and_contexts(group, parsed_captions):
     for caption_id in group:
         caption = parsed_captions[caption_id]
         subject = caption['subject']['subject']
-        candidates += [a for a in subject if a.subject_root and a.lemma not in [b.lemma for b in candidates]]
+
+        # if the subject contains a group of NN + IN + NN, we use it instead of the subject root. i.e. "a group of people", we use 'group of people' instead of just 'group'
+        group_found = None
+        root = [a for a in subject if a.subject_root][0]
+        prep = [a for a in root.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'IN']
+        if prep:
+            prep = prep[0]
+            nn = [a for a in prep.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'NN']
+            if nn:
+                nn = nn[0]
+                start = int(root.features['start_string'])
+                end = int(nn.features['end_string'])
+                group_found = True
+                # TODO use string format
+                # pmi_array = [prep.lemma + '$IN|NN$' + root.lemma + '|', nn.lemma + '$NN|IN$' + prep.lemma + '|']  # [of$IN|NN$group|, people$NN|IN$of|]
+                pmi_array = ['%s$IN|NN$%s|' % (prep.lemma, root.lemma), nn.lemma + '%s$NN|IN$%s|' % (nn.lemma, prep.lemma)]  # [of$IN|NN$group|, people$NN|IN$of|]
+                # pmi_array = [root.lemma + ' ' + root.pfeatures['spos'], nn.lemma + ' NN']
+
+        if not group_found:
+            start = int(root.features['start_string'])
+            end = int(root.features['end_string'])
+            pmi_array = [root.lemma + ' ' + root.pfeatures['spos']]
+
+        new_candidate = {'subject_text': caption['subject']['text'],
+                         'candidate': caption['sentence'].sentence[start:end],
+                         'pmi_array': pmi_array,
+                         'start': start,
+                         'end': end,
+                         'caption_id': caption_id}
+
+        candidates.append(new_candidate)
 
         caption['predicate']['context'] = []  # for each predicate, save individual context (relevant elements from subjects and predicate, excluding verbs)
         predicate = caption['predicate']['predicate']
@@ -177,15 +207,22 @@ def find_candidates_and_contexts(group, parsed_captions):
 def select_candidate(candidates, context):
 
     # find candidate with higher pmi
+    pmi_dict = {}  # save coputed pmi's so we do not query twice for the same pmi!
     try:
         selected_candidate = None
-        max_pmi = 0
+        max_pmi = float('-inf')
         for candidate in candidates:
-            pmi = do_pmi([candidate.lemma + ' ' + candidate.pos], context)
+            if str(candidate['pmi_array']) in pmi_dict:
+                pmi = pmi_dict[str(candidate['pmi_array'])]
+            else:
+                pmi = do_pmi(candidate['pmi_array'], context)
+                pmi_dict[str(candidate['pmi_array'])] = pmi
+
             if pmi['normalized_pmi'] > max_pmi:
                 max_pmi = pmi['normalized_pmi']
                 selected_candidate = candidate
-        print 'from candidates @@@ ' + str([a.lemma for a in candidates]) + ' @@@ and context @@@ ' + str(context) + ' @@@ we choose @@@ ' + selected_candidate.lemma + ' @@@'
+
+        print 'from candidates @@@ ' + str(candidates) + ' @@@ and context @@@ ' + str(context) + ' @@@ we choose @@@ ' + str(selected_candidate) + ' @@@'
     except:
         # just in case the web service for do_pmi fails
         print '[ERROR] Something went wrong with do_pmi function. We choose first candidate of group.'
@@ -233,15 +270,12 @@ def association_strengthen():
 
             for caption_id in group:
 
-                # replace candidates with lower pmi with selected candidate
                 caption = parsed_captions[caption_id]
 
-                subject = ''
-                for i, element in enumerate(caption['subject']['subject']):
-                    if element.subject_root:
-                        subject += selected_candidate.form + ' '
-                    else:
-                        subject += caption['subject']['subject'][i].form + ' '
+                # replace candidates with lower pmi with selected candidate
+                caption_subject = [a for a in candidates_subject if a['caption_id'] == caption_id][0]
+                selected_candidate_text = selected_candidate['subject_text'][selected_candidate['start']:selected_candidate['end']]
+                subject = caption_subject['subject_text'][:caption_subject['start']] + selected_candidate_text + caption_subject['subject_text'][caption_subject['end']:]
 
                 # find verb synset with higher PMI and replace current verb
                 predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB') and a.predicate_root]
@@ -301,7 +335,7 @@ def association_strengthen():
                         else:
                             print '[NO VERB]'
 
-                new_captions.append(subject + caption['predicate']['text'])
+                new_captions.append(subject + ' ' + caption['predicate']['text'])
 
         videos_new_captions[video_id] = list(set(new_captions))
 
