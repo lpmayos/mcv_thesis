@@ -25,7 +25,7 @@ class TransitionClient(object):
             params = u"text=%s" % (urllib.quote(text))
             request = urllib2.urlopen(self.parser_url, params)
         except:
-            print '[ERROR] urllib had problems with ' + text + '. Skipped'
+            print '[ERROR] urllib had problems with test. Skipped'
             return
 
         response = json.loads(request.read())

@@ -306,10 +306,13 @@ def association_strengthen():
                         selected_verb = None
                         max_pmi = float('-inf')
                         for verb_synset in verb_synsets_unique:
-                            pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
-                            if pmi['normalized_pmi'] > max_pmi:
-                                max_pmi = pmi['normalized_pmi']
-                                selected_verb = verb_synset
+                            try:
+                                pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
+                                if pmi['normalized_pmi'] > max_pmi:
+                                    max_pmi = pmi['normalized_pmi']
+                                    selected_verb = verb_synset
+                            except:
+                                print '[ERROR] Error in do_pmi, skipping verb_synset'
 
                         if selected_verb:
                             # print 'from verbs @@@ ' + str(verb_synsets_unique) + ' @@@ and context @@@ ' + str(caption['predicate']['context']) + ' @@@ we choose @@@ ' + selected_verb.lemmas()[0].name() + ' @@@'
@@ -353,14 +356,14 @@ def association_strengthen():
 
         videos_new_captions[video_id] = list(set(new_captions))
 
-        original_sentences = training_sentences['video' + str(video_id)]
-        print '**************** Original sentences:**************************************'
-        for sentence in original_sentences:
-            print '\t' + sentence
+        # original_sentences = training_sentences['video' + str(video_id)]
+        # print '**************** Original sentences:**************************************'
+        # for sentence in original_sentences:
+        #     print '\t' + sentence
 
-        print '**************** New sentences:**************************************'
-        for sentence in new_captions:
-            print '\t' + sentence
+        # print '**************** New sentences:**************************************'
+        # for sentence in new_captions:
+        #     print '\t' + sentence
 
     create_training_sentences(videos_new_captions, config.path_to_new_train_val_videodatainfo)
 
