@@ -314,25 +314,26 @@ def create_forms(typeform_creator):
     # Sep  3 19:15 msr-vtt-experiment_pmi_subject_replacement
     # Sep  1 16:42 msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi
 
+    # experiments = {'original': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
+    #                'exp1': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment1/model-99.json',
+    #                'exp4': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
+    #                'exp4_symmetrical': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4_symmetrical/model-99.json',
+    #                'subj_pred_combi': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
+    #                'pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
+    #                'subj_pred_combi_pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
     experiments = {'original': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
-                   'exp1': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment1/model-99.json',
-                   'exp4': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
-                   'exp4_symmetrical': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4_symmetrical/model-99.json',
-                   'subj_pred_combi': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
-                   'pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
-                   'subj_pred_combi_pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
+                   'data_aug_new': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_subj_pred_combi_new/model-99.json'}
     data = extract_data(experiments)
 
-    # forms = [['video7010', 'video7011', 'video7012', 'video7013'],
-    #          ['video7020', 'video7021', 'video7022', 'video7023']]
+    forms = [['video9519', 'video9215', 'video9136', 'video9230', 'video9492', 'video9115', 'video8238', 'video8226', 'video7548', 'video9523']]
 
-    forms = [['video' + str(random.randint(7010, 9999)) for a in range(10)],
-             ['video' + str(random.randint(7010, 9999)) for a in range(10)],
-             ['video' + str(random.randint(7010, 9999)) for a in range(10)]]
+    # forms = [['video' + str(random.randint(7010, 9999)) for a in range(10)],
+    #          ['video' + str(random.randint(7010, 9999)) for a in range(10)],
+    #          ['video' + str(random.randint(7010, 9999)) for a in range(10)]]
 
     for i, video_ids in enumerate(forms):
-        # create_form_with_data(typeform_creator, data, video_ids, i)
-        show_form_data(typeform_creator, data, video_ids, i)
+        create_form_with_data(typeform_creator, data, video_ids, i)
+        # show_form_data(typeform_creator, data, video_ids, i)
 
 
 def main():

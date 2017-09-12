@@ -7,6 +7,7 @@ Caption exp4: "A man is singing a song and dancing"
 Caption subj_pred_combi_pmi_subj_replace: "A man is standing"
 Caption pmi_subj_replace: "A man is singing"
 Caption original: "A man is talking about something in a stage"
+Caption data_aug_new: "A man is singing on stage"
 
 Video video9215: https://www.youtube.com/watch?v=yJuO5qDJDFo (0:00:49 to 0:01:00).
 https://vib.by/v/QkmCBF144
@@ -17,6 +18,7 @@ Caption exp4: "A car is driving down the road"
 Caption subj_pred_combi_pmi_subj_replace: "A man is talking about a car"
 Caption pmi_subj_replace: "A car is driving down the street"
 Caption original: "A car is being driven"
+Caption data_aug_new: "A car is driving down the street"
 
 Video video9136: https://www.youtube.com/watch?v=V9Hi4IKHnF8 (0:00:00 to 0:00:25).
 https://vib.by/v/QkAELK1NE
@@ -27,6 +29,7 @@ Caption exp4: "A cartoon character is peeped at a piece of paper"
 Caption subj_pred_combi_pmi_subj_replace: "A cartoon car is being played"
 Caption pmi_subj_replace: "A cartoon man is walking around"
 Caption original: "A cartoon character is talking about a cartoon"
+Caption data_aug_new: "a cartoon is shown"
 
 Video video9230: https://www.youtube.com/watch?v=UZb2NOHPA2A (0:01:02 to 0:01:14).
 https://vib.by/v/Xy8s8FJN4
@@ -37,6 +40,7 @@ Caption exp4: "A man is talking to a man"
 Caption subj_pred_combi_pmi_subj_replace: "A man is standing in front of a large building"
 Caption pmi_subj_replace: "A man is talking to a man"
 Caption original: "A man in a black suit and black hat is talking to a man in a black suit"
+Caption data_aug_new: "a man in a suit is talking to a man"
 
 Video video9492: https://www.youtube.com/watch?v=XbtKlKAFsQw (0:03:29 to 0:03:39).
 https://vib.by/v/QkRewt1E4
@@ -47,6 +51,7 @@ Caption exp4: "A man is showing how to use a baby stroller"
 Caption subj_pred_combi_pmi_subj_replace: "A person is showing a do-it-yourself project"
 Caption pmi_subj_replace: "A man is showing how to use a door"
 Caption original: "A person is showing how to use a door"
+Caption data_aug_new: "A person is showing how to do a project in a room"
 
 Video video9115: https://www.youtube.com/watch?v=2q4IdyIF__c (0:02:02 to 0:02:14).
 https://vib.by/v/myerDFyNN
@@ -57,6 +62,7 @@ Caption exp4: "A man is cooking potatoes"
 Caption subj_pred_combi_pmi_subj_replace: "A person is talking about a recipe"
 Caption pmi_subj_replace: "A person is showing how to cook a pie"
 Caption original: "A person is cooking"
+Caption data_aug_new: "A person is cooking"
 
 Video video8238: https://www.youtube.com/watch?v=ZDQcwuKjOwo (0:00:01 to 0:00:19).
 https://vib.by/v/QJb0PY1VE
@@ -67,6 +73,7 @@ Caption exp4: "A man is showing how to make a sandwich"
 Caption subj_pred_combi_pmi_subj_replace: "A man is putting a piece of meat on a table"
 Caption pmi_subj_replace: "A man is talking about a fish in a kitchen"
 Caption original: "A man is cutting a piece of meat and a man is talking about it"
+Caption data_aug_new: "A man is cutting a vegetables with a knife"
 
 Video video8226: https://www.youtube.com/watch?v=JUfsj8PcOLA (0:05:45 to 0:06:00).
 https://vib.by/v/mJNNuK14E
@@ -77,6 +84,8 @@ Caption exp4: "A man is talking to a woman about a new company"
 Caption subj_pred_combi_pmi_subj_replace: "A man is talking"
 Caption pmi_subj_replace: "A man is talking about a man"
 Caption original: "A man is talking about something"
+Caption data_aug_new: "A man is talking about a news show"
+
 
 Video video7548: https://www.youtube.com/watch?v=3tK1nmdAe-4 (0:00:21 to 0:00:38).
 https://vib.by/v/m1aOdFJEN
@@ -87,6 +96,7 @@ Caption exp4: "A man is talking to a woman"
 Caption subj_pred_combi_pmi_subj_replace: "A man is talking to another man in a room"
 Caption pmi_subj_replace: "A man is talking to a man"
 Caption original: "A man is talking to a woman"
+Caption data_aug_new: "A man is talking to a man"
 
 Video video9523: https://www.youtube.com/watch?v=vD182vPpunk (0:01:07 to 0:01:17).
 https://vib.by/v/X1je3KyVE
@@ -97,7 +107,7 @@ Caption exp4: "A soccer player kicks a ball across the field"
 Caption subj_pred_combi_pmi_subj_replace: "A man is playing a video game"
 Caption pmi_subj_replace: "A people is playing a video game"
 Caption original: "A man is playing a football video game"
-
+Caption data_aug_new: "A group of people is running on the grass and getting hurt"
 
 =============================================================================================
 
