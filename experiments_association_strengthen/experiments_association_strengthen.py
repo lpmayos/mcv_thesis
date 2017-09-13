@@ -81,38 +81,33 @@ def compute_similarity(caption1_subject_tokens, caption2_subject_tokens):
 def senses_match(caption1, caption2):
     """ If both subjects are talking about the same subject, both sentences are
     good pair to exchange subject and predicate.
-    Copy of the function in experiments_data_augmentation.py, with different
-    similarity threshold and using slightly modified compute_similarity method
-    (see function above)
     """
     tokens_caption1 = caption1['sentence'].tokens_id_list
     tokens_caption2 = caption2['sentence'].tokens_id_list
 
-    caption1_subject_tokens = [a for a in tokens_caption1 if config.tokens_set.get_token_by_id(a).token in caption1['subject']['text']]
-    caption2_subject_tokens = [a for a in tokens_caption2 if config.tokens_set.get_token_by_id(a).token in caption2['subject']['text']]
+    root_caption1 = ' '.join([a.form for a in caption1['subject']['subject'] if a.subject_root])
+    root_caption2 = ' '.join([a.form for a in caption2['subject']['subject'] if a.subject_root])
+
+    caption1_subject_tokens = [a for a in tokens_caption1 if config.tokens_set.get_token_by_id(a).token in root_caption1]
+    caption2_subject_tokens = [a for a in tokens_caption2 if config.tokens_set.get_token_by_id(a).token in root_caption2]
 
     similarity1 = compute_similarity(caption1_subject_tokens, caption2_subject_tokens)
     similarity2 = compute_similarity(caption2_subject_tokens, caption1_subject_tokens)
     similarity = (similarity1 + similarity2) / 2
 
-    # print caption1['subject']['text'], caption2['subject']['text'], senses_match(caption1, caption2)
-    # a person a car (False, 0.11991402370630166))
-    # a man a guy (False, 0.19675769279689898)
-    # a man a person (False, 0.34096977153644165)
-    # a woman a person (False, 0.33271940637971226)
-    # the beatles an old music group (False, 0.11675626017873093)
-    # beatles a song (False, 0.19218121001865157)
-    # pictures of a man pictures of different men (True, 0.5149835263223229)
-    # someone a man (False, 0.16947170257507718)
-    # two men a man (False, 0.17697034738018128)
-    # two persons conversing one person wearing a hat another person two men (False, 0.31205561984143665)
-    # people a man and a woman (False, 0.1766071559706051)
+    # print root_caption1, root_caption2, similarity
+    # cat dog 0.496842531883
+    # man guy 0.196757692797
+    # man man 1.0
+    # men someone 0.0
+    # men man 0.235960463174
+    # woman person 0.33271940638
+    # beatles man 0.0
+    # ghost secret 0.237277743194
+    # ghost guy 0.126937045444
+    # ghost man 0.163853100341
 
-    # a song a man with long hair (False, 0.07822706485203093)
-    # a trailer for superman a man (False, 0.10629458762267459)
-    # man a play (False, 0)
-
-    if similarity > 0.14:  # threshold determined manually by inspecting results
+    if similarity > 0.18:  # threshold determined manually by inspecting results
         return True, similarity
     return False, similarity
 
@@ -150,27 +145,28 @@ def find_candidates_and_contexts(group, parsed_captions):
         caption = parsed_captions[caption_id]
         subject = caption['subject']['subject']
 
-        # if the subject contains a group of NN + IN + NN, we use it instead of the subject root. i.e. "a group of people", we use 'group of people' instead of just 'group'
-        group_found = None
+        # # if the subject contains a group of NN + IN + NN, we use it instead of the subject root. i.e. "a group of people", we use 'group of people' instead of just 'group'
+        # group_found = None
         root = [a for a in subject if a.subject_root][0]
-        prep = [a for a in root.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'IN']
-        if prep:
-            prep = prep[0]
-            nn = [a for a in prep.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'NN']
-            if nn:
-                nn = nn[0]
-                start = int(root.features['start_string'])
-                end = int(nn.features['end_string'])
-                group_found = True
-                # TODO use string format
-                # pmi_array = [prep.lemma + '$IN|NN$' + root.lemma + '|', nn.lemma + '$NN|IN$' + prep.lemma + '|']  # [of$IN|NN$group|, people$NN|IN$of|]
-                pmi_array = ['%s$IN|NN$%s|' % (prep.lemma, root.lemma), nn.lemma + '%s$NN|IN$%s|' % (nn.lemma, prep.lemma)]  # [of$IN|NN$group|, people$NN|IN$of|]
-                # pmi_array = [root.lemma + ' ' + root.pfeatures['spos'], nn.lemma + ' NN']
+        # prep = [a for a in root.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'IN']
+        # if prep:
+        #     prep = prep[0]
+        #     nn = [a for a in prep.children if 'spos' in a.pfeatures and a.pfeatures['spos'] == 'NN']
+        #     if nn:
+        #         nn = nn[0]
+        #         start = int(root.features['start_string'])
+        #         end = int(nn.features['end_string'])
+        #         group_found = True
+        #         pmi_array = ['%s$IN|NN$%s|' % (prep.lemma, root.lemma), nn.lemma + '%s$NN|IN$%s|' % (nn.lemma, prep.lemma)]  # [of$IN|NN$group|, people$NN|IN$of|]
 
-        if not group_found:
-            start = int(root.features['start_string'])
-            end = int(root.features['end_string'])
-            pmi_array = [root.lemma + ' ' + root.pfeatures['spos']]
+        # if not group_found:
+        #     start = int(root.features['start_string'])
+        #     end = int(root.features['end_string'])
+        #     pmi_array = [root.lemma + ' ' + root.pfeatures['spos']]
+
+        start = int(root.features['start_string'])
+        end = int(root.features['end_string'])
+        pmi_array = [root.lemma + ' ' + root.pfeatures['spos']]
 
         new_candidate = {'subject_text': caption['subject']['text'],
                          'candidate': caption['sentence'].sentence[start:end],
@@ -276,82 +272,74 @@ def association_strengthen():
 
                 caption = parsed_captions[caption_id]
 
-                # replace candidates with lower pmi with selected candidate
-                caption_subject = [a for a in candidates_subject if a['caption_id'] == caption_id][0]
-                subject_offset = min([int(a.features['start_string']) for a in caption['subject']['subject']])
-
-                start = caption_subject['start'] - subject_offset
-                end = caption_subject['end'] - subject_offset
-                subject = caption_subject['subject_text'][:start] + selected_candidate_text + caption_subject['subject_text'][end:]
+                # replace candidates root with lower pmi with selected candidate
+                subject_root = [a for a in caption['subject']['subject'] if a.subject_root]
+                if len(subject_root) > 0 and selected_candidate_text not in caption['subject']['text']:
+                    subject_root[0].form = selected_candidate_text
+                subject = ' '.join([a.form for a in caption['subject']['subject']])
 
                 # find verb synset with higher PMI and replace current verb
-                replaceable_verbs = []
+                # replaceable_verbs = []
                 predicate_verbs = [a for a in caption['predicate']['predicate'] if a.pos.startswith('VB')]  # and a.predicate_root]
                 for predicate_verb in predicate_verbs:
                     verb_lemma = predicate_verb.lemma
 
-                    if verb_lemma != 'be':  # to avoid problems with 'a car is shown', for example
-
-                        # save in dict because it takes long time to compute
-                        if verb_lemma in synsets_dict:
-                            verb_synsets_unique = synsets_dict[verb_lemma]
-                        else:
-                            verb_synsets = wn.synsets(verb_lemma, pos=wn.VERB)
+                    # save in dict because it takes long time to compute
+                    if verb_lemma in synsets_dict:
+                        verb_synsets_unique = synsets_dict[verb_lemma]
+                    else:
+                        verb_synsets = wn.synsets(verb_lemma, pos=wn.VERB)
+                        if len(verb_synsets) > 0:
+                            verb_synset = verb_synsets[0]
                             verb_synsets_unique = []
-                            for verb_synset in verb_synsets:
-                                if len([a for a in verb_synsets_unique if a.lemmas()[0].name() == verb_synset.lemmas()[0].name()]) == 0:
-                                    verb_synsets_unique.append(verb_synset)
+                            for lemma in verb_synset.lemma_names():
+                                lemma_synsets = wn.synsets(lemma, pos=wn.VERB)
+                                if len(lemma_synsets) > 0:
+                                    verb_synsets_unique.append(lemma_synsets[0])
+                            verb_synsets_unique = list(set(verb_synsets_unique))
                             synsets_dict[verb_lemma] = verb_synsets_unique
 
-                        selected_verb = None
-                        max_pmi = float('-inf')
-                        for verb_synset in verb_synsets_unique:
-                            try:
-                                pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
-                                if pmi['normalized_pmi'] > max_pmi:
-                                    max_pmi = pmi['normalized_pmi']
-                                    selected_verb = verb_synset
-                            except:
-                                print '[ERROR] Error in do_pmi, skipping verb_synset'
+                    selected_verb = None
+                    max_pmi = float('-inf')
+                    for verb_synset in verb_synsets_unique:
+                        try:
+                            pmi = do_pmi([verb_synset.lemmas()[0].name() + ' VB'], caption['predicate']['context'])
+                            if pmi['normalized_pmi'] > max_pmi:
+                                max_pmi = pmi['normalized_pmi']
+                                selected_verb = verb_synset
+                        except:
+                            print '[ERROR] Error in do_pmi, skipping verb_synset'
 
-                        if selected_verb:
-                            # print 'from verbs @@@ ' + str(verb_synsets_unique) + ' @@@ and context @@@ ' + str(caption['predicate']['context']) + ' @@@ we choose @@@ ' + selected_verb.lemmas()[0].name() + ' @@@'
+                    if selected_verb and selected_verb.lemma_names()[0] != verb_lemma:
 
-                            # properly conjugate the selected verb and replace it in caption['predicate']['text']
-                            try:
-                                if predicate_verb.features['finiteness'] == 'PART':
-                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=(pattern.en.PAST + pattern.en.PARTICIPLE))
-                                elif predicate_verb.features['finiteness'] == 'GER':
-                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=pattern.text.GERUND)
-                                elif predicate_verb.features['tense'] == 'PAST':
-                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PAST)
-                                elif predicate_verb.features['tense'] == 'PRES':
-                                    if 'person' in predicate_verb.features and predicate_verb.features['person'] == '3':
-                                        new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=SINGULAR)
-                                    else:
-                                        new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=PLURAL)
-                            except KeyError, e:
-                                print '[KeyError] I got a KeyError - reason "%s"' % str(e)
-                                print predicate_verb.features
+                        new_verb = None
 
-                            start = int(predicate_verb.features['start_string'])
-                            end = int(predicate_verb.features['end_string'])
-                            replaceable_verbs.append((caption['sentence'].sentence[start:end], new_verb))
+                        # properly conjugate the selected verb and replace it in caption['predicate']['text']
+                        try:
+                            if 'finiteness' in predicate_verb.features and predicate_verb.features['finiteness'] == 'PART':
+                                new_verb = conjugate(selected_verb.lemma_names()[0], tense=(pattern.en.PAST + pattern.en.PARTICIPLE))
+                            elif 'finiteness' in predicate_verb.features and predicate_verb.features['finiteness'] == 'GER':
+                                new_verb = conjugate(selected_verb.lemma_names()[0], tense=pattern.text.GERUND)
+                            elif 'tense' in predicate_verb.features and predicate_verb.features['tense'] == 'PAST':
+                                new_verb = conjugate(selected_verb.lemma_names()[0], tense=PAST)
+                            elif 'tense' in predicate_verb.features and predicate_verb.features['tense'] == 'PRES':
+                                if 'person' in predicate_verb.features and predicate_verb.features['person'] == '3':
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=SINGULAR)
+                                else:
+                                    new_verb = conjugate(selected_verb.lemma_names()[0], tense=PRESENT, number=PLURAL)
+                        except KeyError, e:
+                            print '[KeyError] I got a KeyError - reason "%s"' % str(e)
+                            print predicate_verb.features
 
-                            # caption['predicate']['text'] = caption['predicate']['text'][:start] + new_verb + caption['predicate']['text'][end:]
+                        if new_verb:
+                            predicate_verb.plemma = selected_verb.lemma_names()[0]
+                            predicate_verb.form = new_verb
+                            predicate_verb.lemma = selected_verb.lemma_names()[0]
+                            predicate_verb.columns[1] = new_verb
+                            predicate_verb.columns[2] = selected_verb.lemma_names()[0]
+                            predicate_verb.columns[3] = selected_verb.lemma_names()[0]
 
-                        else:
-                            print '[NO VERB SELECTED] predicate text not changed'
-
-                predicate = caption['predicate']['text']
-                for verb_pair in replaceable_verbs:
-                    # temporal fix: to avoid replacing parts of words, we look for a verb with at least one preceeding space
-                    if ' ' + verb_pair[0] + ' ' in predicate:
-                        predicate = predicate.replace(' ' + verb_pair[0] + ' ', ' ' + verb_pair[1] + ' ')
-                    elif ' ' + verb_pair[0] in predicate:
-                        predicate = predicate.replace(' ' + verb_pair[0], ' ' + verb_pair[1])
-                    elif verb_pair[0] + ' ' in predicate:
-                        predicate = predicate.replace(verb_pair[0] + ' ', verb_pair[1] + ' ')
+                predicate = ' '.join([a.form for a in caption['predicate']['predicate']])
                 new_captions.append(subject + ' ' + predicate)
 
         videos_new_captions[video_id] = list(set(new_captions))
