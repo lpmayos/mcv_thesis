@@ -86,7 +86,6 @@ Caption pmi_subj_replace: "A man is talking about a man"
 Caption original: "A man is talking about something"
 Caption data_aug_new: "A man is talking about a news show"
 
-
 Video video7548: https://www.youtube.com/watch?v=3tK1nmdAe-4 (0:00:21 to 0:00:38).
 https://vib.by/v/m1aOdFJEN
 Caption exp4_symmetrical: "A man is walking down a street"

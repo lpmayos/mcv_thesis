@@ -192,7 +192,7 @@ def extract_data(experiments):
                              'split': u'test',
                              'captions': {'exp5': u'a man and a woman are talking', 'exp4': u'a woman is talking to a man'}}
     """
-    with open('/Users/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/test_videodatainfo.json', 'r') as f:
+    with open('/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/test_videodatainfo.json', 'r') as f:
         f_json = json.load(f)
         test_videos_info = f_json['videos']
     f.close()
@@ -321,8 +321,8 @@ def create_forms(typeform_creator):
     #                'subj_pred_combi': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
     #                'pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
     #                'subj_pred_combi_pmi_subj_replace': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
-    experiments = {'original': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
-                   'data_aug_new': '/Users/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_subj_pred_combi_new/model-99.json'}
+    experiments = {'original': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt/model-99.json',
+                   'data_aug_new': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_subj_pred_combi_new/model-99.json'}
     data = extract_data(experiments)
 
     forms = [['video9519', 'video9215', 'video9136', 'video9230', 'video9492', 'video9115', 'video8238', 'video8226', 'video7548', 'video9523']]
