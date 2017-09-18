@@ -6,7 +6,8 @@ import json
 
 class ResultsAnalysis:
 
-    experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'pmi_subj_replace', 'subj_pred_combi_pmi_subj_replace']
+    # experiments = ['original', 'exp1', 'exp4', 'exp4_symmetrical', 'subj_pred_combi', 'subj_pred_combi_new', 'pmi_subj_replace', 'subj_pred_combi_pmi_subj_replace']
+    experiments = ['exp4', 'subj_pred_combi_new']
 
     # training data for each experiment
     training_data = {'original': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/train_val_videodatainfo.json',
@@ -14,6 +15,7 @@ class ResultsAnalysis:
                      'exp4': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e4_th1_0.09_th2_0.506.json',
                      'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435.json',
                      'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_subj_pred_combi_senses.json',
+                     'subj_pred_combi_new': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_e4_th1_0.09_th2_0.506_subj_pred_combi.json',
                      'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement.json',
                      'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/DATA/MSR-VTT/new_train_val_videodatainfo/train_val_videodatainfo_el_th1_0.11_th2_0.435_pmi_subject_replacement_subj_pred_combi.json'}
 
@@ -23,6 +25,7 @@ class ResultsAnalysis:
                           'exp4': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4/model-99.json',
                           'exp4_symmetrical': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment4_symmetrical/model-99.json',
                           'subj_pred_combi': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-el_th1_0.11_th2_0.435_subj_pred_combi_senses/model-99.json',
+                          'subj_pred_combi_new': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_subj_pred_combi_new/model-99.json',
                           'pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement/model-99.json',
                           'subj_pred_combi_pmi_subj_replace': '/home/lpmayos/code/caption-guided-saliency/experiments/msr-vtt-experiment_pmi_subject_replacement_subj_pred_combi/model-99.json'}
 
@@ -57,7 +60,7 @@ class ResultsAnalysis:
 
 def main():
     resultsAnalysis = ResultsAnalysis()
-    resultsAnalysis.compare_training_data('video0')
+    resultsAnalysis.compare_training_data('video10')
 
 
 if __name__ == "__main__":
