@@ -49,19 +49,10 @@ def do_pmi(combination_words, context_words):
 
 
 if __name__ == "__main__":
-    # lemma pos
-    # pmi sino existe 0, si no ocurren juntas -1, corpus british National Corpus
+
     candidates = ['car NN', 'vehicle NN', 'audi NN']
-    context = ['drives', 'countryside', 'road', 'driving', 'commercial', 'speedly', 'narrow road', 'features', 'showing', 'narrates', 'experience', 'curves', 'telling', 'talking', 'smooth']
     context = ['drive VB*', 'show VB*']
 
     for candidate in candidates:
         pmi = do_pmi([candidate], context)
         print pmi
-
-    # for term in terms:
-    #     if term.endswith(" NN"):
-    #         terms.remove(term)
-    #         print term, do_pmi([term], terms)
-    #         print "truck", do_pmi(["truck NN"], terms)
-    #         terms.add(term)
