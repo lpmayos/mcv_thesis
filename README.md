@@ -201,8 +201,6 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 ## Experiments: data augmentation
 
 
-### Subjects and predicates combination
-
 **Goal**: generate an augmented training set.
 
 **Method**: combine the subjects and predicates of the captions of each video, given that they are compatible in terms of number and semantics.
@@ -226,8 +224,6 @@ SenseEmbed vectors should be downloaded from http://lcl.uniroma1.it/sensembed/, 
 
 ## Experiments: robustness enhancement
 
-
-### Subjects and predicates combination
 
 **Goal**: generate a more robust training set in terms of vocabulary.
 
